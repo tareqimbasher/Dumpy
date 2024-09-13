@@ -1,5 +1,7 @@
 ﻿// ReSharper disable once CheckNamespace
 
+using Dumpy.Renderers.Html;
+
 namespace Dumpy;
 
 public ref partial struct ValueStringBuilder
@@ -30,9 +32,9 @@ public ref partial struct ValueStringBuilder
         Append(">");
     }
 
-    public void WriteNull(DumpOptions options)
+    public void WriteNull(HtmlDumpOptions options)
     {
-        WriteOpenTag("span", $"class=\"{options.CssClasses.Null}\""); // TODO set this statically in options
+        WriteOpenTag("span", options.CssClasses.NullFormatted);
         Append("null");
         WriteCloseTag("span");
     }

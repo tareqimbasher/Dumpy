@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
-using Dumpy.Metadata;
 using Dumpy.Renderers.Html.Utils;
 using Dumpy.Utils;
 
 namespace Dumpy.Renderers.Html;
 
-public class ObjectConverter : IGenericConverter
+public class ObjectHtmlConverter : IGenericHtmlConverter
 {
-    private static ObjectConverter? _instance;
+    private static ObjectHtmlConverter? _instance;
 
-    public static ObjectConverter Instance
+    public static ObjectHtmlConverter Instance
     {
-        get { return _instance ??= new ObjectConverter(); }
+        get { return _instance ??= new ObjectHtmlConverter(); }
     }
 
-    public void Convert<T>(ref ValueStringBuilder writer, T? value, Type targetType, DumpOptions options)
+    public void Convert<T>(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
     {
         if (value is null)
         {
@@ -27,39 +24,37 @@ public class ObjectConverter : IGenericConverter
         writer.WriteOpenTag("table");
         writer.WriteOpenTag("thead"); // TODO set statically
 
-        writer.WriteOpenTag("tr", $"class=\"{options.CssClasses.TableInfoHeader}\"");
+        writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
         writer.WriteOpenTag(
             "th",
             "colspan=\"2\"",
-            options.AddTitleAttributes ? $"title=\"{options.TypeMetadataProvider.GetName(targetType, true)}\"" : null
+            options.AddTitleAttributes ? $"title=\"{TypeUtil.GetName(targetType, true)}\"" : null
         );
 
-        writer.Append(HtmlUtil.EscapeText(options.TypeMetadataProvider.GetName(targetType)));
+        writer.Append(HtmlUtil.EscapeText(TypeUtil.GetName(targetType)));
 
         writer.WriteCloseTag("th");
         writer.WriteCloseTag("tr");
         writer.WriteCloseTag("thead");
 
-        var dataMembers = options.TypeMetadataProvider.GetDataMembers(targetType);
-
-        if (!dataMembers.IsEmpty)
-        {
-            WriteTBody(ref writer, value, dataMembers, options);
-        }
+        WriteTBody(ref writer, value, targetType, options);
 
         writer.WriteCloseTag("table");
     }
 
-    private void WriteTBody<T>(ref ValueStringBuilder writer, T value, DataMembers dataMembers, DumpOptions options)
+    private void WriteTBody<T>(ref ValueStringBuilder writer, T value, Type targetType, HtmlDumpOptions options)
     {
         writer.WriteOpenTag("tbody");
 
-        foreach (var field in dataMembers.Fields)
+        if (options.IncludeNonPublicMembers)
         {
-            WriteTRow(ref writer, field.Name, field.FieldType, TypeUtil.GetFieldValue(field, value), options);
+            foreach (var field in TypeUtil.GetFields(targetType, options.IncludeNonPublicMembers))
+            {
+                WriteTRow(ref writer, field.Name, field.FieldType, TypeUtil.GetFieldValue(field, value), options);
+            }
         }
 
-        foreach (var prop in dataMembers.Properties)
+        foreach (var prop in TypeUtil.GetProperties(targetType, options.IncludeNonPublicMembers))
         {
             WriteTRow(ref writer, prop.Name, prop.PropertyType, TypeUtil.GetPropertyValue(prop, value), options);
         }
@@ -72,14 +67,14 @@ public class ObjectConverter : IGenericConverter
         string memberName,
         Type memberType,
         object? memberValue,
-        DumpOptions options)
+        HtmlDumpOptions options)
     {
         writer.WriteOpenTag("tr");
 
         writer.WriteOpenTag(
             "th",
             options.AddTitleAttributes
-                ? $"title=\"{options.TypeMetadataProvider.GetName(memberType, true)}\""
+                ? $"title=\"{TypeUtil.GetName(memberType, true)}\""
                 : null);
         writer.Append(memberName);
         writer.WriteCloseTag("th");

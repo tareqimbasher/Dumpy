@@ -1,4 +1,5 @@
 using Dumpy.Renderers;
+using Dumpy.Renderers.Html;
 
 namespace Dumpy.Tests;
 
@@ -9,10 +10,10 @@ public class CustomConverterSelectionTests
     {
         var type = Dumper.GetUserDefinedConverterType(typeof(Car), new DumpOptions
         {
-            Converters = { typeof(CarConverter) }
+            Converters = { typeof(CarHtmlConverter) }
         });
         
-        Assert.Equal(typeof(CarConverter), type);
+        Assert.Equal(typeof(CarHtmlConverter), type);
     }
     
     [Fact]
@@ -20,10 +21,10 @@ public class CustomConverterSelectionTests
     {
         var type = Dumper.GetUserDefinedConverterType(typeof(ICar), new DumpOptions
         {
-            Converters = { typeof(CarConverter) }
+            Converters = { typeof(CarHtmlConverter) }
         });
         
-        Assert.Equal(typeof(CarConverter), type);
+        Assert.Equal(typeof(CarHtmlConverter), type);
     }
     
     [Fact]
@@ -31,10 +32,10 @@ public class CustomConverterSelectionTests
     {
         var type = Dumper.GetUserDefinedConverterType(typeof(FlyingCar), new DumpOptions
         {
-            Converters = { typeof(CarConverter) }
+            Converters = { typeof(CarHtmlConverter) }
         });
         
-        Assert.Equal(typeof(CarConverter), type);
+        Assert.Equal(typeof(CarHtmlConverter), type);
     }
     
     [Fact]
@@ -42,10 +43,10 @@ public class CustomConverterSelectionTests
     {
         var type = Dumper.GetUserDefinedConverterType(typeof(Vehicle), new DumpOptions
         {
-            Converters = { typeof(CarConverter) }
+            Converters = { typeof(CarHtmlConverter) }
         });
         
-        Assert.NotEqual(typeof(CarConverter), type);
+        Assert.NotEqual(typeof(CarHtmlConverter), type);
     }
     
     public class Vehicle
@@ -66,11 +67,11 @@ public class CustomConverterSelectionTests
         string Make { get; }
     }
 
-    public class CarConverter : IConverter<ICar>
+    public class CarHtmlConverter : IHtmlConverter<ICar>
     {
-        public void Convert(ref ValueStringBuilder writer, ICar? value, Type targetType, DumpOptions options)
+        public void Convert(ref ValueStringBuilder writer, ICar? value, Type targetType, HtmlDumpOptions options)
         {
-            writer.Append("Hello from CarConverter");
+            writer.Append("Hello from CarHtmlConverter");
         }
     }
 }

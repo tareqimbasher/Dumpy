@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -34,6 +36,83 @@ internal static class TypeUtil
         return !IsStringFormattable(type) && !IsCollection(type);
     }
 
+    private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _typePropertyInfoCache = new();
+    private static readonly ConcurrentDictionary<Type, FieldInfo[]> _typeFieldInfoCache = new();
+
+    public static string GetName(Type type, bool fullyQualify = false)
+    {
+        var name = fullyQualify ? type.FullName ?? type.Name : type.Name;
+
+        if (!type.IsGenericType)
+        {
+            return name;
+        }
+
+        var sb = new StringBuilder();
+
+        if (type.Namespace == null && name.Contains("AnonymousType"))
+        {
+            sb.Append("AnonymousType");
+        }
+        else
+        {
+            sb.Append(name.AsSpan(0, name.IndexOf('`')));
+        }
+
+        sb.Append(type
+            .GetGenericArguments()
+            .Aggregate("<",
+                delegate(string aggregate, Type argType)
+                {
+                    return aggregate + (aggregate == "<" ? "" : ",") + GetName(argType, fullyQualify);
+                }
+            ));
+
+        sb.Append('>');
+
+        return sb.ToString();
+    }
+
+    public static PropertyInfo[] GetProperties(Type type, bool includeNonPublic)
+    {
+        if (_typePropertyInfoCache.TryGetValue(type, out var properties))
+        {
+            return properties;
+        }
+
+        var bindingFlags = includeNonPublic
+            ? BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+            : BindingFlags.Instance | BindingFlags.Public;
+
+        properties = type
+            .GetProperties(bindingFlags)
+            .Where(p => p.CanRead)
+            // Exclude properties that exist in base types and are hidden by properties in derived types
+            .GroupBy(p => p.Name)
+            .Select(g => g.OrderBy(p => p.DeclaringType == type).First())
+            .ToArray();
+
+        _typePropertyInfoCache.TryAdd(type, properties);
+        return properties;
+    }
+
+    public static FieldInfo[] GetFields(Type type, bool includeNonPublic)
+    {
+        if (_typeFieldInfoCache.TryGetValue(type, out var fields))
+        {
+            return fields;
+        }
+
+        var bindingFlags = includeNonPublic
+            ? BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+            : BindingFlags.Instance | BindingFlags.Public;
+        
+        fields = type.GetFields(bindingFlags);
+
+        _typeFieldInfoCache.TryAdd(type, fields);
+        return fields;
+    }
+    
     public static object? GetFieldValue<T>(FieldInfo field, T obj)
     {
         try

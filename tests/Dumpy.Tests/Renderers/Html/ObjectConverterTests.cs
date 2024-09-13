@@ -1,6 +1,6 @@
 ﻿namespace Dumpy.Tests.Renderers.Html;
 
-public class ObjectConverterTests
+public class ObjectHtmlConverterTests
 {
     [Fact]
     public void ShouldCorrectlySerializeObject()

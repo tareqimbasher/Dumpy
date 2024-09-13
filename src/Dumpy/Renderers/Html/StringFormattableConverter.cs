@@ -3,19 +3,19 @@ using Dumpy.Renderers.Html.Utils;
 
 namespace Dumpy.Renderers.Html;
 
-public class StringFormattableConverter : IGenericConverter
+public class StringFormattableHtmlConverter : IGenericHtmlConverter
 {
-    private static StringFormattableConverter? _instance;
+    private static StringFormattableHtmlConverter? _instance;
 
-    public static StringFormattableConverter Instance
+    public static StringFormattableHtmlConverter Instance
     {
         get
         {
-            return _instance ??= new StringFormattableConverter();
+            return _instance ??= new StringFormattableHtmlConverter();
         }
     }
     
-    public void Convert<T>(ref ValueStringBuilder writer, T? value, Type targetType, DumpOptions options)
+    public void Convert<T>(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
     {
         if (value is null)
         {

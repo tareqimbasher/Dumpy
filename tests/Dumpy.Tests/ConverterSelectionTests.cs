@@ -34,7 +34,7 @@ public class ConverterSelectionTests
     {
         var converter = Dumper.GetGenericConverter(type);
         
-        Assert.Equal(typeof(StringFormattableConverter), converter.GetType());
+        Assert.Equal(typeof(StringFormattableHtmlConverter), converter.GetType());
     }
     
     [Fact]
@@ -48,7 +48,7 @@ public class ConverterSelectionTests
         
         var converter = Dumper.GetGenericConverter(o.GetType());
         
-        Assert.Equal(typeof(ObjectConverter), converter.GetType());
+        Assert.Equal(typeof(ObjectHtmlConverter), converter.GetType());
     }
     
     [Fact]
@@ -62,7 +62,7 @@ public class ConverterSelectionTests
         
         var converter = Dumper.GetGenericConverter(o.GetType());
         
-        Assert.Equal(typeof(ObjectConverter), converter.GetType());
+        Assert.Equal(typeof(ObjectHtmlConverter), converter.GetType());
     }
     
     [Theory]
@@ -80,6 +80,6 @@ public class ConverterSelectionTests
     {
         var converter = Dumper.GetGenericConverter(type);
         
-        Assert.Equal(typeof(CollectionConverter), converter.GetType());
+        Assert.Equal(typeof(CollectionHtmlConverter), converter.GetType());
     }
 }

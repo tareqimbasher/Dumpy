@@ -8,16 +8,16 @@ using Dumpy.Utils;
 
 namespace Dumpy.Renderers.Html;
 
-public class CollectionConverter : IGenericConverter
+public class CollectionHtmlConverter : IGenericHtmlConverter
 {
-    private static CollectionConverter? _instance;
+    private static CollectionHtmlConverter? _instance;
 
-    public static CollectionConverter Instance
+    public static CollectionHtmlConverter Instance
     {
-        get { return _instance ??= new CollectionConverter(); }
+        get { return _instance ??= new CollectionHtmlConverter(); }
     }
 
-    public void Convert<T>(ref ValueStringBuilder writer, T? value, Type targetType, DumpOptions options)
+    public void Convert<T>(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
     {
         if (value is null)
         {
@@ -35,7 +35,7 @@ public class CollectionConverter : IGenericConverter
         if (!isElementObject)
         {
             writer.WriteOpenTag("table");
-            writer.WriteOpenTag("thead", $"class=\"{options.CssClasses.TableInfoHeader}\"");
+            writer.WriteOpenTag("thead", options.CssClasses.TableInfoHeaderFormatted);
 
             writer.WriteOpenTag("tr");
             writer.WriteOpenTag("th");
@@ -79,18 +79,18 @@ public class CollectionConverter : IGenericConverter
         }
         else
         {
-            var elementProperties = options.TypeMetadataProvider
-                .GetMembers(elementType)
-                .Where(mi => mi.MemberType == MemberTypes.Property)
-                .Cast<PropertyInfo>()
-                .ToArray();
+            var fields = options.IncludeFields
+                ? TypeUtil.GetFields(elementType, options.IncludeNonPublicMembers)
+                : Array.Empty<FieldInfo>();
+
+            var properties = TypeUtil.GetProperties(elementType, options.IncludeNonPublicMembers);
 
             writer.WriteOpenTag("table");
             writer.WriteOpenTag("thead");
 
             // Info header
-            writer.WriteOpenTag("tr", $"class=\"{options.CssClasses.TableInfoHeader}\"");
-            writer.WriteOpenTag("th", $"colspan=\"{elementProperties.Length}\"");
+            writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
+            writer.WriteOpenTag("th", $"colspan=\"{fields.Length + properties.Length}\"");
 
             int infoHeaderRowStartIndex = writer.Length;
 
@@ -98,11 +98,11 @@ public class CollectionConverter : IGenericConverter
             writer.WriteCloseTag("tr");
 
             // Data header
-            writer.WriteOpenTag("tr", $"class=\"{options.CssClasses.TableDataHeader}\"");
-            foreach (var property in elementProperties)
+            writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
+            foreach (var name in fields.Select(x => x.Name).Union(properties.Select(x => x.Name)))
             {
                 writer.WriteOpenTag("th");
-                writer.Append(HtmlUtil.EscapeText(property.Name));
+                writer.Append(HtmlUtil.EscapeText(name));
                 writer.WriteCloseTag("th");
             }
 
@@ -127,11 +127,19 @@ public class CollectionConverter : IGenericConverter
 
                 writer.WriteOpenTag("tr");
 
-                foreach (var property in elementProperties)
+                foreach (var field in fields)
                 {
                     writer.WriteOpenTag("td");
-                    var propertyValue = TypeUtil.GetPropertyValue(property, element);
-                    Dumper.DumpHtml(ref writer, propertyValue, property.PropertyType, options);
+                    var val = TypeUtil.GetFieldValue(field, element);
+                    Dumper.DumpHtml(ref writer, val, field.FieldType, options);
+                    writer.WriteCloseTag("td");
+                }
+
+                foreach (var property in properties)
+                {
+                    writer.WriteOpenTag("td");
+                    var val = TypeUtil.GetPropertyValue(property, element);
+                    Dumper.DumpHtml(ref writer, val, property.PropertyType, options);
                     writer.WriteCloseTag("td");
                 }
 
@@ -154,7 +162,7 @@ public class CollectionConverter : IGenericConverter
         DumpOptions options)
     {
         var sb = new StringBuilder();
-        var collectionTypeName = options.TypeMetadataProvider.GetName(collectionType);
+        var collectionTypeName = TypeUtil.GetName(collectionType);
 
         if (collectionType.Namespace == "System.Linq" && collectionTypeName.StartsWith("IGrouping<"))
         {
@@ -162,7 +170,7 @@ public class CollectionConverter : IGenericConverter
             if (keyProp != null)
             {
                 object? key = TypeUtil.GetPropertyValue(keyProp, collection);
-        
+
                 if (key == null)
                 {
                     sb.Append("Key = (null)");
@@ -170,22 +178,19 @@ public class CollectionConverter : IGenericConverter
                 else
                 {
                     var keyType = key.GetType();
-        
+
                     if (TypeUtil.IsStringFormattable(keyType))
                     {
                         sb.Append($"Key = {key}");
                     }
                     else if (TypeUtil.IsCollection(keyType))
                     {
-                        sb.Append($"Key = {options.TypeMetadataProvider.GetName(keyType)}");
+                        sb.Append($"Key = {TypeUtil.GetName(keyType)}");
                     }
                     else
                     {
-                        var properties = options.TypeMetadataProvider.GetMembers(keyType)
-                            .Where(x => x.MemberType == MemberTypes.Property)
-                            .Cast<PropertyInfo>()
-                            .ToArray();
-                        
+                        var properties = TypeUtil.GetProperties(keyType, false);
+
                         sb.Append("Key = {");
 
                         for (var iProp = 0; iProp < properties.Length; iProp++)
@@ -197,7 +202,7 @@ public class CollectionConverter : IGenericConverter
                             {
                                 propValueStr = TypeUtil.IsStringFormattable(property.PropertyType)
                                     ? propValue.ToString()
-                                    : options.TypeMetadataProvider.GetName(property.PropertyType);
+                                    : TypeUtil.GetName(property.PropertyType);
                             }
 
                             propValueStr ??= "(null)";
@@ -209,7 +214,7 @@ public class CollectionConverter : IGenericConverter
                                 sb.Append("...");
                                 break;
                             }
-                            
+
                             if (iProp < properties.Length - 1)
                             {
                                 sb.Append(", ");

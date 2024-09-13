@@ -4,7 +4,7 @@ using Dumpy.Renderers.Html.Utils;
 
 namespace Dumpy.Tests.Renderers.Html;
 
-public class StringFormattableConverterTests
+public class StringFormattableHtmlConverterTests
 {
     [Theory]
     [InlineData(1)]
