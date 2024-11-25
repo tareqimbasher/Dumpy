@@ -1,5 +1,5 @@
-using Dumpy.Renderers;
-using Dumpy.Renderers.Html;
+using Dumpy.Html;
+using Dumpy.Html.Converters;
 
 namespace Dumpy.Tests;
 
@@ -12,10 +12,10 @@ public class CustomConverterSelectionTests
         {
             Converters = { typeof(CarHtmlConverter) }
         });
-        
+
         Assert.Equal(typeof(CarHtmlConverter), type);
     }
-    
+
     [Fact]
     public void ReturnsCorrectConverterUsingInterface()
     {
@@ -23,10 +23,10 @@ public class CustomConverterSelectionTests
         {
             Converters = { typeof(CarHtmlConverter) }
         });
-        
+
         Assert.Equal(typeof(CarHtmlConverter), type);
     }
-    
+
     [Fact]
     public void ReturnsCorrectConverterUsingDerivedType()
     {
@@ -34,10 +34,10 @@ public class CustomConverterSelectionTests
         {
             Converters = { typeof(CarHtmlConverter) }
         });
-        
+
         Assert.Equal(typeof(CarHtmlConverter), type);
     }
-    
+
     [Fact]
     public void DoesNotReturnCorrectConverterUsingBaseType()
     {
@@ -45,10 +45,10 @@ public class CustomConverterSelectionTests
         {
             Converters = { typeof(CarHtmlConverter) }
         });
-        
+
         Assert.NotEqual(typeof(CarHtmlConverter), type);
     }
-    
+
     public class Vehicle
     {
     }

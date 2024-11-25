@@ -1,15 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net6.0;net7.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <LangVersion>11</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RootNamespace>Dumpy</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Dumpy\Dumpy.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
         <InternalsVisibleTo Include="Dumpy.Tests" />
-        <InternalsVisibleTo Include="Dumpy.Html" />
     </ItemGroup>
 
 </Project>

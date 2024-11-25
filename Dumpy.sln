@@ -12,6 +12,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dumpy.Benchmark", "tests\Du
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dumpy.ConsoleApp", "tests\Dumpy.ConsoleApp\Dumpy.ConsoleApp.csproj", "{16827F47-16D2-4AA4-8A04-4800B35B1713}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dumpy.Html", "src\Dumpy.Html\Dumpy.Html.csproj", "{F1E152F5-7496-4FB8-8624-9D90984CB8C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "others", "others", "{6075434C-EEA0-4F0A-A9CC-0C9B113D3033}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,11 +42,16 @@ Global
 		{16827F47-16D2-4AA4-8A04-4800B35B1713}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16827F47-16D2-4AA4-8A04-4800B35B1713}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16827F47-16D2-4AA4-8A04-4800B35B1713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1E152F5-7496-4FB8-8624-9D90984CB8C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1E152F5-7496-4FB8-8624-9D90984CB8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1E152F5-7496-4FB8-8624-9D90984CB8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1E152F5-7496-4FB8-8624-9D90984CB8C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0ABF13B2-5CB3-42FC-B35A-166B62905796} = {8BD69570-2C56-474A-98C3-2E1C539BEF1B}
 		{73DDA529-92A6-4B74-B8CD-46D9DD905F9E} = {4B6E624A-5221-401F-BC65-D594908C6980}
 		{B61D004B-B551-42EB-9D7D-581919DFC1F0} = {4B6E624A-5221-401F-BC65-D594908C6980}
 		{16827F47-16D2-4AA4-8A04-4800B35B1713} = {4B6E624A-5221-401F-BC65-D594908C6980}
+		{F1E152F5-7496-4FB8-8624-9D90984CB8C6} = {8BD69570-2C56-474A-98C3-2E1C539BEF1B}
 	EndGlobalSection
 EndGlobal

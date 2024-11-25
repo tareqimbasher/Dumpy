@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\Dumpy.Html\Dumpy.Html.csproj" />
       <ProjectReference Include="..\..\src\Dumpy\Dumpy.csproj" />
     </ItemGroup>
 

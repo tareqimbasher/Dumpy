@@ -1,23 +1,19 @@
 ﻿using System;
-using Dumpy.Renderers.Html.Utils;
+using Dumpy.Html.Utils;
 using Dumpy.Utils;
 
-namespace Dumpy.Renderers.Html;
+namespace Dumpy.Html.Converters;
 
 public class ObjectHtmlConverter : IGenericHtmlConverter
 {
     private static ObjectHtmlConverter? _instance;
-
-    public static ObjectHtmlConverter Instance
-    {
-        get { return _instance ??= new ObjectHtmlConverter(); }
-    }
+    public static ObjectHtmlConverter Instance => _instance ??= new ObjectHtmlConverter();
 
     public void Convert<T>(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
     {
         if (value is null)
         {
-            writer.WriteNull(options);
+            writer.WriteNullHtml(options);
             return;
         }
 

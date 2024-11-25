@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
 using System.Xml.Linq;
-using Dumpy.Renderers.Html.Utils;
+using Dumpy.Html.Utils;
 
 namespace Dumpy.Tests.Renderers.Html;
 
-public class StringFormattableHtmlConverterTests
+public class StringHtmlConverterTests
 {
     [Theory]
     [InlineData(1)]

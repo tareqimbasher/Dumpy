@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 using BenchmarkDotNet.Attributes;
-using Dumpy.Renderers.Html.Utils;
+using Dumpy.Html.Utils;
 
 namespace Dumpy.Benchmark;
 

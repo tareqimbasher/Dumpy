@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using Dumpy.Renderers.Html;
+using Dumpy.Html;
+using Dumpy.Html.Converters;
 using Dumpy.Utils;
 
 // ReSharper disable once CheckNamespace
@@ -46,9 +47,8 @@ public static partial class Dumper
             return;
         }
         
-        var converter = GetGenericHtmlConverter(valueType);
-        
-        converter.Convert(ref writer, value, valueType, options);
+        var representation = GetConverter(valueType);
+        representation.Convert(ref writer, value, valueType, options);
     }
     
     internal static Type? GetUserDefinedHtmlConverterType(Type targetType, DumpOptions options)
@@ -65,11 +65,11 @@ public static partial class Dumper
         return converterType;
     }
 
-    internal static IGenericHtmlConverter GetGenericHtmlConverter(Type targetType)
+    internal static IGenericHtmlConverter GetConverter(Type targetType)
     {
         if (TypeUtil.IsStringFormattable(targetType))
         {
-            return StringFormattableHtmlConverter.Instance;
+            return StringHtmlConverter.Instance;
         }
 
         if (typeof(IEnumerable).IsAssignableFrom(targetType))

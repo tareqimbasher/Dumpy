@@ -1,4 +1,4 @@
-﻿namespace Dumpy.Renderers.Html;
+﻿namespace Dumpy.Html;
 
 public class HtmlDumpOptions : DumpOptions
 {

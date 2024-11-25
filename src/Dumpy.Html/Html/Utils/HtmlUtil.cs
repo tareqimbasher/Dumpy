@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
-namespace Dumpy.Renderers.Html.Utils;
+namespace Dumpy.Html.Utils;
 
 internal static class HtmlUtil
 {

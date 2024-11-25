@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Dumpy;
+using Dumpy.ConsoleApp;
 
 var cars = new List<Helper.Car>();
 
@@ -17,38 +18,41 @@ sw.Stop();
 Console.WriteLine($"Elapsed time: {sw.ElapsedMilliseconds}ms");
 
 
-class Helper
+namespace Dumpy.ConsoleApp
 {
-    private static readonly Random _random = new();
-
-    static string GenerateRandomString(int length)
+    class Helper
     {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        return new string(Enumerable.Repeat(chars, length)
-            .Select(s => s[_random.Next(s.Length)]).ToArray());
-    }
+        private static readonly Random _random = new();
 
-    public class Car
-    {
-        public string Make { get; set; } = GenerateRandomString(10);
-        public string Model { get; set; } = GenerateRandomString(15);
-        public int Year { get; set; } = 2022;
-        public DateTime CreatedDate { get; set; } = new(2022, 1, 1);
-
-        public List<Feature> Features { get; set; } = new()
+        static string GenerateRandomString(int length)
         {
-            new(),
-            new(),
-            new(),
-            new(),
-            new()
-        };
-    }
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[_random.Next(s.Length)]).ToArray());
+        }
 
-    public class Feature
-    {
-        public string Label { get; set; } = GenerateRandomString(15);
-        public string Description { get; set; } = GenerateRandomString(50);
-        public bool Included { get; set; } = true;
+        public class Car
+        {
+            public string Make { get; set; } = GenerateRandomString(10);
+            public string Model { get; set; } = GenerateRandomString(15);
+            public int Year { get; set; } = 2022;
+            public DateTime CreatedDate { get; set; } = new(2022, 1, 1);
+
+            public List<Feature> Features { get; set; } = new()
+            {
+                new(),
+                new(),
+                new(),
+                new(),
+                new()
+            };
+        }
+
+        public class Feature
+        {
+            public string Label { get; set; } = GenerateRandomString(15);
+            public string Description { get; set; } = GenerateRandomString(50);
+            public bool Included { get; set; } = true;
+        }
     }
 }

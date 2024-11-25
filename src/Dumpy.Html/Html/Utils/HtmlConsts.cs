@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Dumpy.Renderers.Html.Utils;
+namespace Dumpy.Html.Utils;
 
 public static class HtmlConsts
 {

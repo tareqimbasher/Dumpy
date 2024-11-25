@@ -3,25 +3,21 @@ using System.Collections;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Dumpy.Renderers.Html.Utils;
+using Dumpy.Html.Utils;
 using Dumpy.Utils;
 
-namespace Dumpy.Renderers.Html;
+namespace Dumpy.Html.Converters;
 
 public class CollectionHtmlConverter : IGenericHtmlConverter
 {
     private static CollectionHtmlConverter? _instance;
-
-    public static CollectionHtmlConverter Instance
-    {
-        get { return _instance ??= new CollectionHtmlConverter(); }
-    }
+    public static CollectionHtmlConverter Instance => _instance ??= new CollectionHtmlConverter();
 
     public void Convert<T>(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
     {
         if (value is null)
         {
-            writer.WriteNull(options);
+            writer.WriteNullHtml(options);
             return;
         }
 
@@ -98,7 +94,7 @@ public class CollectionHtmlConverter : IGenericHtmlConverter
             writer.WriteCloseTag("tr");
 
             // Data header
-            writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
+            writer.WriteOpenTag("tr", options.CssClasses.TableDataHeaderFormatted);
             foreach (var name in fields.Select(x => x.Name).Union(properties.Select(x => x.Name)))
             {
                 writer.WriteOpenTag("th");

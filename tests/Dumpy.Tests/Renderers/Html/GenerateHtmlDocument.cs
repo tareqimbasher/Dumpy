@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Dumpy.Renderers.Html;
+using Dumpy.Html;
 using Dumpy.Tests.Renderers.Html.Models;
 
 namespace Dumpy.Tests.Renderers.Html;
