@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using Dumpy.Html;
-using Dumpy.Tests.Renderers.Html.Models;
+using Dumpy.Tests.Models;
 
-namespace Dumpy.Tests.Renderers.Html;
+namespace Dumpy.Html.Tests;
 
 public class GenerateHtmlDocument
 {
@@ -35,7 +35,7 @@ public class GenerateHtmlDocument
             ]
         };
 
-        var html = Dumper.DumpHtml(person, new HtmlDumpOptions { AddTitleAttributes = true });
+        var html = Dumpy.Dumper.DumpHtml(person, new HtmlDumpOptions { AddTitleAttributes = true });
 
         var doc = Consts.DocumentTemplate.Replace("HTML_REPLACE", html);
 

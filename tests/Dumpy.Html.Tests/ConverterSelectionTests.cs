@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.Xml;
 using System.Xml.Linq;
 using Dumpy.Html.Converters;
-using Dumpy.Tests.Renderers.Html.Models;
+using Dumpy.Tests.Models;
 
-namespace Dumpy.Tests;
+namespace Dumpy.Html.Tests;
 
 public class ConverterSelectionTests
 {
@@ -32,7 +32,7 @@ public class ConverterSelectionTests
     [InlineData(typeof(XmlNode))]
     public void StringFormattableTypes(Type type)
     {
-        var converter = Dumper.GetConverter(type);
+        var converter = Dumpy.Dumper.GetGenericConverter(type);
         
         Assert.Equal(typeof(StringHtmlConverter), converter.GetType());
     }
@@ -46,7 +46,7 @@ public class ConverterSelectionTests
             Age = 20
         };
         
-        var converter = Dumper.GetConverter(o.GetType());
+        var converter = Dumpy.Dumper.GetGenericConverter(o.GetType());
         
         Assert.Equal(typeof(ObjectHtmlConverter), converter.GetType());
     }
@@ -60,7 +60,7 @@ public class ConverterSelectionTests
             Age = 20
         };
         
-        var converter = Dumper.GetConverter(o.GetType());
+        var converter = Dumpy.Dumper.GetGenericConverter(o.GetType());
         
         Assert.Equal(typeof(ObjectHtmlConverter), converter.GetType());
     }
@@ -78,7 +78,7 @@ public class ConverterSelectionTests
     [InlineData(typeof(ConcurrentBag<>))]
     public void CollectionTypes(Type type)
     {
-        var converter = Dumper.GetConverter(type);
+        var converter = Dumpy.Dumper.GetGenericConverter(type);
         
         Assert.Equal(typeof(CollectionHtmlConverter), converter.GetType());
     }

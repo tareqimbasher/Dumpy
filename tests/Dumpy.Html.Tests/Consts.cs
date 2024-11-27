@@ -1,6 +1,6 @@
-﻿using Dumpy.Tests.Renderers.Html.Models;
+﻿using Dumpy.Tests.Models;
 
-namespace Dumpy.Tests.Renderers.Html;
+namespace Dumpy.Html.Tests;
 
 public static class Consts
 {

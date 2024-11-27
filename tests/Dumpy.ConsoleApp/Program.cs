@@ -1,58 +1,21 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
 using Dumpy;
 using Dumpy.ConsoleApp;
 
-var cars = new List<Helper.Car>();
+var cars = Enumerable.Range(0, 10000).Select(x => new Car()).ToArray();
 
-for (int i = 0; i < 10000; i++)
+Benchmark($"Dumpy: {cars.Length} cars", () => cars.DumpHtml());
+Benchmark($"STJ  : {cars.Length} cars", () => JsonSerializer.Serialize(cars));
+
+void Benchmark(string operation, Func<string> action)
 {
-    cars.Add(new Helper.Car());
-}
-
-var sw = Stopwatch.StartNew();
-
-Dumper.DumpHtml(cars);
-
-sw.Stop();
-
-Console.WriteLine($"Elapsed time: {sw.ElapsedMilliseconds}ms");
-
-
-namespace Dumpy.ConsoleApp
-{
-    class Helper
-    {
-        private static readonly Random _random = new();
-
-        static string GenerateRandomString(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[_random.Next(s.Length)]).ToArray());
-        }
-
-        public class Car
-        {
-            public string Make { get; set; } = GenerateRandomString(10);
-            public string Model { get; set; } = GenerateRandomString(15);
-            public int Year { get; set; } = 2022;
-            public DateTime CreatedDate { get; set; } = new(2022, 1, 1);
-
-            public List<Feature> Features { get; set; } = new()
-            {
-                new(),
-                new(),
-                new(),
-                new(),
-                new()
-            };
-        }
-
-        public class Feature
-        {
-            public string Label { get; set; } = GenerateRandomString(15);
-            public string Description { get; set; } = GenerateRandomString(50);
-            public bool Included { get; set; } = true;
-        }
-    }
+    var sw = Stopwatch.StartNew();
+    var result = action();
+    sw.Stop();
+    Console.WriteLine($"{operation}:" +
+                      $"\n   time: {sw.ElapsedMilliseconds}ms" +
+                      $"\n   length: {result.Length:N0}" +
+                      $"\n   size: {result.Length * sizeof(char):N0} bytes" +
+                      $"\n");
 }

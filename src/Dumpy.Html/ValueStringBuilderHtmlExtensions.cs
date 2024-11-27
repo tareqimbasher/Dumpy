@@ -1,6 +1,4 @@
-﻿using Dumpy.Html;
-
-namespace Dumpy;
+﻿namespace Dumpy.Html;
 
 public static class ValueStringBuilderHtmlExtensions
 {

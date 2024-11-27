@@ -1,7 +1,8 @@
 ﻿using System.Text;
+using Dumpy;
 using Xunit.Abstractions;
 
-namespace Dumpy.Tests.Renderers.Html;
+namespace Dumpy.Html.Tests;
 
 public class TMP(ITestOutputHelper testOutputHelper)
 {

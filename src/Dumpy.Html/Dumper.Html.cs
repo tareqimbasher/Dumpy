@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Linq;
 using Dumpy.Html;
 using Dumpy.Html.Converters;
@@ -8,11 +9,11 @@ using Dumpy.Utils;
 // ReSharper disable once CheckNamespace
 namespace Dumpy;
 
-public static partial class Dumper
+public static class Dumper
 {
     private static readonly Lazy<HtmlDumpOptions> DefaultHtmlOptions = new(() => new HtmlDumpOptions());
 
-    public static string DumpHtml<T>(T? value, HtmlDumpOptions? options = null)
+    public static string DumpHtml<T>(this T? value, HtmlDumpOptions? options = null)
     {
         options ??= DefaultHtmlOptions.Value;
 
@@ -46,18 +47,18 @@ public static partial class Dumper
             userDefinedConverter.Convert(ref writer, value, valueType, options);
             return;
         }
-        
-        var representation = GetConverter(valueType);
-        representation.Convert(ref writer, value, valueType, options);
+
+        IGenericHtmlConverter converter = GetGenericConverter(valueType);
+        converter.Convert(ref writer, value, valueType, options);
     }
-    
+
     internal static Type? GetUserDefinedHtmlConverterType(Type targetType, DumpOptions options)
     {
         if (options.Converters.Count == 0)
         {
             return null;
         }
-        
+
         var target = typeof(IHtmlConverter<>).MakeGenericType(targetType);
 
         var converterType = options.Converters.FirstOrDefault(x => target.IsAssignableFrom(x));
@@ -65,7 +66,8 @@ public static partial class Dumper
         return converterType;
     }
 
-    internal static IGenericHtmlConverter GetConverter(Type targetType)
+
+    internal static IGenericHtmlConverter GetGenericConverter(Type targetType)
     {
         if (TypeUtil.IsStringFormattable(targetType))
         {

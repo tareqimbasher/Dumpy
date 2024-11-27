@@ -21,11 +21,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Dumpy\Dumpy.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Metadata\"/>
+      <ProjectReference Include="..\..\src\Dumpy.Html\Dumpy.Html.csproj" />
+      <ProjectReference Include="..\Dumpy.Tests\Dumpy.Tests.csproj" />
     </ItemGroup>
 
 </Project>

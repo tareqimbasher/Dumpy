@@ -1,4 +1,4 @@
-﻿namespace Dumpy.Tests.Renderers.Html;
+﻿namespace Dumpy.Html.Tests;
 
 internal static class Util
 {

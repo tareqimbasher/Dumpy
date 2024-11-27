@@ -1,4 +1,4 @@
-﻿namespace Dumpy.Tests.Renderers.Html.Models;
+﻿namespace Dumpy.Tests.Models;
 
 public class Person
 {

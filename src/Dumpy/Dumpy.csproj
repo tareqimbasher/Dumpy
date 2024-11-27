@@ -8,8 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Dumpy.Tests" />
         <InternalsVisibleTo Include="Dumpy.Html" />
+        <InternalsVisibleTo Include="Dumpy.Html.Tests" />
+        <InternalsVisibleTo Include="Dumpy.Tests" />
     </ItemGroup>
 
 </Project>

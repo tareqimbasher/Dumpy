@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Xunit.Abstractions;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace Dumpy.Tests.Renderers.Html;
+namespace Dumpy.Html.Tests;
 
 public class PerformanceTests(ITestOutputHelper testOutputHelper)
 {
@@ -12,7 +12,7 @@ public class PerformanceTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Profile()
     {
-        Dumper.DumpHtml(Data);
+        Dumpy.Dumper.DumpHtml(Data);
     }
     
     [Fact]
@@ -28,7 +28,7 @@ public class PerformanceTests(ITestOutputHelper testOutputHelper)
             testOutputHelper.WriteLine($"Serializing {itemsCount} Cars");
             Benchmark("System.Text.Json", () => _ = JsonSerializer.Serialize(cars), times, preRun);
             Benchmark("Json.NET", () => _ = JsonConvert.SerializeObject(cars), times, preRun);
-            Benchmark("Dumpy", () => _ = Dumper.DumpHtml(cars), times, preRun);
+            Benchmark("Dumpy", () => _ = Dumpy.Dumper.DumpHtml(cars), times, preRun);
             testOutputHelper.WriteLine("");
         }
     }

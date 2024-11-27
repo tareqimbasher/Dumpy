@@ -1,11 +1,11 @@
-﻿namespace Dumpy.Tests.Renderers.Html;
+﻿namespace Dumpy.Html.Tests;
 
 public class ObjectHtmlConverterTests
 {
     [Fact]
     public void ShouldCorrectlySerializeObject()
     {
-        var html = Dumper.DumpHtml(Consts.Person);
+        var html = Dumpy.Dumper.DumpHtml(Consts.Person);
 
         Assert.Equal(MinimizeHtml(Consts.PersonHtmlRepresentation), html);
     }
