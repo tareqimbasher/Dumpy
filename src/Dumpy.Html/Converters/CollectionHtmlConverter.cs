@@ -123,7 +123,7 @@ public class CollectionHtmlConverter : IGenericHtmlConverter
 
                 writer.WriteOpenTag("tr");
 
-                foreach (var field in fields)
+                foreach (var field in fields) // TODO check if needs to be included
                 {
                     writer.WriteOpenTag("td");
                     var val = TypeUtil.GetFieldValue(field, element);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Linq;
 using Dumpy.Html;
 using Dumpy.Html.Converters;
@@ -11,11 +10,11 @@ namespace Dumpy;
 
 public static class Dumper
 {
-    private static readonly Lazy<HtmlDumpOptions> DefaultHtmlOptions = new(() => new HtmlDumpOptions());
+    private static readonly Lazy<HtmlDumpOptions> DefaultOptions = new(() => new HtmlDumpOptions());
 
     public static string DumpHtml<T>(this T? value, HtmlDumpOptions? options = null)
     {
-        options ??= DefaultHtmlOptions.Value;
+        options ??= DefaultOptions.Value;
 
         var writer = new ValueStringBuilder(stackalloc char[512], 4096);
 
@@ -36,7 +35,7 @@ public static class Dumper
 
     public static void DumpHtml<T>(ref ValueStringBuilder writer, T? value, Type valueType, HtmlDumpOptions options)
     {
-        var userDefinedConverterType = GetUserDefinedHtmlConverterType(valueType, options);
+        var userDefinedConverterType = GetUserDefinedConverterType(valueType, options);
 
         if (userDefinedConverterType != null)
         {
@@ -52,7 +51,7 @@ public static class Dumper
         converter.Convert(ref writer, value, valueType, options);
     }
 
-    internal static Type? GetUserDefinedHtmlConverterType(Type targetType, DumpOptions options)
+    internal static Type? GetUserDefinedConverterType(Type targetType, DumpOptions options)
     {
         if (options.Converters.Count == 0)
         {

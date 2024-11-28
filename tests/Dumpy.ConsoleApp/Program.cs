@@ -2,8 +2,13 @@
 using System.Text.Json;
 using Dumpy;
 using Dumpy.ConsoleApp;
+using Spectre.Console;
 
-var cars = Enumerable.Range(0, 10000).Select(x => new Car()).ToArray();
+var r = Enumerable.Range(0, 10).Select(x => new Car()).ToArray().DumpConsole();
+AnsiConsole.Write(r);
+Console.WriteLine();
+
+var cars = Enumerable.Range(0, 50000).Select(x => new Car()).ToArray();
 
 Benchmark($"Dumpy: {cars.Length} cars", () => cars.DumpHtml());
 Benchmark($"STJ  : {cars.Length} cars", () => JsonSerializer.Serialize(cars));

@@ -7,7 +7,7 @@ public class CustomConverterSelectionTests
     [Fact]
     public void ReturnsCorrectConverterUsingExactType()
     {
-        var type = Dumper.GetUserDefinedHtmlConverterType(typeof(Car), new DumpOptions
+        var type = Dumper.GetUserDefinedConverterType(typeof(Car), new DumpOptions
         {
             Converters = { typeof(CarHtmlConverter) }
         });
@@ -18,7 +18,7 @@ public class CustomConverterSelectionTests
     [Fact]
     public void ReturnsCorrectConverterUsingInterface()
     {
-        var type = Dumper.GetUserDefinedHtmlConverterType(typeof(ICar), new DumpOptions
+        var type = Dumper.GetUserDefinedConverterType(typeof(ICar), new DumpOptions
         {
             Converters = { typeof(CarHtmlConverter) }
         });
@@ -29,7 +29,7 @@ public class CustomConverterSelectionTests
     [Fact]
     public void ReturnsCorrectConverterUsingDerivedType()
     {
-        var type = Dumper.GetUserDefinedHtmlConverterType(typeof(FlyingCar), new DumpOptions
+        var type = Dumper.GetUserDefinedConverterType(typeof(FlyingCar), new DumpOptions
         {
             Converters = { typeof(CarHtmlConverter) }
         });
@@ -40,7 +40,7 @@ public class CustomConverterSelectionTests
     [Fact]
     public void DoesNotReturnCorrectConverterUsingBaseType()
     {
-        var type = Dumper.GetUserDefinedHtmlConverterType(typeof(Vehicle), new DumpOptions
+        var type = Dumper.GetUserDefinedConverterType(typeof(Vehicle), new DumpOptions
         {
             Converters = { typeof(CarHtmlConverter) }
         });

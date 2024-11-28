@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace Dumpy.Utils;
 
-internal static class TypeUtil
+public static class TypeUtil
 {
     public static bool IsStringFormattable(Type type)
     {
@@ -143,7 +143,7 @@ internal static class TypeUtil
         }
     }
     
-    internal static Type? GetCollectionElementType(Type collectionType)
+    public static Type? GetCollectionElementType(Type collectionType)
     {
         // Arrays
         if (collectionType.IsArray)
