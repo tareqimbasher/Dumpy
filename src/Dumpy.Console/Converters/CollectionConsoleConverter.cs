@@ -31,29 +31,29 @@ public class CollectionConsoleConverter : IGenericConsoleConverter
         if (!isElementObject)
         {
             var table = new Table();
-            table.AddColumn("# Items");
+            table.AddColumn("");
 
             int? maxCount = options.MaxCollectionSerializeLength;
-            int count = 0;
+            int rowCount = 0;
             bool elementsCountExceedMax = false;
 
             foreach (var element in collection)
             {
-                count++;
+                rowCount++;
 
-                if (count > maxCount)
+                if (rowCount > maxCount)
                 {
                     elementsCountExceedMax = true;
                     break;
                 }
 
-                table.AddRow(element.DumpConsole(elementType, options));
+                table.AddRow(element.DumpToRenderable(elementType, options));
             }
 
-            if (elementsCountExceedMax)
-            {
-            }
-
+            var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
+            table.Title = new TableTitle(typeName, new Style(decoration: Decoration.Bold | Decoration.Dim));
+            table.Columns[0].Header($"{(elementsCountExceedMax ? "First " : "")}{rowCount} items");
+            
             return table;
         }
         else
@@ -65,16 +65,16 @@ public class CollectionConsoleConverter : IGenericConsoleConverter
             var properties = TypeUtil.GetProperties(elementType, options.IncludeNonPublicMembers);
 
             int? maxCount = options.MaxCollectionSerializeLength;
-            int count = 0;
+            int rowCount = 0;
             bool elementsCountExceedMax = false;
 
             var rows = new List<List<IRenderable>>();
 
             foreach (var element in collection)
             {
-                count++;
+                rowCount++;
 
-                if (count > maxCount)
+                if (rowCount > maxCount)
                 {
                     elementsCountExceedMax = true;
                     break;
@@ -86,28 +86,39 @@ public class CollectionConsoleConverter : IGenericConsoleConverter
                 foreach (var field in fields) // TODO check if needs to be included
                 {
                     var val = TypeUtil.GetFieldValue(field, element);
-                    row.Add(val.DumpConsole(field.FieldType, options));
+                    row.Add(val.DumpToRenderable(field.FieldType, options));
                 }
 
                 foreach (var property in properties)
                 {
                     var val = TypeUtil.GetPropertyValue(property, element);
-                    row.Add(val.DumpConsole(property.PropertyType, options));
+                    row.Add(val.DumpToRenderable(property.PropertyType, options));
                 }
             }
 
-            var table = new Table();
             var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
-            table.Title = new TableTitle($"{(elementsCountExceedMax ? "First " : "")}{count} items | {typeName}", new Style(decoration: Decoration.Bold));
+            string title = $"{(elementsCountExceedMax ? "First " : "")}{rowCount} items | {typeName}";
+
+            if (rowCount == 0)
+            {
+                return EmptyCollectionWidget.New(typeName);
+            }
+
+            var table = new Table();
+            // table.Expand = true;
+            table.Border(TableBorder.Rounded);
+            table.BorderStyle(new Style(Color.PaleTurquoise4));
+            table.ShowRowSeparators = true;
+            table.Title = new TableTitle(title, new Style(decoration: Decoration.Bold | Decoration.Dim));
 
             foreach (var field in fields)
             {
-                table.AddColumn(field.Name, c => c.LeftAligned());
+                table.AddColumn(new TableColumn(new Markup($"[bold][olive]{field.Name}[/][/]")));
             }
             
             foreach (var property in properties)
             {
-                table.AddColumn(property.Name, c => c.LeftAligned());
+                table.AddColumn(new TableColumn(new Markup($"[bold][olive]{property.Name}[/][/]")));
             }
             
             foreach (var row in rows)

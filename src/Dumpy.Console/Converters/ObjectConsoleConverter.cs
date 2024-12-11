@@ -21,22 +21,24 @@ public class ObjectConsoleConverter : IGenericConsoleConverter
         var table = new Table();
         var typeName = Markup.Escape(TypeUtil.GetName(targetType, true));
         table.Title = new TableTitle(typeName, new Style(decoration: Decoration.Bold));
-        table.AddColumn("Property");
-        table.AddColumn("Value");
+        table.AddColumn(new TableColumn(new Markup("[bold][olive]Property[/][/]")));
+        table.AddColumn(new TableColumn(new Markup("[bold][olive]Value[/][/]")));
+        table.Border(TableBorder.Rounded);
+        table.BorderStyle(new Style(Color.PaleTurquoise4));
         
         if (options.IncludeNonPublicMembers)
         {
             foreach (var field in TypeUtil.GetFields(targetType, options.IncludeNonPublicMembers))
             {
                 var fieldValue = TypeUtil.GetFieldValue(field, value);
-                table.AddRow(new Markup($"[green]{field.Name}[/]"), fieldValue.DumpConsole(field.FieldType, options));
+                table.AddRow(new Markup($"[bold][olive]{field.Name}[/][/]"), fieldValue.DumpToRenderable(field.FieldType, options));
             }
         }
         
         foreach (var prop in TypeUtil.GetProperties(targetType, options.IncludeNonPublicMembers))
         {
             var propValue = TypeUtil.GetPropertyValue(prop, value);
-            table.AddRow(new Markup($"[green]{prop.Name}[/]"), propValue.DumpConsole(prop.PropertyType, options));
+            table.AddRow(new Markup($"[bold][olive]{prop.Name}[/][/]"), propValue.DumpToRenderable(prop.PropertyType, options));
         }
 
         return table;

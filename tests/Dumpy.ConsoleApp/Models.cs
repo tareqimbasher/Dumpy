@@ -14,26 +14,30 @@ static class Helper
     
 public class Car
 {
-    public string Make { get; set; } = Helper.GenerateRandomString(10);
-    public string Model { get; set; } = Helper. GenerateRandomString(15);
-    public int Year { get; set; } = 2022;
     public string Text1 { get; set; } = Helper. GenerateRandomString(15);
-    public string? Null { get; set; } = null;
-    public int Int { get; set; } = 9000;
+    public int Int { get; set; } = 2022;
     public decimal Decimal { get; set; } = 15.35m;
-    public DateTime DateTime { get; set; } = new DateTime(2020, 1, 1);
-    public DateOnly DateOnly { get; set; } = new DateOnly(2020, 1, 1);
+    public string? Null { get; set; } = null;
     public bool True { get; set; } = true;
     public bool False { get; set; } = false;
+    public DateTime DateTime { get; set; } = new DateTime(2020, 1, 1);
+    public DateOnly DateOnly { get; set; } = new DateOnly(2020, 1, 1);
+    public TimeSpan TimeSpan { get; set; } = TimeSpan.FromMinutes(5);
+    public Dictionary<string, string> Dictionary { get; set; } = new Dictionary<string, string>()
+    {
+        { "key1", "value1" },
+        { "key2", "value2" }  
+    };
+    //public DateTimeOffset DateTimeOffset { get; set; } = new DateTimeOffset(new DateTime(2020, 1, 1));
     
-    public List<Feature> Empty { get; set; } = new();
+    public List<Feature> EmptyList { get; set; } = new();
     public List<Feature> Features { get; set; } = new()
     {
         new(),
         new(),
         new(),
-        new(),
-        new()
+        // new(),
+        // new()
     };
 }
 

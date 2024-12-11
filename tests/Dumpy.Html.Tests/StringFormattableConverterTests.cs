@@ -18,7 +18,7 @@ public class StringHtmlConverterTests
     [InlineData(5L)]
     public void ShouldCorrectlySerializePrimitiveValues<T>(T value)
     {
-        var html = Dumpy.Dumper.DumpHtml(value);
+        var html = Dumpy.HtmlDumpSink.DumpHtml(value);
 
         Assert.Equal(value!.ToString(), html);
     }
@@ -29,7 +29,7 @@ public class StringHtmlConverterTests
     [InlineData(BindingFlags.Instance)]
     public void ShouldCorrectlySerializeEnumValues<T>(T value)
     {
-        var html = Dumpy.Dumper.DumpHtml(value);
+        var html = Dumpy.HtmlDumpSink.DumpHtml(value);
 
         Assert.Equal(value.ToString(), html);
     }
@@ -39,7 +39,7 @@ public class StringHtmlConverterTests
     {
         var date = DateTime.Now;
 
-        var html = Dumpy.Dumper.DumpHtml(date);
+        var html = Dumpy.HtmlDumpSink.DumpHtml(date);
 
         Assert.Equal(HtmlUtil.EscapeText(date.ToString()), html);
     }
@@ -49,7 +49,7 @@ public class StringHtmlConverterTests
     {
         var date = DateOnly.Parse("2001-01-01");
 
-        var html = Dumpy.Dumper.DumpHtml(date);
+        var html = Dumpy.HtmlDumpSink.DumpHtml(date);
 
         Assert.Equal(HtmlUtil.EscapeText(date.ToString()), html);
     }
@@ -59,7 +59,7 @@ public class StringHtmlConverterTests
     {
         var val = new FormattableValue();
 
-        var html = Dumpy.Dumper.DumpHtml(val);
+        var html = Dumpy.HtmlDumpSink.DumpHtml(val);
 
         Assert.Equal("FormattableValuePlaceholder", html);
     }
@@ -69,7 +69,7 @@ public class StringHtmlConverterTests
     {
         var val = new int?(1);
 
-        var html = Dumpy.Dumper.DumpHtml(val);
+        var html = Dumpy.HtmlDumpSink.DumpHtml(val);
 
         Assert.Equal("1", html);
     }
@@ -79,7 +79,7 @@ public class StringHtmlConverterTests
     {
         var x = XElement.Parse("<Message>Hello</Message>");
 
-        var html = Dumpy.Dumper.DumpHtml(x);
+        var html = Dumpy.HtmlDumpSink.DumpHtml(x);
 
         Assert.Equal(HtmlUtil.EscapeText("<Message>Hello</Message>"), html);
     }

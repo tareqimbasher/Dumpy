@@ -76,7 +76,7 @@ public class ObjectHtmlConverter : IGenericHtmlConverter
         writer.WriteCloseTag("th");
 
         writer.WriteOpenTag("td");
-        Dumper.DumpHtml(ref writer, memberValue, memberType, options);
+        HtmlDumpSink.DumpHtml(ref writer, memberValue, memberType, options);
         writer.WriteCloseTag("td");
 
         writer.WriteCloseTag("tr");

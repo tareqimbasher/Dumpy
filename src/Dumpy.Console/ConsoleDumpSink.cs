@@ -1,27 +1,37 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dumpy.Console.Converters;
 using Dumpy.Utils;
+using Spectre.Console;
 using Spectre.Console.Rendering;
 
 // ReSharper disable once CheckNamespace
 namespace Dumpy;
 
-public static class Dumper
+public static class ConsoleDumpSink
 {
     private static readonly Lazy<DumpOptions> DefaultOptions = new(() => new DumpOptions());
 
-    public static IRenderable DumpConsole<T>(this T? value, DumpOptions? options = null)
+    [return: NotNullIfNotNull("value")]
+    public static T? DumpConsole<T>(this T? value, DumpOptions? options = null)
+    {
+        AnsiConsole.Write(DumpToRenderable(value, options));
+        AnsiConsole.WriteLine();
+        return value;
+    }
+    
+    public static IRenderable DumpToRenderable<T>(this T? value, DumpOptions? options = null)
     {
         options ??= DefaultOptions.Value;
 
         var valueType = value?.GetType() ?? typeof(T);
 
-        return DumpConsole(value, valueType, options);
+        return DumpToRenderable(value, valueType, options);
     }
 
-    public static IRenderable DumpConsole<T>(this T? value, Type valueType, DumpOptions options)
+    public static IRenderable DumpToRenderable<T>(this T? value, Type valueType, DumpOptions options)
     {
         var userDefinedConverterType = GetUserDefinedConverterType(valueType, options);
 

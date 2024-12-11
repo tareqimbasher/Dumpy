@@ -8,7 +8,7 @@ using Dumpy.Utils;
 // ReSharper disable once CheckNamespace
 namespace Dumpy;
 
-public static class Dumper
+public static class HtmlDumpSink
 {
     private static readonly Lazy<HtmlDumpOptions> DefaultOptions = new(() => new HtmlDumpOptions());
 

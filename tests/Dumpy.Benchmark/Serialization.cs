@@ -17,19 +17,19 @@ public class Serialization
     public string Json1() => JsonSerializer.Serialize(_1);
 
     [Benchmark]
-    public string Html1() => Dumper.DumpHtml(_1);
+    public string Html1() => HtmlDumpSink.DumpHtml(_1);
 
     [Benchmark]
     public string Json10() => JsonSerializer.Serialize(_10);
     
     [Benchmark]
-    public string Html10() => Dumper.DumpHtml(_10);
+    public string Html10() => HtmlDumpSink.DumpHtml(_10);
     
     [Benchmark]
     public string Json100() => JsonSerializer.Serialize(_100);
     
     [Benchmark]
-    public string Html100() => Dumper.DumpHtml(_100);
+    public string Html100() => HtmlDumpSink.DumpHtml(_100);
     
     // [Benchmark]
     // public string Json1000() => JsonSerializer.Serialize(_1000);
