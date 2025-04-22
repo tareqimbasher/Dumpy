@@ -5,7 +5,7 @@ public class ObjectHtmlConverterTests
     [Fact]
     public void ShouldCorrectlySerializeObject()
     {
-        var html = Dumpy.HtmlDumpSink.DumpHtml(Consts.Person);
+        var html = HtmlDumper.DumpHtml(Consts.Person);
 
         Assert.Equal(MinimizeHtml(Consts.PersonHtmlRepresentation), html);
     }

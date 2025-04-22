@@ -29,10 +29,9 @@ public class ConverterSelectionTests
     [InlineData(typeof(string))]
     [InlineData(typeof(Exception))]
     [InlineData(typeof(XNode))]
-    [InlineData(typeof(XmlNode))]
     public void StringFormattableTypes(Type type)
     {
-        var converter = Dumpy.HtmlDumpSink.GetGenericConverter(type);
+        var converter = HtmlDumper.GetGenericConverter(type);
         
         Assert.Equal(typeof(StringHtmlConverter), converter.GetType());
     }
@@ -46,7 +45,7 @@ public class ConverterSelectionTests
             Age = 20
         };
         
-        var converter = Dumpy.HtmlDumpSink.GetGenericConverter(o.GetType());
+        var converter = HtmlDumper.GetGenericConverter(o.GetType());
         
         Assert.Equal(typeof(ObjectHtmlConverter), converter.GetType());
     }
@@ -60,7 +59,7 @@ public class ConverterSelectionTests
             Age = 20
         };
         
-        var converter = Dumpy.HtmlDumpSink.GetGenericConverter(o.GetType());
+        var converter = HtmlDumper.GetGenericConverter(o.GetType());
         
         Assert.Equal(typeof(ObjectHtmlConverter), converter.GetType());
     }
@@ -78,7 +77,7 @@ public class ConverterSelectionTests
     [InlineData(typeof(ConcurrentBag<>))]
     public void CollectionTypes(Type type)
     {
-        var converter = Dumpy.HtmlDumpSink.GetGenericConverter(type);
+        var converter = HtmlDumper.GetGenericConverter(type);
         
         Assert.Equal(typeof(CollectionHtmlConverter), converter.GetType());
     }

@@ -7,7 +7,7 @@ using Dumpy.Utils;
 // ReSharper disable once CheckNamespace
 namespace Dumpy;
 
-public static class HtmlDumpSink
+public static class HtmlDumper
 {
     private static readonly Lazy<HtmlDumpOptions> DefaultOptions = new(() => new HtmlDumpOptions());
 
@@ -63,7 +63,6 @@ public static class HtmlDumpSink
 
         return converterType;
     }
-
 
     internal static IGenericHtmlConverter GetGenericConverter(Type targetType)
     {

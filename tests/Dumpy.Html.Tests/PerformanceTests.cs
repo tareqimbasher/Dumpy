@@ -12,7 +12,7 @@ public class PerformanceTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Profile()
     {
-        Dumpy.HtmlDumpSink.DumpHtml(Data);
+        HtmlDumper.DumpHtml(Data);
     }
     
     [Fact]
@@ -28,7 +28,7 @@ public class PerformanceTests(ITestOutputHelper testOutputHelper)
             testOutputHelper.WriteLine($"Serializing {itemsCount} Cars");
             Benchmark("System.Text.Json", () => _ = JsonSerializer.Serialize(cars), times, preRun);
             Benchmark("Json.NET", () => _ = JsonConvert.SerializeObject(cars), times, preRun);
-            Benchmark("Dumpy", () => _ = Dumpy.HtmlDumpSink.DumpHtml(cars), times, preRun);
+            Benchmark("Dumpy", () => _ = HtmlDumper.DumpHtml(cars), times, preRun);
             testOutputHelper.WriteLine("");
         }
     }

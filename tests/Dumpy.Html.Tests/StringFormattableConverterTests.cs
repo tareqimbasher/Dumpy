@@ -2,6 +2,8 @@
 using System.Xml.Linq;
 using Dumpy.Html.Utils;
 
+// ReSharper disable InvokeAsExtensionMethod
+
 namespace Dumpy.Html.Tests;
 
 public class StringHtmlConverterTests
@@ -9,6 +11,8 @@ public class StringHtmlConverterTests
     [Theory]
     [InlineData(1)]
     [InlineData(-1)]
+    [InlineData((uint)4)]
+    [InlineData((sbyte)-4)]
     [InlineData(0.0)]
     [InlineData(1.0)]
     [InlineData(5.3)]
@@ -18,7 +22,7 @@ public class StringHtmlConverterTests
     [InlineData(5L)]
     public void ShouldCorrectlySerializePrimitiveValues<T>(T value)
     {
-        var html = Dumpy.HtmlDumpSink.DumpHtml(value);
+        var html = HtmlDumper.DumpHtml(value);
 
         Assert.Equal(value!.ToString(), html);
     }
@@ -27,11 +31,12 @@ public class StringHtmlConverterTests
     [InlineData(StringComparison.Ordinal)]
     [InlineData(DateTimeKind.Utc)]
     [InlineData(BindingFlags.Instance)]
+    [InlineData(BindingFlags.Instance | BindingFlags.Public)]
     public void ShouldCorrectlySerializeEnumValues<T>(T value)
     {
-        var html = Dumpy.HtmlDumpSink.DumpHtml(value);
+        var html = HtmlDumper.DumpHtml(value);
 
-        Assert.Equal(value.ToString(), html);
+        Assert.Equal(value!.ToString(), html);
     }
 
     [Fact]
@@ -39,7 +44,7 @@ public class StringHtmlConverterTests
     {
         var date = DateTime.Now;
 
-        var html = Dumpy.HtmlDumpSink.DumpHtml(date);
+        var html = HtmlDumper.DumpHtml(date);
 
         Assert.Equal(HtmlUtil.EscapeText(date.ToString()), html);
     }
@@ -49,7 +54,7 @@ public class StringHtmlConverterTests
     {
         var date = DateOnly.Parse("2001-01-01");
 
-        var html = Dumpy.HtmlDumpSink.DumpHtml(date);
+        var html = HtmlDumper.DumpHtml(date);
 
         Assert.Equal(HtmlUtil.EscapeText(date.ToString()), html);
     }
@@ -59,7 +64,7 @@ public class StringHtmlConverterTests
     {
         var val = new FormattableValue();
 
-        var html = Dumpy.HtmlDumpSink.DumpHtml(val);
+        var html = HtmlDumper.DumpHtml(val);
 
         Assert.Equal("FormattableValuePlaceholder", html);
     }
@@ -69,7 +74,7 @@ public class StringHtmlConverterTests
     {
         var val = new int?(1);
 
-        var html = Dumpy.HtmlDumpSink.DumpHtml(val);
+        var html = HtmlDumper.DumpHtml(val);
 
         Assert.Equal("1", html);
     }
@@ -79,7 +84,7 @@ public class StringHtmlConverterTests
     {
         var x = XElement.Parse("<Message>Hello</Message>");
 
-        var html = Dumpy.HtmlDumpSink.DumpHtml(x);
+        var html = HtmlDumper.DumpHtml(x);
 
         Assert.Equal(HtmlUtil.EscapeText("<Message>Hello</Message>"), html);
     }

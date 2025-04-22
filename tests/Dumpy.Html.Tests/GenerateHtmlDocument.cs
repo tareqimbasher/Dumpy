@@ -35,7 +35,7 @@ public class GenerateHtmlDocument
             ]
         };
 
-        var html = Dumpy.HtmlDumpSink.DumpHtml(person, new HtmlDumpOptions { AddTitleAttributes = true });
+        var html = HtmlDumper.DumpHtml(person, new HtmlDumpOptions { AddTitleAttributes = true });
 
         var doc = Consts.DocumentTemplate.Replace("HTML_REPLACE", html);
 

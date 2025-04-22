@@ -61,7 +61,7 @@ public class CollectionHtmlConverter : IGenericHtmlConverter
                 writer.WriteOpenTag("tr");
                 writer.WriteOpenTag("td");
 
-                HtmlDumpSink.DumpHtml(ref writer, element, elementType, options);
+                HtmlDumper.DumpHtml(ref writer, element, elementType, options);
 
                 writer.WriteCloseTag("td");
                 writer.WriteCloseTag("tr");
@@ -127,7 +127,7 @@ public class CollectionHtmlConverter : IGenericHtmlConverter
                 {
                     writer.WriteOpenTag("td");
                     var val = TypeUtil.GetFieldValue(field, element);
-                    HtmlDumpSink.DumpHtml(ref writer, val, field.FieldType, options);
+                    HtmlDumper.DumpHtml(ref writer, val, field.FieldType, options);
                     writer.WriteCloseTag("td");
                 }
 
@@ -135,7 +135,7 @@ public class CollectionHtmlConverter : IGenericHtmlConverter
                 {
                     writer.WriteOpenTag("td");
                     var val = TypeUtil.GetPropertyValue(property, element);
-                    HtmlDumpSink.DumpHtml(ref writer, val, property.PropertyType, options);
+                    HtmlDumper.DumpHtml(ref writer, val, property.PropertyType, options);
                     writer.WriteCloseTag("td");
                 }
 

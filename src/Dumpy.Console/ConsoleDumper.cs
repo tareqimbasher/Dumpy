@@ -9,12 +9,9 @@ using Spectre.Console.Rendering;
 // ReSharper disable once CheckNamespace
 namespace Dumpy;
 
-public static class ConsoleDumpSink
+public static class ConsoleDumper
 {
     private static readonly Lazy<DumpOptions> DefaultOptions = new(() => new DumpOptions());
-
-    [return: NotNullIfNotNull("value")]
-    public static T? Dump<T>(this T? value, string? title = null, DumpOptions? options = null) => DumpConsole(value, title, options);
 
     [return: NotNullIfNotNull("value")]
     public static T? DumpConsole<T>(this T? value, string? title = null, DumpOptions? options = null)
@@ -72,7 +69,6 @@ public static class ConsoleDumpSink
 
         return converterType;
     }
-
 
     internal static IGenericConsoleConverter GetGenericConverter(Type targetType)
     {
