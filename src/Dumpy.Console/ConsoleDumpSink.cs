@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dumpy.Console.Converters;
@@ -15,13 +14,25 @@ public static class ConsoleDumpSink
     private static readonly Lazy<DumpOptions> DefaultOptions = new(() => new DumpOptions());
 
     [return: NotNullIfNotNull("value")]
-    public static T? DumpConsole<T>(this T? value, DumpOptions? options = null)
+    public static T? Dump<T>(this T? value, string? title = null, DumpOptions? options = null) => DumpConsole(value, title, options);
+
+    [return: NotNullIfNotNull("value")]
+    public static T? DumpConsole<T>(this T? value, string? title = null, DumpOptions? options = null)
     {
-        AnsiConsole.Write(DumpToRenderable(value, options));
+        if (title != null)
+        {
+            var rule = new Rule($"[bold][lightgoldenrod2_2]{title}[/][/]");
+            rule.LeftJustified();
+            rule.RuleStyle("darkorange");
+            AnsiConsole.Write(rule);
+        }
+
+        var renderable = DumpToRenderable(value, options);
+        AnsiConsole.Write(renderable);
         AnsiConsole.WriteLine();
         return value;
     }
-    
+
     public static IRenderable DumpToRenderable<T>(this T? value, DumpOptions? options = null)
     {
         options ??= DefaultOptions.Value;
@@ -69,8 +80,8 @@ public static class ConsoleDumpSink
         {
             return StringConsoleConverter.Instance;
         }
-        
-        if (typeof(IEnumerable).IsAssignableFrom(targetType))
+
+        if (TypeUtil.IsCollection(targetType))
         {
             return CollectionConsoleConverter.Instance;
         }

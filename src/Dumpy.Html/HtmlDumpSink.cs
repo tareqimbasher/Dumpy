@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using Dumpy.Html;
 using Dumpy.Html.Converters;
@@ -73,7 +72,7 @@ public static class HtmlDumpSink
             return StringHtmlConverter.Instance;
         }
 
-        if (typeof(IEnumerable).IsAssignableFrom(targetType))
+        if (TypeUtil.IsCollection(targetType))
         {
             return CollectionHtmlConverter.Instance;
         }
