@@ -20,10 +20,7 @@ public static class TypeUtil
                || typeof(IFormattable).IsAssignableFrom(type)
                || typeof(Exception).IsAssignableFrom(type)
                || typeof(Type).IsAssignableFrom(type)
-               || Nullable.GetUnderlyingType(type) != null
-               || typeof(XNode).IsAssignableFrom(type)
-               || typeof(XmlNode).IsAssignableFrom(type)
-            ;
+               || Nullable.GetUnderlyingType(type) != null;
     }
 
     public static bool IsCollection(Type type)

@@ -1,12 +1,19 @@
-﻿namespace Dumpy.Html;
+﻿using Dumpy.Html.Converters;
+
+namespace Dumpy.Html;
 
 public class HtmlDumpOptions : DumpOptions
 {
+    public HtmlDumpOptions()
+    {
+        Converters = [typeof(XmlNodeHtmlConverter), typeof(XNodeHtmlConverter)];
+    }
+
     /// <summary>
     /// If true, adds title attributes containing additional metadata.
     /// </summary>
     public bool AddTitleAttributes { get; set; }
-    
+
     /// <summary>
     /// CSS classes added to serialized HTML nodes.
     /// </summary>
@@ -52,7 +59,7 @@ public class CssClassOptions
             _nullFormatted = $"class=\"{value}\"";
         }
     }
-    
+
     internal string? NullFormatted => Enabled ? _nullFormatted : null;
 
     /// <summary>
@@ -67,7 +74,7 @@ public class CssClassOptions
             _emptyCollectionFormatted = $"class=\"{value}\"";
         }
     }
-    
+
     internal string? EmptyCollectionFormatted => Enabled ? _emptyCollectionFormatted : null;
 
     /// <summary>
@@ -82,7 +89,7 @@ public class CssClassOptions
             _cyclicReferenceFormatted = $"class=\"{value}\"";
         }
     }
-    
+
     internal string? CyclicReferenceFormatted => Enabled ? _cyclicReferenceFormatted : null;
 
     /// <summary>
@@ -97,7 +104,7 @@ public class CssClassOptions
             _maxDepthReachedFormatted = $"class=\"{value}\"";
         }
     }
-    
+
     internal string? MaxDepthReachedFormatted => Enabled ? _maxDepthReachedFormatted : null;
 
     /// <summary>
@@ -112,7 +119,7 @@ public class CssClassOptions
             _tableInfoHeaderFormatted = $"class=\"{value}\"";
         }
     }
-    
+
     internal string? TableInfoHeaderFormatted => Enabled ? _tableInfoHeaderFormatted : null;
 
     /// <summary>
@@ -127,6 +134,6 @@ public class CssClassOptions
             _tableDataHeaderFormatted = $"class=\"{value}\"";
         }
     }
-    
+
     internal string? TableDataHeaderFormatted => Enabled ? _tableDataHeaderFormatted : null;
 }

@@ -4,7 +4,7 @@ using Dumpy.Html.Utils;
 
 // ReSharper disable InvokeAsExtensionMethod
 
-namespace Dumpy.Html.Tests;
+namespace Dumpy.Html.Tests.Converters;
 
 public class StringHtmlConverterTests
 {
@@ -77,16 +77,6 @@ public class StringHtmlConverterTests
         var html = HtmlDumper.DumpHtml(val);
 
         Assert.Equal("1", html);
-    }
-
-    [Fact]
-    public void ShouldCorrectlySerializeXNode()
-    {
-        var x = XElement.Parse("<Message>Hello</Message>");
-
-        var html = HtmlDumper.DumpHtml(x);
-
-        Assert.Equal(HtmlUtil.EscapeText("<Message>Hello</Message>"), html);
     }
 }
 

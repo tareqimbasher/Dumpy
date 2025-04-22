@@ -1,4 +1,4 @@
-﻿namespace Dumpy.Html.Tests;
+﻿namespace Dumpy.Html.Tests.Converters;
 
 public class ObjectHtmlConverterTests
 {

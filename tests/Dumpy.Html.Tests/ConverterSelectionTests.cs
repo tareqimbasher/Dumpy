@@ -28,7 +28,6 @@ public class ConverterSelectionTests
     [InlineData(typeof(StringComparison?))]
     [InlineData(typeof(string))]
     [InlineData(typeof(Exception))]
-    [InlineData(typeof(XNode))]
     public void StringFormattableTypes(Type type)
     {
         var converter = HtmlDumper.GetGenericConverter(type);
@@ -80,5 +79,16 @@ public class ConverterSelectionTests
         var converter = HtmlDumper.GetGenericConverter(type);
         
         Assert.Equal(typeof(CollectionHtmlConverter), converter.GetType());
+    }
+    
+    [Theory]
+    [InlineData(typeof(XmlNode), typeof(XmlNodeHtmlConverter))]
+    [InlineData(typeof(XNode), typeof(XNodeHtmlConverter))]
+    public void OtherTypes(Type targetType, Type expectedConverterType)
+    {
+        var converter = HtmlDumper.GetUserDefinedConverterType(targetType, new HtmlDumpOptions());
+        
+        Assert.NotNull(converter);
+        Assert.Equal(expectedConverterType, converter);
     }
 }
