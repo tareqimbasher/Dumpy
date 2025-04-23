@@ -11,7 +11,7 @@ public class XmlNodeConverterTests
         var doc = new XmlDocument();
         doc.LoadXml("<root><child id=\"1\"/>Value</root>");
 
-        var html = HtmlDumper.DumpHtml(doc);
+        var html = HtmlDumper.DumpHtml(doc, typeof(XmlNode));
 
         var xml = HtmlUtil.EscapeText("<root><child id=\"1\" />Value</root>");
         var expected = $"<pre><code language=\"xml\">{xml}</code></pre>";

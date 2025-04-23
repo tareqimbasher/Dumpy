@@ -30,9 +30,10 @@ public class ConverterSelectionTests
     [InlineData(typeof(Exception))]
     public void StringFormattableTypes(Type type)
     {
-        var converter = HtmlDumper.GetGenericConverter(type);
+        var options = new HtmlDumpOptions();
+        var converter = options.GetConverter(type);
         
-        Assert.Equal(typeof(StringHtmlConverter), converter.GetType());
+        Assert.Equal(typeof(StringDefaultHtmlConverter<>).MakeGenericType(type), converter.GetType());
     }
     
     [Fact]
@@ -44,9 +45,10 @@ public class ConverterSelectionTests
             Age = 20
         };
         
-        var converter = HtmlDumper.GetGenericConverter(o.GetType());
+        var options = new HtmlDumpOptions();
+        var converter = options.GetConverter(o.GetType());
         
-        Assert.Equal(typeof(ObjectHtmlConverter), converter.GetType());
+        Assert.Equal(typeof(ObjectDefaultHtmlConverter<>).MakeGenericType(o.GetType()), converter.GetType());
     }
     
     [Fact]
@@ -58,27 +60,29 @@ public class ConverterSelectionTests
             Age = 20
         };
         
-        var converter = HtmlDumper.GetGenericConverter(o.GetType());
+        var options = new HtmlDumpOptions();
+        var converter = options.GetConverter(o.GetType());
         
-        Assert.Equal(typeof(ObjectHtmlConverter), converter.GetType());
+        Assert.Equal(typeof(ObjectDefaultHtmlConverter<>).MakeGenericType(o.GetType()), converter.GetType());
     }
     
     [Theory]
     [InlineData(typeof(Array))]
     [InlineData(typeof(int[]))]
-    [InlineData(typeof(List<>))]
+    [InlineData(typeof(List<string>))]
     [InlineData(typeof(IEnumerable))]
-    [InlineData(typeof(IEnumerable<>))]
-    [InlineData(typeof(IList<>))]
-    [InlineData(typeof(IReadOnlyList<>))]
-    [InlineData(typeof(ICollection<>))]
-    [InlineData(typeof(IReadOnlyCollection<>))]
-    [InlineData(typeof(ConcurrentBag<>))]
+    [InlineData(typeof(IEnumerable<string>))]
+    [InlineData(typeof(IList<string>))]
+    [InlineData(typeof(IReadOnlyList<string>))]
+    [InlineData(typeof(ICollection<string>))]
+    [InlineData(typeof(IReadOnlyCollection<string>))]
+    [InlineData(typeof(ConcurrentBag<string>))]
     public void CollectionTypes(Type type)
     {
-        var converter = HtmlDumper.GetGenericConverter(type);
+        var options = new HtmlDumpOptions();
+        var converter = options.GetConverter(type);
         
-        Assert.Equal(typeof(CollectionHtmlConverter), converter.GetType());
+        Assert.Equal(typeof(IEnumerableDefautHtmlConverter<>).MakeGenericType(type), converter.GetType());
     }
     
     [Theory]
@@ -86,9 +90,10 @@ public class ConverterSelectionTests
     [InlineData(typeof(XNode), typeof(XNodeHtmlConverter))]
     public void OtherTypes(Type targetType, Type expectedConverterType)
     {
-        var converter = HtmlDumper.GetUserDefinedConverterType(targetType, new HtmlDumpOptions());
+        var options = new HtmlDumpOptions();
+        var converter = options.GetConverter(targetType);
         
         Assert.NotNull(converter);
-        Assert.Equal(expectedConverterType, converter);
+        Assert.Equal(expectedConverterType, converter.GetType());
     }
 }

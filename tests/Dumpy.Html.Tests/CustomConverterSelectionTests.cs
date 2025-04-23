@@ -7,45 +7,45 @@ public class CustomConverterSelectionTests
     [Fact]
     public void ReturnsCorrectConverterUsingExactType()
     {
-        var type = HtmlDumper.GetUserDefinedConverterType(typeof(Car), new DumpOptions
+        var converter = new HtmlDumpOptions
         {
-            Converters = { typeof(CarHtmlConverter) }
-        });
+            Converters = { new CarHtmlConverter() }
+        }.GetConverter(typeof(Car));
 
-        Assert.Equal(typeof(CarHtmlConverter), type);
+        Assert.Equal(typeof(CarHtmlConverter), converter.GetType());
     }
 
     [Fact]
     public void ReturnsCorrectConverterUsingInterface()
     {
-        var type = HtmlDumper.GetUserDefinedConverterType(typeof(ICar), new DumpOptions
+        var converter = new HtmlDumpOptions
         {
-            Converters = { typeof(CarHtmlConverter) }
-        });
+            Converters = { new CarHtmlConverter() }
+        }.GetConverter(typeof(ICar));
 
-        Assert.Equal(typeof(CarHtmlConverter), type);
+        Assert.Equal(typeof(CarHtmlConverter), converter.GetType());
     }
 
     [Fact]
     public void ReturnsCorrectConverterUsingDerivedType()
     {
-        var type = HtmlDumper.GetUserDefinedConverterType(typeof(FlyingCar), new DumpOptions
+        var converter = new HtmlDumpOptions
         {
-            Converters = { typeof(CarHtmlConverter) }
-        });
+            Converters = { new CarHtmlConverter() }
+        }.GetConverter(typeof(FlyingCar));
 
-        Assert.Equal(typeof(CarHtmlConverter), type);
+        Assert.Equal(typeof(CarHtmlConverter), converter.GetType());
     }
 
     [Fact]
     public void DoesNotReturnCorrectConverterUsingBaseType()
     {
-        var type = HtmlDumper.GetUserDefinedConverterType(typeof(Vehicle), new DumpOptions
+        var converter = new HtmlDumpOptions
         {
-            Converters = { typeof(CarHtmlConverter) }
-        });
+            Converters = { new CarHtmlConverter() }
+        }.GetConverter(typeof(Vehicle));
 
-        Assert.NotEqual(typeof(CarHtmlConverter), type);
+        Assert.NotEqual(typeof(CarHtmlConverter), converter.GetType());
     }
 
     public class Vehicle
@@ -66,9 +66,10 @@ public class CustomConverterSelectionTests
         string Make { get; }
     }
 
-    public class CarHtmlConverter : IHtmlConverter<ICar>
+    public class CarHtmlConverter : HtmlConverter<ICar>
     {
-        public void Convert(ref ValueStringBuilder writer, ICar? value, Type targetType, HtmlDumpOptions options)
+        public override void Convert(ref ValueStringBuilder writer, ICar? value, Type targetType,
+            HtmlDumpOptions options)
         {
             writer.Append("Hello from CarHtmlConverter");
         }

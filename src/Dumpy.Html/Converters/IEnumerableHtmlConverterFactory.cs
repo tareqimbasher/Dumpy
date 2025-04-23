@@ -8,12 +8,25 @@ using Dumpy.Utils;
 
 namespace Dumpy.Html.Converters;
 
-public class CollectionHtmlConverter : IGenericHtmlConverter
+// ReSharper disable once InconsistentNaming
+public class IEnumerableHtmlConverterFactory : HtmlConverterFactory
 {
-    private static CollectionHtmlConverter? _instance;
-    public static CollectionHtmlConverter Instance => _instance ??= new CollectionHtmlConverter();
+    public override bool CanConvert(Type typeToConvert)
+    {
+        return TypeUtil.IsCollection(typeToConvert);
+    }
 
-    public void Convert<T>(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
+    public override HtmlConverter? CreateConverter(Type typeToConvert, HtmlDumpOptions options)
+    {
+        var converterType = typeof(IEnumerableDefautHtmlConverter<>).MakeGenericType(typeToConvert);
+        return Activator.CreateInstance(converterType) as HtmlConverter;
+    }
+}
+
+// ReSharper disable once InconsistentNaming
+public class IEnumerableDefautHtmlConverter<T> : HtmlConverter<T>
+{
+    public override void Convert(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
     {
         if (value is null)
         {

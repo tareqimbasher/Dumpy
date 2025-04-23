@@ -4,9 +4,9 @@ using Dumpy.Html.Utils;
 
 namespace Dumpy.Html.Converters;
 
-public class XmlNodeHtmlConverter : IHtmlConverter<XmlNode>
+public class XmlNodeHtmlConverter : HtmlConverter<XmlNode>
 {
-    public void Convert(ref ValueStringBuilder writer, XmlNode? value, Type targetType, HtmlDumpOptions options)
+    public override void Convert(ref ValueStringBuilder writer, XmlNode? value, Type targetType, HtmlDumpOptions options)
     {
         if (value is null)
         {

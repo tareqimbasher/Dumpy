@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Dumpy;
+﻿namespace Dumpy;
 
 public class DumpOptions
 {
@@ -19,12 +16,12 @@ public class DumpOptions
     /// If true, empty collections will be serialized to an "empty" placeholder instead of a table.
     /// </summary>
     public bool SerializeEmptyCollectionPlaceholder { get; set; }
-    
+
     /// <summary>
     /// If true, will serialize fields.
     /// </summary>
     public bool IncludeFields { get; set; }
-    
+
     /// <summary>
     /// If true, will serialize non-public fields and properties.
     /// </summary>
@@ -51,9 +48,4 @@ public class DumpOptions
             _maxDepth = value;
         }
     }
-
-    /// <summary>
-    /// The list of custom HTML Converters to use during serialization.
-    /// </summary>
-    public List<Type> Converters { get; set; } = new();
 }

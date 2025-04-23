@@ -4,14 +4,17 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace Dumpy.Utils;
 
 public static class TypeUtil
 {
+    private static readonly ConcurrentDictionary<Type, PropertyInfo[]> TypePropertyInfoCache = new();
+    private static readonly ConcurrentDictionary<Type, FieldInfo[]> TypeFieldInfoCache = new();
+    private static readonly Type NullableType = typeof(Nullable<>);
+
     public static bool IsStringFormattable(Type type)
     {
         return type.IsPrimitive
@@ -33,8 +36,26 @@ public static class TypeUtil
         return !IsStringFormattable(type) && !IsCollection(type);
     }
 
-    private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _typePropertyInfoCache = new();
-    private static readonly ConcurrentDictionary<Type, FieldInfo[]> _typeFieldInfoCache = new();
+    /// <summary>
+    /// Returns <see langword="true" /> when the given type is of type <see cref="Nullable{T}"/>.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsNullableOfT(this Type type) =>
+        type.IsGenericType && type.GetGenericTypeDefinition() == NullableType;
+    
+    /// <summary>
+    /// Returns <see langword="true" /> when the given type is assignable from <paramref name="from"/> including support
+    /// when <paramref name="from"/> is <see cref="Nullable{T}"/> by using the {T} generic parameter for <paramref name="from"/>.
+    /// </summary>
+    public static bool IsAssignableFromInternal(this Type type, Type from)
+    {
+        if (IsNullableOfT(from) && type.IsInterface)
+        {
+            return type.IsAssignableFrom(from.GetGenericArguments()[0]);
+        }
+
+        return type.IsAssignableFrom(from);
+    }
 
     public static string GetName(Type type, bool fullyQualify = false)
     {
@@ -72,7 +93,7 @@ public static class TypeUtil
 
     public static PropertyInfo[] GetProperties(Type type, bool includeNonPublic)
     {
-        if (_typePropertyInfoCache.TryGetValue(type, out var properties))
+        if (TypePropertyInfoCache.TryGetValue(type, out var properties))
         {
             return properties;
         }
@@ -89,13 +110,13 @@ public static class TypeUtil
             .Select(g => g.OrderBy(p => p.DeclaringType == type).First())
             .ToArray();
 
-        _typePropertyInfoCache.TryAdd(type, properties);
+        TypePropertyInfoCache.TryAdd(type, properties);
         return properties;
     }
 
     public static FieldInfo[] GetFields(Type type, bool includeNonPublic)
     {
-        if (_typeFieldInfoCache.TryGetValue(type, out var fields))
+        if (TypeFieldInfoCache.TryGetValue(type, out var fields))
         {
             return fields;
         }
@@ -106,7 +127,7 @@ public static class TypeUtil
         
         fields = type.GetFields(bindingFlags);
 
-        _typeFieldInfoCache.TryAdd(type, fields);
+        TypeFieldInfoCache.TryAdd(type, fields);
         return fields;
     }
     

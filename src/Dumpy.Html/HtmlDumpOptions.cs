@@ -1,13 +1,14 @@
-﻿using Dumpy.Html.Converters;
+﻿using System.Collections.Generic;
+using Dumpy.Html.Converters;
 
 namespace Dumpy.Html;
 
-public class HtmlDumpOptions : DumpOptions
+public partial class HtmlDumpOptions : DumpOptions
 {
-    public HtmlDumpOptions()
-    {
-        Converters = [typeof(XmlNodeHtmlConverter), typeof(XNodeHtmlConverter)];
-    }
+    /// <summary>
+    /// The list of custom HTML Converters to use during serialization.
+    /// </summary>
+    public List<HtmlConverter> Converters { get; set; } = new();
 
     /// <summary>
     /// If true, adds title attributes containing additional metadata.

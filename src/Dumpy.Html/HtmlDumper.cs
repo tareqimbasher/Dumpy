@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Dumpy.Html;
 using Dumpy.Html.Converters;
 using Dumpy.Utils;
@@ -13,14 +15,18 @@ public static class HtmlDumper
 
     public static string DumpHtml<T>(this T? value, HtmlDumpOptions? options = null)
     {
+        var valueType = value?.GetType() ?? typeof(T);
+        return DumpHtml(value, valueType, options);
+    }
+
+    public static string DumpHtml<T>(this T? value, Type valueType, HtmlDumpOptions? options = null)
+    {
         options ??= DefaultOptions.Value;
 
         var writer = new ValueStringBuilder(stackalloc char[512], 4096);
 
         try
         {
-            var valueType = value?.GetType() ?? typeof(T);
-
             DumpHtml(ref writer, value, valueType, options);
         }
         catch
@@ -34,48 +40,45 @@ public static class HtmlDumper
 
     public static void DumpHtml<T>(ref ValueStringBuilder writer, T? value, Type valueType, HtmlDumpOptions options)
     {
-        var userDefinedConverterType = GetUserDefinedConverterType(valueType, options);
+        var converter = options.GetConverter(valueType);
+        converter.ConvertInner(ref writer, value, valueType, options);
+        
+        // The problem right now is how to call the Convert method
 
-        if (userDefinedConverterType != null)
-        {
-            var userDefinedConverter = Activator.CreateInstance(userDefinedConverterType) as IHtmlConverter<T>
-                                       ?? throw new InvalidOperationException(
-                                           $"Cannot create instance of {userDefinedConverterType} as {nameof(IHtmlConverter<T>)}.");
-
-            userDefinedConverter.Convert(ref writer, value, valueType, options);
-            return;
-        }
-
-        IGenericHtmlConverter converter = GetGenericConverter(valueType);
-        converter.Convert(ref writer, value, valueType, options);
+        // var method = typeof(HtmlConverter<>).GetMethod(
+        //     "Convert", 
+        //     BindingFlags.Public | BindingFlags.Instance);
+        // Debug.Assert(method != null);
+        //
+        // method.Invoke(converter, new object[] { writer, value!, valueType, options });
     }
 
-    internal static Type? GetUserDefinedConverterType(Type targetType, DumpOptions options)
-    {
-        if (options.Converters.Count == 0)
-        {
-            return null;
-        }
-
-        var target = typeof(IHtmlConverter<>).MakeGenericType(targetType);
-
-        var converterType = options.Converters.FirstOrDefault(x => target.IsAssignableFrom(x));
-
-        return converterType;
-    }
-
-    internal static IGenericHtmlConverter GetGenericConverter(Type targetType)
-    {
-        if (TypeUtil.IsStringFormattable(targetType))
-        {
-            return StringHtmlConverter.Instance;
-        }
-
-        if (TypeUtil.IsCollection(targetType))
-        {
-            return CollectionHtmlConverter.Instance;
-        }
-
-        return ObjectHtmlConverter.Instance;
-    }
+    // internal static Type? GetUserDefinedConverterType(Type targetType, DumpOptions options)
+    // {
+    //     if (options.Converters.Count == 0)
+    //     {
+    //         return null;
+    //     }
+    //
+    //     var target = typeof(IHtmlConverter<>).MakeGenericType(targetType);
+    //
+    //     var converterType = options.Converters.FirstOrDefault(x => target.IsAssignableFrom(x));
+    //
+    //     return converterType;
+    // }
+    //
+    // internal static IGenericHtmlConverter GetGenericConverter(Type targetType)
+    // {
+    //     if (TypeUtil.IsStringFormattable(targetType))
+    //     {
+    //         return StringHtmlConverterFactory.Instance;
+    //     }
+    //
+    //     if (TypeUtil.IsCollection(targetType))
+    //     {
+    //         return IEnumerableHtmlConverterFactory.Instance;
+    //     }
+    //
+    //     return ObjectHtmlConverterFactory.Instance;
+    // }
 }

@@ -4,12 +4,20 @@ using Dumpy.Utils;
 
 namespace Dumpy.Html.Converters;
 
-public class ObjectHtmlConverter : IGenericHtmlConverter
+public class ObjectHtmlConverterFactory : HtmlConverterFactory
 {
-    private static ObjectHtmlConverter? _instance;
-    public static ObjectHtmlConverter Instance => _instance ??= new ObjectHtmlConverter();
+    public override bool CanConvert(Type typeToConvert) => true;
 
-    public void Convert<T>(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
+    public override HtmlConverter? CreateConverter(Type typeToConvert, HtmlDumpOptions options)
+    {
+        var converterType = typeof(ObjectDefaultHtmlConverter<>).MakeGenericType(typeToConvert);
+        return Activator.CreateInstance(converterType) as HtmlConverter;
+    }
+}
+
+public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
+{
+    public override void Convert(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
     {
         if (value is null)
         {
@@ -38,11 +46,11 @@ public class ObjectHtmlConverter : IGenericHtmlConverter
         writer.WriteCloseTag("table");
     }
 
-    private void WriteTBody<T>(ref ValueStringBuilder writer, T value, Type targetType, HtmlDumpOptions options)
+    private void WriteTBody(ref ValueStringBuilder writer, T value, Type targetType, HtmlDumpOptions options)
     {
         writer.WriteOpenTag("tbody");
 
-        if (options.IncludeNonPublicMembers)
+        if (options.IncludeFields)
         {
             foreach (var field in TypeUtil.GetFields(targetType, options.IncludeNonPublicMembers))
             {
