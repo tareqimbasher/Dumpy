@@ -24,8 +24,4 @@
         <ProjectReference Include="..\..\src\Dumpy\Dumpy.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Metadata\"/>
-    </ItemGroup>
-
 </Project>

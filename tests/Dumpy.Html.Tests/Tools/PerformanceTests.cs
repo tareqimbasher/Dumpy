@@ -3,19 +3,19 @@ using Newtonsoft.Json;
 using Xunit.Abstractions;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace Dumpy.Html.Tests;
+namespace Dumpy.Html.Tests.Tools;
 
 public class PerformanceTests(ITestOutputHelper testOutputHelper)
 {
     private Car[] Data = Enumerable.Range(0, 10000).Select(i => new Car(i)).ToArray();
     
-    [Fact]
+    [Fact(Skip = "Adhoc")]
     public void Profile()
     {
         HtmlDumper.DumpHtml(Data);
     }
     
-    [Fact]
+    [Fact(Skip = "Adhoc")]
     public void LibComparison_Performance_Test()
     {
         const int times = 3;

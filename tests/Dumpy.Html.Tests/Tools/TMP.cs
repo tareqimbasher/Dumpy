@@ -1,12 +1,11 @@
 ﻿using System.Text;
-using Dumpy;
 using Xunit.Abstractions;
 
-namespace Dumpy.Html.Tests;
+namespace Dumpy.Html.Tests.Tools;
 
 public class TMP(ITestOutputHelper testOutputHelper)
 {
-    [Fact]
+    [Fact(Skip = "")]
     public void Test()
     {
         // var sb = new StringBuilder();

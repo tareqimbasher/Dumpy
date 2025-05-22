@@ -2,14 +2,14 @@
 
 internal static class Util
 {
+    private const string Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static readonly Random _random = new();
-    const string _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     public static string GenerateRandomString(int length)
     {
         return new string(
             Enumerable
-                .Repeat(_chars, length)
+                .Repeat(Chars, length)
                 .Select(s => s[_random.Next(s.Length)])
                 .ToArray()
         );

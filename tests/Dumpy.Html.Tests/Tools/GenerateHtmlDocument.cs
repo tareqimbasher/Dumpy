@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
-using Dumpy.Html;
 using Dumpy.Tests.Models;
 
-namespace Dumpy.Html.Tests;
+namespace Dumpy.Html.Tests.Tools;
 
 public class GenerateHtmlDocument
 {

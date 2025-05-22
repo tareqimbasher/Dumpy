@@ -5,9 +5,9 @@ using System.Xml.Linq;
 using Dumpy.Html.Converters;
 using Dumpy.Tests.Models;
 
-namespace Dumpy.Html.Tests;
+namespace Dumpy.Html.Tests.Converters;
 
-public class ConverterSelectionTests
+public class BuiltinConverterSelectionTests
 {
     [Theory]
     [InlineData(typeof(int))]
@@ -52,7 +52,7 @@ public class ConverterSelectionTests
     }
     
     [Fact]
-    public void AnonTypes()
+    public void AnonymousTypes()
     {
         var o = new
         {
@@ -68,7 +68,7 @@ public class ConverterSelectionTests
     
     [Theory]
     [InlineData(typeof(Array))]
-    [InlineData(typeof(int[]))]
+    [InlineData(typeof(string[]))]
     [InlineData(typeof(List<string>))]
     [InlineData(typeof(IEnumerable))]
     [InlineData(typeof(IEnumerable<string>))]
@@ -86,9 +86,10 @@ public class ConverterSelectionTests
     }
     
     [Theory]
+    [InlineData(typeof(int[,]), typeof(TwoDimensionalArrayHtmlConverter<int[,]>))]
     [InlineData(typeof(XmlNode), typeof(XmlNodeHtmlConverter))]
     [InlineData(typeof(XNode), typeof(XNodeHtmlConverter))]
-    public void OtherTypes(Type targetType, Type expectedConverterType)
+    public void SpecialTypes(Type targetType, Type expectedConverterType)
     {
         var options = new HtmlDumpOptions();
         var converter = options.GetConverter(targetType);
