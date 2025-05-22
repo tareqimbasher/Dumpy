@@ -91,8 +91,9 @@ public static class TypeUtil
         return sb.ToString();
     }
 
-    public static PropertyInfo[] GetProperties(Type type, bool includeNonPublic)
+    public static PropertyInfo[] GetReadableProperties(Type type, bool includeNonPublic)
     {
+        // TODO make includeNonPublic part of key
         if (TypePropertyInfoCache.TryGetValue(type, out var properties))
         {
             return properties;

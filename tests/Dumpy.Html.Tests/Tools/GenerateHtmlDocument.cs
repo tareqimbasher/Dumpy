@@ -5,8 +5,14 @@ namespace Dumpy.Html.Tests.Tools;
 
 public class GenerateHtmlDocument
 {
-    [Fact(Skip = "Manual")]
+    [Fact]
     public void GeneratePage()
+    {
+        // Person();
+        FileSystemInfo();
+    }
+
+    private void Person()
     {
         var person = new Person
         {
@@ -33,8 +39,19 @@ public class GenerateHtmlDocument
                 }
             ]
         };
+        Write(person);
+    }
 
-        var html = HtmlDumper.DumpHtml(person, new HtmlDumpOptions { AddTitleAttributes = true });
+    private void FileSystemInfo()
+    {
+        var file = new FileInfo("/does/not/exist.txt");
+        var dir = new DirectoryInfo("/does/not/exist");
+        Write(dir);
+    }
+    
+    private static void Write<T>(T value)
+    {
+        var html = HtmlDumper.DumpHtml(value, new HtmlDumpOptions { AddTitleAttributes = true });
 
         var doc = Consts.DocumentTemplate.Replace("HTML_REPLACE", html);
 

@@ -1,4 +1,6 @@
-﻿namespace Dumpy.Html.Tests;
+﻿using System.Xml;
+
+namespace Dumpy.Html.Tests;
 
 internal static class Util
 {
@@ -13,5 +15,12 @@ internal static class Util
                 .Select(s => s[_random.Next(s.Length)])
                 .ToArray()
         );
+    }
+    
+    public static string MinimizeHtml(string html)
+    {
+        var xd = new XmlDocument();
+        xd.LoadXml(html);
+        return xd.OuterXml;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Dumpy.Html.Utils;
 using Dumpy.Utils;
 
@@ -58,9 +59,10 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
             }
         }
 
-        foreach (var prop in TypeUtil.GetProperties(targetType, options.IncludeNonPublicMembers))
+        foreach (var prop in GetReadableProperties(targetType, options.IncludeNonPublicMembers))
         {
-            WriteTRow(ref writer, prop.Name, prop.PropertyType, TypeUtil.GetPropertyValue(prop, value), options);
+            var (propValue, propValueType) = GetPropertyValue(prop, value);
+            WriteTRow(ref writer, prop.Name, propValueType, propValue, options);
         }
 
         writer.WriteCloseTag("tbody");
@@ -88,5 +90,15 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
         writer.WriteCloseTag("td");
 
         writer.WriteCloseTag("tr");
+    }
+    
+    protected virtual PropertyInfo[] GetReadableProperties(Type targetType, bool includeNonPublicMembers)
+    {
+        return TypeUtil.GetReadableProperties(targetType, includeNonPublicMembers);
+    }
+
+    protected virtual (object? propValue, Type propValueType) GetPropertyValue<TObject>(PropertyInfo property, TObject obj)
+    {
+        return (TypeUtil.GetPropertyValue(property, obj), property.PropertyType);
     }
 }

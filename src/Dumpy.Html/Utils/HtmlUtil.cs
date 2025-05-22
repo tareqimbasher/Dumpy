@@ -17,6 +17,7 @@ internal static class HtmlUtil
         
         text = text
             .Replace("&", HtmlConsts.HtmlAmpersand)
+            .Replace(" ", " ")
             .Replace("<", HtmlConsts.HtmlLessThan)
             .Replace(">", HtmlConsts.HtmlGreaterThan)
             .Replace("\"", HtmlConsts.HtmlQuote)

@@ -92,7 +92,7 @@ public class IEnumerableDefautHtmlConverter<T> : HtmlConverter<T>
                 ? TypeUtil.GetFields(elementType, options.IncludeNonPublicMembers)
                 : Array.Empty<FieldInfo>();
 
-            var properties = TypeUtil.GetProperties(elementType, options.IncludeNonPublicMembers);
+            var properties = TypeUtil.GetReadableProperties(elementType, options.IncludeNonPublicMembers);
 
             writer.WriteOpenTag("table");
             writer.WriteOpenTag("thead");
@@ -198,7 +198,7 @@ public class IEnumerableDefautHtmlConverter<T> : HtmlConverter<T>
                     }
                     else
                     {
-                        var properties = TypeUtil.GetProperties(keyType, false);
+                        var properties = TypeUtil.GetReadableProperties(keyType, false);
 
                         sb.Append("Key = {");
 
