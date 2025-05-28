@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using BenchmarkDotNet.Attributes;
+using Dumpify;
 
 namespace Dumpy.Benchmark;
 
@@ -18,6 +19,9 @@ public class Serialization
 
     [Benchmark]
     public string Html1() => HtmlDumper.DumpHtml(_1);
+    
+    [Benchmark]
+    public string Dumpify1() => DumpExtensions.DumpText(_1);
 
     [Benchmark]
     public string Json10() => JsonSerializer.Serialize(_10);
@@ -26,22 +30,31 @@ public class Serialization
     public string Html10() => HtmlDumper.DumpHtml(_10);
     
     [Benchmark]
+    public string Dumpify10() => DumpExtensions.DumpText(_10);
+    
+    [Benchmark]
     public string Json100() => JsonSerializer.Serialize(_100);
     
     [Benchmark]
     public string Html100() => HtmlDumper.DumpHtml(_100);
     
+    [Benchmark]
+    public string Dumpify100() => DumpExtensions.DumpText(_100);
+    
     // [Benchmark]
     // public string Json1000() => JsonSerializer.Serialize(_1000);
+    
+    // [Benchmark]
+    // public string Html1000() => HtmlDumper.DumpHtml(_1000);
     //
     // [Benchmark]
-    // public string Html1000() => Dumper.DumpHtml(_1000);
-    //
+    // public string Dumpify1000() => DumpExtensions.DumpText(_1000);
+    
     // [Benchmark]
     // public string Json10000() => JsonSerializer.Serialize(_10000);
     //
     // [Benchmark]
-    // public string Html10000() => Dumper.DumpHtml(_10000);
+    // public string Html10000() => HtmlDumper.DumpHtml(_10000);
 
     public class Car(int id)
     {
