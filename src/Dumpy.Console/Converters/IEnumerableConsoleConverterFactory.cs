@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -9,12 +9,25 @@ using Spectre.Console.Rendering;
 
 namespace Dumpy.Console.Converters;
 
-public class CollectionConsoleConverter : IGenericConsoleConverter
+// ReSharper disable once InconsistentNaming
+public class IEnumerableConsoleConverterFactory : ConsoleConverterFactory
 {
-    private static CollectionConsoleConverter? _instance;
-    public static CollectionConsoleConverter Instance => _instance ??= new CollectionConsoleConverter();
+    public override bool CanConvert(Type typeToConvert)
+    {
+        return TypeUtil.IsCollection(typeToConvert);
+    }
 
-    public IRenderable Convert<T>(T? value, Type targetType, DumpOptions options)
+    public override ConsoleConverter? CreateConverter(Type typeToConvert, ConsoleDumpOptions options)
+    {
+        var converterType = typeof(IEnumerableDefaultConsoleConverter<>).MakeGenericType(typeToConvert);
+        return Activator.CreateInstance(converterType) as ConsoleConverter;
+    }
+}
+
+// ReSharper disable once InconsistentNaming
+public class IEnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
+{
+    public override IRenderable Convert(T? value, Type targetType, ConsoleDumpOptions options)
     {
         if (value is null)
         {
@@ -62,7 +75,7 @@ public class CollectionConsoleConverter : IGenericConsoleConverter
                 ? TypeUtil.GetFields(elementType, options.IncludeNonPublicMembers)
                 : Array.Empty<FieldInfo>();
 
-            var properties = TypeUtil.GetProperties(elementType, options.IncludeNonPublicMembers);
+            var properties = TypeUtil.GetReadableProperties(elementType, options.IncludeNonPublicMembers);
 
             int? maxCount = options.MaxCollectionSerializeLength;
             int rowCount = 0;

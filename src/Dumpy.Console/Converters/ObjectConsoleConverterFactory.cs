@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Dumpy.Console.Widgets;
 using Dumpy.Utils;
 using Spectre.Console;
@@ -6,12 +6,20 @@ using Spectre.Console.Rendering;
 
 namespace Dumpy.Console.Converters;
 
-public class ObjectConsoleConverter : IGenericConsoleConverter
+public class ObjectConsoleConverterFactory : ConsoleConverterFactory
 {
-    private static ObjectConsoleConverter? _instance;
-    public static ObjectConsoleConverter Instance => _instance ??= new ObjectConsoleConverter();
+    public override bool CanConvert(Type typeToConvert) => true;
 
-    public IRenderable Convert<T>(T? value, Type targetType, DumpOptions options)
+    public override ConsoleConverter? CreateConverter(Type typeToConvert, ConsoleDumpOptions options)
+    {
+        var converterType = typeof(ObjectDefaultConsoleConverter<>).MakeGenericType(typeToConvert);
+        return Activator.CreateInstance(converterType) as ConsoleConverter;
+    }
+}
+
+public class ObjectDefaultConsoleConverter<T> : ConsoleConverter<T>
+{
+    public override IRenderable Convert(T? value, Type targetType, ConsoleDumpOptions options)
     {
         if (value is null)
         {
@@ -35,7 +43,7 @@ public class ObjectConsoleConverter : IGenericConsoleConverter
             }
         }
         
-        foreach (var prop in TypeUtil.GetProperties(targetType, options.IncludeNonPublicMembers))
+        foreach (var prop in TypeUtil.GetReadableProperties(targetType, options.IncludeNonPublicMembers))
         {
             var propValue = TypeUtil.GetPropertyValue(prop, value);
             table.AddRow(new Markup($"[bold][olive]{prop.Name}[/][/]"), propValue.DumpToRenderable(prop.PropertyType, options));

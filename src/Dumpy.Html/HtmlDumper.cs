@@ -11,7 +11,7 @@ namespace Dumpy;
 
 public static class HtmlDumper
 {
-    private static readonly Lazy<HtmlDumpOptions> DefaultOptions = new(() => new HtmlDumpOptions());
+    private static readonly Lazy<HtmlDumpOptions> _defaultOptions = new(() => new HtmlDumpOptions());
 
     public static string DumpHtml<T>(this T? value, HtmlDumpOptions? options = null)
     {
@@ -21,7 +21,7 @@ public static class HtmlDumper
 
     public static string DumpHtml<T>(this T? value, Type valueType, HtmlDumpOptions? options = null)
     {
-        options ??= DefaultOptions.Value;
+        options ??= _defaultOptions.Value;
 
         var writer = new ValueStringBuilder(stackalloc char[512], 4096);
 
@@ -42,43 +42,5 @@ public static class HtmlDumper
     {
         var converter = options.GetConverter(valueType);
         converter.ConvertInner(ref writer, value, valueType, options);
-        
-        // The problem right now is how to call the Convert method
-
-        // var method = typeof(HtmlConverter<>).GetMethod(
-        //     "Convert", 
-        //     BindingFlags.Public | BindingFlags.Instance);
-        // Debug.Assert(method != null);
-        //
-        // method.Invoke(converter, new object[] { writer, value!, valueType, options });
     }
-
-    // internal static Type? GetUserDefinedConverterType(Type targetType, DumpOptions options)
-    // {
-    //     if (options.Converters.Count == 0)
-    //     {
-    //         return null;
-    //     }
-    //
-    //     var target = typeof(IHtmlConverter<>).MakeGenericType(targetType);
-    //
-    //     var converterType = options.Converters.FirstOrDefault(x => target.IsAssignableFrom(x));
-    //
-    //     return converterType;
-    // }
-    //
-    // internal static IGenericHtmlConverter GetGenericConverter(Type targetType)
-    // {
-    //     if (TypeUtil.IsStringFormattable(targetType))
-    //     {
-    //         return StringHtmlConverterFactory.Instance;
-    //     }
-    //
-    //     if (TypeUtil.IsCollection(targetType))
-    //     {
-    //         return IEnumerableHtmlConverterFactory.Instance;
-    //     }
-    //
-    //     return ObjectHtmlConverterFactory.Instance;
-    // }
 }

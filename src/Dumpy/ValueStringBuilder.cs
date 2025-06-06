@@ -89,6 +89,11 @@ public ref partial struct ValueStringBuilder
         }
     }
 
+    /// <summary>
+    /// Converts the value of this instance to a <see cref="String"/>. This is a destructive operation. This instance
+    /// of <see cref="ValueStringBuilder"/> will be disposed.
+    /// </summary>
+    /// <returns></returns>
     public override string ToString()
     {
         string s = _chars.Slice(0, _pos).ToString();

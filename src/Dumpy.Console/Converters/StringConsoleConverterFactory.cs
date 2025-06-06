@@ -1,16 +1,28 @@
-﻿using System;
+using System;
 using Dumpy.Console.Widgets;
+using Dumpy.Utils;
 using Spectre.Console;
 using Spectre.Console.Rendering;
 
 namespace Dumpy.Console.Converters;
 
-public class StringConsoleConverter : IGenericConsoleConverter
+public class StringConsoleConverterFactory : ConsoleConverterFactory
 {
-    private static StringConsoleConverter? _instance;
-    public static StringConsoleConverter Instance => _instance ??= new StringConsoleConverter();
+    public override bool CanConvert(Type typeToConvert)
+    {
+        return TypeUtil.IsStringFormattable(typeToConvert);
+    }
 
-    public IRenderable Convert<T>(T? value, Type targetType, DumpOptions options)
+    public override ConsoleConverter? CreateConverter(Type typeToConvert, ConsoleDumpOptions options)
+    {
+        var converterType = typeof(StringDefaultConsoleConverter<>).MakeGenericType(typeToConvert);
+        return Activator.CreateInstance(converterType) as ConsoleConverter;
+    }
+}
+
+public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
+{
+    public override IRenderable Convert(T? value, Type targetType, ConsoleDumpOptions options)
     {
         if (value is null)
         {

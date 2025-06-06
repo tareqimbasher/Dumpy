@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace Dumpy.Html;
+namespace Dumpy;
 
 public static class ThrowHelper
 {
