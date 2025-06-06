@@ -5,9 +5,9 @@ namespace Dumpy.Console.Converters;
 
 public static class BuiltInConverters
 {
-    // private static ConsoleConverter<XmlNode>? _xmlNodeConverter;
-    // public static ConsoleConverter<XmlNode> XmlNodeConverter => _xmlNodeConverter ??= new XmlNodeHtmlConverter();
-    //
-    // private static ConsoleConverter<XNode>? _xNodeConverter;
-    // public static ConsoleConverter<XNode> XNodeConverter => _xNodeConverter ??= new XNodeHtmlConverter();
+    private static ConsoleConverter<XmlNode>? _xmlNodeConverter;
+    public static ConsoleConverter<XmlNode> XmlNodeConverter => _xmlNodeConverter ??= new XmlNodeConsoleConverter();
+
+    private static ConsoleConverter<XNode>? _xNodeConverter;
+    public static ConsoleConverter<XNode> XNodeConverter => _xNodeConverter ??= new XNodeConsoleConverter();
 }

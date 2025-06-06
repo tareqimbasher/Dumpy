@@ -75,16 +75,16 @@ public static class DumperTests
 
     class Car
     {
-        public string Make { get; set; }
-        public string Model { get; set; }
+        public string? Make { get; set; }
+        public string? Model { get; set; }
         public int Year { get; set; }
-        public List<Feature> Features { get; set; }
+        public List<Feature>? Features { get; set; }
     }
 
     class Feature
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public bool HasIt { get; set; }
-        public List<Feature> DependantFeatures { get; set; }
+        public List<Feature>? DependantFeatures { get; set; }
     }
 }

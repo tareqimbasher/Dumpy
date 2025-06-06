@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Dumpy.Console.Widgets;
 using Dumpy.Utils;
 using Spectre.Console;
@@ -43,12 +44,17 @@ public class ObjectDefaultConsoleConverter<T> : ConsoleConverter<T>
             }
         }
         
-        foreach (var prop in TypeUtil.GetReadableProperties(targetType, options.IncludeNonPublicMembers))
+        foreach (var prop in GetReadableProperties(targetType, options.IncludeNonPublicMembers))
         {
             var propValue = TypeUtil.GetPropertyValue(prop, value);
             table.AddRow(new Markup($"[bold][olive]{prop.Name}[/][/]"), propValue.DumpToRenderable(prop.PropertyType, options));
         }
 
         return table;
+    }
+    
+    protected virtual PropertyInfo[] GetReadableProperties(Type targetType, bool includeNonPublicMembers)
+    {
+        return TypeUtil.GetReadableProperties(targetType, includeNonPublicMembers);
     }
 }

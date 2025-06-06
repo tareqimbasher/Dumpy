@@ -21,7 +21,7 @@ public partial class ConsoleDumpOptions
         {
             _defaultSimpleConverters = GetDefaultSimpleConverters();
             Volatile.Write(ref _defaultFactoryConverters, [
-                // new FileSystemInfoConsoleConverterFactory(),
+                new FileSystemInfoConsoleConverterFactory(),
                 // new TwoDimensionalArrayConsoleConverterFactory(),
                 new StringConsoleConverterFactory(),
                 // IEnumerable should always be second to last since it can convert any IEnumerable.
@@ -38,10 +38,10 @@ public partial class ConsoleDumpOptions
         var converters = new Dictionary<Type, ConsoleConverter>(numberOfSimpleConverters);
 
         // When adding to this, update NumberOfSimpleConverters above.
-        // Add(BuiltInConverters.XmlNodeConverter);
-        // Add(BuiltInConverters.XNodeConverter);
+        Add(BuiltInConverters.XmlNodeConverter);
+        Add(BuiltInConverters.XNodeConverter);
 
-        //Debug.Assert(numberOfSimpleConverters == converters.Count);
+        Debug.Assert(numberOfSimpleConverters == converters.Count);
 
         return converters;
 

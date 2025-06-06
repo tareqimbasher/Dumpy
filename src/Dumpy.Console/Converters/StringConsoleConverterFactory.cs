@@ -34,11 +34,6 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
             return new Markup($"[lightsalmon1]\"{value}\"[/]");
         }
         
-        if (targetType == typeof(char))
-        {
-            return new Markup($"[lightsalmon1]'{value}'[/]");
-        }
-        
         if (targetType == typeof(Guid))
         {
             return new Markup($"[lightsalmon1]{value}[/]");
@@ -71,6 +66,11 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
             || targetType == typeof(decimal))
         {
             return new Markup($"[skyblue2]{value}[/]");
+        }
+        
+        if (targetType == typeof(char))
+        {
+            return new Markup($"[lightsalmon1]'{value}'[/]");
         }
 
         return new Text(value.ToString()!);
