@@ -1,4 +1,7 @@
-﻿namespace Dumpy;
+﻿using System;
+using System.Reflection;
+
+namespace Dumpy;
 
 public class DumpOptions
 {
@@ -27,6 +30,11 @@ public class DumpOptions
     /// </summary>
     public bool IncludeNonPublicMembers { get; set; }
 
+    /// <summary>
+    /// A predicate to filter members that should be dumped.
+    /// </summary>
+    public Func<MemberInfo, bool>? MemberFilter { get; set; }
+    
     /// <summary>
     /// If set, only this number of items will be serialized when serializing collections.
     /// </summary>

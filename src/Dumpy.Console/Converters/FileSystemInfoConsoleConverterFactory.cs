@@ -43,9 +43,9 @@ public class FileSystemInfoConsoleConverter : ObjectDefaultConsoleConverter<File
         nameof(FileInfo.Directory),
     };
     
-    protected override PropertyInfo[] GetReadableProperties(Type targetType, bool includeNonPublicMembers)
+    protected override PropertyInfo[] GetReadableProperties(Type targetType, ConsoleDumpOptions options)
     {
-        return base.GetReadableProperties(targetType, includeNonPublicMembers)
+        return base.GetReadableProperties(targetType, options)
             .Where(p => _serializableProperties.Contains(p.Name))
             .ToArray();
     }

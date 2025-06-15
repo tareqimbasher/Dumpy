@@ -43,7 +43,10 @@ public class IEnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
 
         if (!isElementObject)
         {
-            var table = new Table();
+            var table = new Table
+            {
+                ShowHeaders = options.TableOptions.ShowHeaders,
+            };
             table.AddColumn("");
 
             int? maxCount = options.MaxCollectionSerializeLength;
@@ -64,9 +67,11 @@ public class IEnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
             }
 
             var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
-            table.Title = new TableTitle(typeName, new Style(decoration: Decoration.Bold | Decoration.Dim));
+            table.Title = options.TableOptions.ShowTitles
+                ? new TableTitle(typeName, new Style(decoration: Decoration.Bold | Decoration.Dim))
+                : null;
             table.Columns[0].Header($"{(elementsCountExceedMax ? "First " : "")}{rowCount} items");
-            
+
             return table;
         }
         else
@@ -117,23 +122,28 @@ public class IEnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                 return EmptyCollectionWidget.New(typeName);
             }
 
-            var table = new Table();
+            var table = new Table
+            {
+                ShowHeaders = options.TableOptions.ShowHeaders
+            };
             // table.Expand = true;
             table.Border(TableBorder.Rounded);
             table.BorderStyle(new Style(Color.PaleTurquoise4));
             table.ShowRowSeparators = true;
-            table.Title = new TableTitle(title, new Style(decoration: Decoration.Bold | Decoration.Dim));
+            table.Title = options.TableOptions.ShowTitles
+                ? new TableTitle(title, new Style(decoration: Decoration.Bold | Decoration.Dim))
+                : null;
 
             foreach (var field in fields)
             {
                 table.AddColumn(new TableColumn(new Markup($"[bold][olive]{field.Name}[/][/]")));
             }
-            
+
             foreach (var property in properties)
             {
                 table.AddColumn(new TableColumn(new Markup($"[bold][olive]{property.Name}[/][/]")));
             }
-            
+
             foreach (var row in rows)
             {
                 table.AddRow(row);

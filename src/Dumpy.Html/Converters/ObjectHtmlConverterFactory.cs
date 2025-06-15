@@ -59,7 +59,7 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
             }
         }
 
-        foreach (var prop in GetReadableProperties(targetType, options.IncludeNonPublicMembers))
+        foreach (var prop in GetReadableProperties(targetType, options))
         {
             var (propValue, propValueType) = GetPropertyValue(prop, value);
             WriteTRow(ref writer, prop.Name, propValueType, propValue, options);
@@ -92,9 +92,9 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
         writer.WriteCloseTag("tr");
     }
     
-    protected virtual PropertyInfo[] GetReadableProperties(Type targetType, bool includeNonPublicMembers)
+    protected virtual PropertyInfo[] GetReadableProperties(Type targetType, HtmlDumpOptions options)
     {
-        return TypeUtil.GetReadableProperties(targetType, includeNonPublicMembers);
+        return TypeUtil.GetReadableProperties(targetType, options.IncludeNonPublicMembers);
     }
 
     protected virtual (object? propValue, Type propValueType) GetPropertyValue<TObject>(PropertyInfo property, TObject obj)
