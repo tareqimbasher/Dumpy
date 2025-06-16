@@ -9,8 +9,10 @@ public class GenerateHtmlDocument
     public void GeneratePage()
     {
         //Person();
+        //PersonCollection();
         //FileSystemInfo();
-        Tuple();
+        //Tuple();
+        TwoDimensionalArray();
     }
 
     private void Person()
@@ -46,6 +48,12 @@ public class GenerateHtmlDocument
             ]
         };
     }
+
+    private void PersonCollection()
+    {
+        var collection = Enumerable.Range(0, 4).Select(x => NewPerson());
+        Write(collection);
+    }
     
     private void FileSystemInfo()
     {
@@ -58,6 +66,12 @@ public class GenerateHtmlDocument
     {
         (Person person, DateTime created) tuple = (NewPerson(), DateTime.Now);
         Write(tuple);
+    }
+
+    private void TwoDimensionalArray()
+    {
+        int[,] numbers = { {1, 4, 2}, {3, 6, 8} };
+        Write(numbers);
     }
     
     private static void Write<T>(T value)
