@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Linq;
 #if NETCOREAPP3_0_OR_GREATER
@@ -9,6 +10,9 @@ namespace Dumpy.Html.Converters;
 
 public static class BuiltInConverters
 {
+    private static HtmlConverter<ITuple>? _tupleConverter;
+    public static HtmlConverter<ITuple> TupleConverter => _tupleConverter ??= new TupleHtmlConverter();
+    
     private static HtmlConverter<XmlNode>? _xmlNodeConverter;
     public static HtmlConverter<XmlNode> XmlNodeConverter => _xmlNodeConverter ??= new XmlNodeHtmlConverter();
 

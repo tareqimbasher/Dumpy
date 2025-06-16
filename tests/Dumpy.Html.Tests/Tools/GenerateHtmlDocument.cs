@@ -9,12 +9,18 @@ public class GenerateHtmlDocument
     public void GeneratePage()
     {
         //Person();
-        FileSystemInfo();
+        //FileSystemInfo();
+        Tuple();
     }
 
     private void Person()
     {
-        var person = new Person
+        Write(NewPerson());
+    }
+
+    private Person NewPerson()
+    {
+        return new Person
         {
             Name = "John",
             Age = 30,
@@ -39,14 +45,19 @@ public class GenerateHtmlDocument
                 }
             ]
         };
-        Write(person);
     }
-
+    
     private void FileSystemInfo()
     {
         var file = new FileInfo("/does/not/exist.txt");
         var dir = new DirectoryInfo("/does/not/exist");
         Write(dir);
+    }
+
+    private void Tuple()
+    {
+        (Person person, DateTime created) tuple = (NewPerson(), DateTime.Now);
+        Write(tuple);
     }
     
     private static void Write<T>(T value)

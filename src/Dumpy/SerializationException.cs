@@ -5,9 +5,4 @@ namespace Dumpy;
 /// <summary>
 /// Thrown as a result of an unexpected stoppage during serialization.
 /// </summary>
-public class SerializationException : Exception
-{
-    public SerializationException(string message) : base(message)
-    {
-    }
-}
+public class SerializationException(string message) : Exception(message);

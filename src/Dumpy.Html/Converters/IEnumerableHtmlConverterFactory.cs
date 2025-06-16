@@ -18,13 +18,13 @@ public class IEnumerableHtmlConverterFactory : HtmlConverterFactory
 
     public override HtmlConverter? CreateConverter(Type typeToConvert, HtmlDumpOptions options)
     {
-        var converterType = typeof(IEnumerableDefautHtmlConverter<>).MakeGenericType(typeToConvert);
+        var converterType = typeof(IEnumerableDefaultHtmlConverter<>).MakeGenericType(typeToConvert);
         return Activator.CreateInstance(converterType) as HtmlConverter;
     }
 }
 
 // ReSharper disable once InconsistentNaming
-public class IEnumerableDefautHtmlConverter<T> : HtmlConverter<T>
+public class IEnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 {
     public override void Convert(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
     {
@@ -35,140 +35,169 @@ public class IEnumerableDefautHtmlConverter<T> : HtmlConverter<T>
         }
 
         var collection = value as IEnumerable ??
-                         throw new Exception($"Value of type {targetType} is not an {nameof(IEnumerable)}.");
+                         throw new SerializationException($"Value of type {targetType} is not an {nameof(IEnumerable)}.");
 
         var elementType = TypeUtil.GetCollectionElementType(targetType) ?? typeof(object);
 
-        bool isElementObject = TypeUtil.IsObject(elementType);
-
-        if (!isElementObject)
+        // Rendering differs depending on the type of the collection's elements:
+        // Objects:
+        //    "Objects" should be rendered "horizontally". Each table row represents an object from the collection,
+        //    each property should have its own column and each cell contains the value of the corresponding property.
+        //
+        // Everything else:
+        //    Each row represents an item from the collection. Each table row has only one cell with the rendered item.
+        
+        if (TypeUtil.IsObject(elementType))
         {
-            writer.WriteOpenTag("table");
-            writer.WriteOpenTag("thead", options.CssClasses.TableInfoHeaderFormatted);
-
-            writer.WriteOpenTag("tr");
-            writer.WriteOpenTag("th");
-
-            int infoHeaderRowStartIndex = writer.Length;
-
-            writer.WriteCloseTag("th");
-            writer.WriteCloseTag("tr");
-            writer.WriteCloseTag("thead");
-
-            writer.WriteOpenTag("tbody");
-
-            int? maxCount = options.MaxCollectionSerializeLength;
-            int count = 0;
-            bool elementsCountExceedMax = false;
-
-            foreach (var element in collection)
-            {
-                count++;
-
-                if (count > maxCount)
-                {
-                    elementsCountExceedMax = true;
-                    break;
-                }
-
-                writer.WriteOpenTag("tr");
-                writer.WriteOpenTag("td");
-
-                HtmlDumper.DumpHtml(ref writer, element, elementType, options);
-
-                writer.WriteCloseTag("td");
-                writer.WriteCloseTag("tr");
-            }
-
-            var infoHeaderText = GetInfoHeaderText(collection, targetType, count, elementsCountExceedMax, options);
-            writer.Insert(infoHeaderRowStartIndex, infoHeaderText);
-
-            writer.WriteCloseTag("tbody");
-            writer.WriteCloseTag("table");
+            ConvertObject(ref writer, collection, elementType, targetType, options);
         }
         else
         {
-            var fields = options.IncludeFields
-                ? TypeUtil.GetFields(elementType, options.IncludeNonPublicMembers)
-                : Array.Empty<FieldInfo>();
-
-            var properties = TypeUtil.GetReadableProperties(elementType, options.IncludeNonPublicMembers);
-
-            writer.WriteOpenTag("table");
-            writer.WriteOpenTag("thead");
-
-            // Info header
-            writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
-            writer.WriteOpenTag("th", $"colspan=\"{fields.Length + properties.Length}\"");
-
-            int infoHeaderRowStartIndex = writer.Length;
-
-            writer.WriteCloseTag("th");
-            writer.WriteCloseTag("tr");
-
-            // Data header
-            writer.WriteOpenTag("tr", options.CssClasses.TableDataHeaderFormatted);
-            foreach (var name in fields.Select(x => x.Name).Union(properties.Select(x => x.Name)))
-            {
-                writer.WriteOpenTag("th");
-                writer.Append(HtmlUtil.EscapeText(name));
-                writer.WriteCloseTag("th");
-            }
-
-            writer.WriteCloseTag("tr");
-
-            writer.WriteCloseTag("thead");
-            writer.WriteOpenTag("tbody");
-
-            int? maxCount = options.MaxCollectionSerializeLength;
-            int count = 0;
-            bool elementsCountExceedMax = false;
-
-            foreach (var element in collection)
-            {
-                count++;
-
-                if (count > maxCount)
-                {
-                    elementsCountExceedMax = true;
-                    break;
-                }
-
-                writer.WriteOpenTag("tr");
-
-                foreach (var field in fields) // TODO check if needs to be included
-                {
-                    writer.WriteOpenTag("td");
-                    var val = TypeUtil.GetFieldValue(field, element);
-                    HtmlDumper.DumpHtml(ref writer, val, field.FieldType, options);
-                    writer.WriteCloseTag("td");
-                }
-
-                foreach (var property in properties)
-                {
-                    writer.WriteOpenTag("td");
-                    var val = TypeUtil.GetPropertyValue(property, element);
-                    HtmlDumper.DumpHtml(ref writer, val, property.PropertyType, options);
-                    writer.WriteCloseTag("td");
-                }
-
-                writer.WriteCloseTag("tr");
-            }
-
-            var infoHeaderText = GetInfoHeaderText(collection, targetType, count, elementsCountExceedMax, options);
-            writer.Insert(infoHeaderRowStartIndex, infoHeaderText);
-
-            writer.WriteCloseTag("tbody");
-            writer.WriteCloseTag("table");
+            ConvertNonObject(ref writer, collection, elementType, targetType, options);
         }
+    }
+
+    private void ConvertObject(
+        ref ValueStringBuilder writer,
+        IEnumerable collection,
+        Type elementType,
+        Type originalValueTargetType,
+        HtmlDumpOptions options
+    )
+    {
+        var fields = options.IncludeFields
+            ? TypeUtil.GetFields(elementType, options.IncludeNonPublicMembers)
+            : [];
+
+        var properties = TypeUtil.GetReadableProperties(elementType, options.IncludeNonPublicMembers);
+
+        writer.WriteOpenTag("table");
+        writer.WriteOpenTag("thead");
+
+        // Info header
+        writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
+        writer.WriteOpenTag("th", $"colspan=\"{fields.Length + properties.Length}\"");
+
+        int infoHeaderRowStartIndex = writer.Length;
+
+        writer.WriteCloseTag("th");
+        writer.WriteCloseTag("tr");
+
+        // Data header
+        writer.WriteOpenTag("tr", options.CssClasses.TableDataHeaderFormatted);
+        foreach (var name in fields.Select(x => x.Name).Union(properties.Select(x => x.Name)))
+        {
+            writer.WriteOpenTag("th");
+            writer.Append(HtmlUtil.EscapeText(name));
+            writer.WriteCloseTag("th");
+        }
+
+        writer.WriteCloseTag("tr");
+
+        writer.WriteCloseTag("thead");
+        writer.WriteOpenTag("tbody");
+
+        int? maxCount = options.MaxCollectionSerializeLength;
+        int count = 0;
+        bool elementsCountExceedMax = false;
+
+        foreach (var element in collection)
+        {
+            count++;
+
+            if (count > maxCount)
+            {
+                elementsCountExceedMax = true;
+                break;
+            }
+
+            writer.WriteOpenTag("tr");
+
+            foreach (var field in fields) // TODO check if needs to be included
+            {
+                writer.WriteOpenTag("td");
+                var val = TypeUtil.GetFieldValue(field, element);
+                HtmlDumper.DumpHtml(ref writer, val, field.FieldType, options);
+                writer.WriteCloseTag("td");
+            }
+
+            foreach (var property in properties)
+            {
+                writer.WriteOpenTag("td");
+                var val = TypeUtil.GetPropertyValue(property, element);
+                HtmlDumper.DumpHtml(ref writer, val, property.PropertyType, options);
+                writer.WriteCloseTag("td");
+            }
+
+            writer.WriteCloseTag("tr");
+        }
+
+        var infoHeaderText =
+            GetInfoHeaderText(collection, originalValueTargetType, count, elementsCountExceedMax);
+        writer.Insert(infoHeaderRowStartIndex, infoHeaderText);
+
+        writer.WriteCloseTag("tbody");
+        writer.WriteCloseTag("table");
+    }
+
+    private void ConvertNonObject(
+        ref ValueStringBuilder writer,
+        IEnumerable collection,
+        Type elementType,
+        Type originalValueTargetType,
+        HtmlDumpOptions options
+    )
+    {
+        writer.WriteOpenTag("table");
+        writer.WriteOpenTag("thead", options.CssClasses.TableInfoHeaderFormatted);
+
+        writer.WriteOpenTag("tr");
+        writer.WriteOpenTag("th");
+
+        int infoHeaderRowStartIndex = writer.Length;
+
+        writer.WriteCloseTag("th");
+        writer.WriteCloseTag("tr");
+        writer.WriteCloseTag("thead");
+
+        writer.WriteOpenTag("tbody");
+
+        int? maxCount = options.MaxCollectionSerializeLength;
+        int count = 0;
+        bool elementsCountExceedMax = false;
+
+        foreach (var element in collection)
+        {
+            count++;
+
+            if (count > maxCount)
+            {
+                elementsCountExceedMax = true;
+                break;
+            }
+
+            writer.WriteOpenTag("tr");
+            writer.WriteOpenTag("td");
+
+            HtmlDumper.DumpHtml(ref writer, element, elementType, options);
+
+            writer.WriteCloseTag("td");
+            writer.WriteCloseTag("tr");
+        }
+
+        var infoHeaderText =
+            GetInfoHeaderText(collection, originalValueTargetType, count, elementsCountExceedMax);
+        writer.Insert(infoHeaderRowStartIndex, infoHeaderText);
+
+        writer.WriteCloseTag("tbody");
+        writer.WriteCloseTag("table");
     }
 
     protected string GetInfoHeaderText(
         IEnumerable collection,
         Type collectionType,
         int serializedElementCount,
-        bool collectionHasMoreElementsThanMax,
-        DumpOptions options)
+        bool collectionHasMoreElementsThanMax)
     {
         var sb = new StringBuilder();
         var collectionTypeName = TypeUtil.GetName(collectionType);

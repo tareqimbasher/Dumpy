@@ -82,7 +82,7 @@ public class BuiltinConverterSelectionTests
         var options = new HtmlDumpOptions();
         var converter = options.GetConverter(type);
         
-        Assert.Equal(typeof(IEnumerableDefautHtmlConverter<>).MakeGenericType(type), converter.GetType());
+        Assert.Equal(typeof(IEnumerableDefaultHtmlConverter<>).MakeGenericType(type), converter.GetType());
     }
     
     [Theory]
