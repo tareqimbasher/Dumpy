@@ -33,26 +33,28 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
         {
             return new Markup($"[lightsalmon1]\"{value}\"[/]");
         }
-        
+
         if (targetType == typeof(Guid))
         {
             return new Markup($"[lightsalmon1]{value}[/]");
         }
 
         if (targetType.IsEnum
-            || targetType == typeof(DateTime) 
-            || targetType == typeof(DateOnly) 
-            || targetType == typeof(DateTimeOffset) 
+            || targetType == typeof(DateTime)
+#if NET6_0_OR_GREATER
+            || targetType == typeof(DateOnly)
+#endif
+            || targetType == typeof(DateTimeOffset)
             || targetType == typeof(TimeSpan))
         {
             return new Markup($"[yellow4_1]{value}[/]");
         }
-        
+
         if (targetType == typeof(bool))
         {
             return new Markup($"[mediumpurple1]{value}[/]");
         }
-        
+
         if (targetType == typeof(int)
             || targetType == typeof(uint)
             || targetType == typeof(long)
@@ -67,7 +69,7 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
         {
             return new Markup($"[skyblue2]{value}[/]");
         }
-        
+
         if (targetType == typeof(char))
         {
             return new Markup($"[lightsalmon1]'{value}'[/]");

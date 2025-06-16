@@ -1,5 +1,9 @@
 using System.Xml;
 using System.Xml.Linq;
+#if NETCOREAPP3_0_OR_GREATER
+using System.Text.Json;
+using System.Text.Json.Nodes;
+#endif
 
 namespace Dumpy.Console.Converters;
 
@@ -10,4 +14,19 @@ public static class BuiltInConverters
 
     private static ConsoleConverter<XNode>? _xNodeConverter;
     public static ConsoleConverter<XNode> XNodeConverter => _xNodeConverter ??= new XNodeConsoleConverter();
+    
+#if NETCOREAPP3_0_OR_GREATER
+    private static ConsoleConverter<JsonDocument>? _jsonDocumentConverter;
+
+    public static ConsoleConverter<JsonDocument> JsonDocumentConverter =>
+        _jsonDocumentConverter ??= new JsonDocumentConsoleConverter();
+
+    private static ConsoleConverter<JsonElement>? _jsonElementConverter;
+
+    public static ConsoleConverter<JsonElement> JsonElementConverter =>
+        _jsonElementConverter ??= new JsonElementConsoleConverter();
+
+    private static ConsoleConverter<JsonNode>? _jsonNodeConverter;
+    public static ConsoleConverter<JsonNode> JsonNodeConverter => _jsonNodeConverter ??= new JsonNodeConsoleConverter();
+#endif
 }

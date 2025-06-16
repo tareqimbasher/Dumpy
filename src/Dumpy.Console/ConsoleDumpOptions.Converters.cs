@@ -14,7 +14,7 @@ public partial class ConsoleDumpOptions
     private static Dictionary<Type, ConsoleConverter>? _defaultSimpleConverters;
     private static ConsoleConverter[]? _defaultFactoryConverters;
     private readonly ConcurrentDictionary<Type, ConsoleConverter> _converters = new();
-    
+
     private void RootBuiltInConverters()
     {
         if (Volatile.Read(ref _defaultFactoryConverters) is null)
@@ -31,17 +31,20 @@ public partial class ConsoleDumpOptions
             ]);
         }
     }
-    
+
     private static Dictionary<Type, ConsoleConverter> GetDefaultSimpleConverters()
     {
-        const int numberOfSimpleConverters = 2;
+        const int numberOfSimpleConverters = 5;
         var converters = new Dictionary<Type, ConsoleConverter>(numberOfSimpleConverters);
 
         // When adding to this, update NumberOfSimpleConverters above.
         Add(BuiltInConverters.XmlNodeConverter);
         Add(BuiltInConverters.XNodeConverter);
-
-        Debug.Assert(numberOfSimpleConverters == converters.Count);
+#if NETCOREAPP3_0_OR_GREATER
+        Add(BuiltInConverters.JsonDocumentConverter);
+        Add(BuiltInConverters.JsonElementConverter);
+        Add(BuiltInConverters.JsonNodeConverter);
+#endif
 
         return converters;
 

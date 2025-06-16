@@ -34,14 +34,17 @@ public partial class HtmlDumpOptions
 
     private static Dictionary<Type, HtmlConverter> GetDefaultSimpleConverters()
     {
-        const int numberOfSimpleConverters = 2;
+        const int numberOfSimpleConverters = 5;
         var converters = new Dictionary<Type, HtmlConverter>(numberOfSimpleConverters);
 
         // When adding to this, update NumberOfSimpleConverters above.
         Add(BuiltInConverters.XmlNodeConverter);
         Add(BuiltInConverters.XNodeConverter);
-
-        Debug.Assert(numberOfSimpleConverters == converters.Count);
+#if NETCOREAPP3_0_OR_GREATER
+        Add(BuiltInConverters.JsonDocumentConverter);
+        Add(BuiltInConverters.JsonElementConverter);
+        Add(BuiltInConverters.JsonNodeConverter);
+#endif
 
         return converters;
 
