@@ -21,7 +21,9 @@ public partial class HtmlDumpOptions
         {
             _defaultSimpleConverters = GetDefaultSimpleConverters();
             Volatile.Write(ref _defaultFactoryConverters, [
+                // In decreasing specificity
                 new FileSystemInfoHtmlConverterFactory(),
+                new MemoryHtmlConverterFactory(),
                 new TwoDimensionalArrayHtmlConverterFactory(),
                 new StringHtmlConverterFactory(),
                 // IEnumerable should always be second to last since it can convert any IEnumerable.

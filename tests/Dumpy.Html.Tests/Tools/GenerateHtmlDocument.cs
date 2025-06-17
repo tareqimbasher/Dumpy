@@ -12,7 +12,8 @@ public class GenerateHtmlDocument
         //PersonCollection();
         //FileSystemInfo();
         //Tuple();
-        TwoDimensionalArray();
+        //TwoDimensionalArray();
+        Memory();
     }
 
     private void Person()
@@ -54,7 +55,7 @@ public class GenerateHtmlDocument
         var collection = Enumerable.Range(0, 4).Select(x => NewPerson());
         Write(collection);
     }
-    
+
     private void FileSystemInfo()
     {
         var file = new FileInfo("/does/not/exist.txt");
@@ -70,10 +71,16 @@ public class GenerateHtmlDocument
 
     private void TwoDimensionalArray()
     {
-        int[,] numbers = { {1, 4, 2}, {3, 6, 8} };
+        int[,] numbers = { { 1, 4, 2 }, { 3, 6, 8 } };
         Write(numbers);
     }
-    
+
+    private void Memory()
+    {
+        Memory<int> memory = new[] { 1, 4, 2 };
+        Write(memory);
+    }
+
     private static void Write<T>(T value)
     {
         var html = HtmlDumper.DumpHtml(value, new HtmlDumpOptions { AddTitleAttributes = true });
