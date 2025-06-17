@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Linq;
 #if NETCOREAPP3_0_OR_GREATER
@@ -9,6 +10,9 @@ namespace Dumpy.Console.Converters;
 
 public static class BuiltInConverters
 {
+    private static ConsoleConverter<ITuple>? _tupleConverter;
+    public static ConsoleConverter<ITuple> TupleConverter => _tupleConverter ??= new TupleConsoleConverter();
+    
     private static ConsoleConverter<XmlNode>? _xmlNodeConverter;
     public static ConsoleConverter<XmlNode> XmlNodeConverter => _xmlNodeConverter ??= new XmlNodeConsoleConverter();
 

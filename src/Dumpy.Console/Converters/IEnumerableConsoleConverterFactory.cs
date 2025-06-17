@@ -66,6 +66,7 @@ public class IEnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                 table.AddRow(element.DumpToRenderable(elementType, options));
             }
 
+            // TODO only get type name if needed
             var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
             table.Title = options.TableOptions.ShowTitles
                 ? new TableTitle(typeName, new Style(decoration: Decoration.Bold | Decoration.Dim))

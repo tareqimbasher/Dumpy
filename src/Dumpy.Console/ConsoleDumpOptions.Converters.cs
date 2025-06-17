@@ -38,6 +38,7 @@ public partial class ConsoleDumpOptions
         var converters = new Dictionary<Type, ConsoleConverter>(numberOfSimpleConverters);
 
         // When adding to this, update NumberOfSimpleConverters above.
+        Add(BuiltInConverters.TupleConverter);
         Add(BuiltInConverters.XmlNodeConverter);
         Add(BuiltInConverters.XNodeConverter);
 #if NETCOREAPP3_0_OR_GREATER
