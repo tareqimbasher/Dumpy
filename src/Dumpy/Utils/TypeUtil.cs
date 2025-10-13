@@ -105,7 +105,8 @@ public static class TypeUtil
 
         properties = type
             .GetProperties(bindingFlags)
-            .Where(p => p.CanRead)
+            // Only include readable properties, and exclude indexer properties
+            .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
             // Exclude properties that exist in base types and are hidden by properties in derived types
             .GroupBy(p => p.Name)
             .Select(g => g.OrderBy(p => p.DeclaringType == type).First())
@@ -126,7 +127,10 @@ public static class TypeUtil
             ? BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
             : BindingFlags.Instance | BindingFlags.Public;
         
-        fields = type.GetFields(bindingFlags);
+        fields = type.GetFields(bindingFlags)
+            .GroupBy(f => f.Name)
+            .Select(g => g.OrderBy(p => p.DeclaringType == type).First())
+            .ToArray();
 
         TypeFieldInfoCache.TryAdd(type, fields);
         return fields;
