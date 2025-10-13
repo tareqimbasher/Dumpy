@@ -18,7 +18,9 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
 
         var table = new Table
         {
-            ShowHeaders = options.TableOptions.ShowHeaders,
+            ShowHeaders = false, // Always false
+            ShowRowSeparators = options.TableOptions.ShowRowSeparators,
+            Expand = options.TableOptions.Expand,
         };
         table.AddColumn("");
         table.AddColumn("");
@@ -38,13 +40,14 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
             serializedItemCount++;
         }
 
-        var exceededMax = value.Length > options.MaxCollectionSerializeLength;
-        table.Columns[1].Header($"{(exceededMax ? "First " : "")}{serializedItemCount} items");
+        
         
         if (options.TableOptions.ShowTitles)
         {
+            var exceededMax = value.Length > options.MaxCollectionSerializeLength;
+            var items = $"{(exceededMax ? "First " : "")}{serializedItemCount} items";
             var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
-            table.Title = new TableTitle(typeName, new Style(decoration: Decoration.Bold | Decoration.Dim));
+            table.Title = new TableTitle($"{items} | {typeName}", new Style(decoration: Decoration.Bold | Decoration.Dim));
         }
 
         return table;

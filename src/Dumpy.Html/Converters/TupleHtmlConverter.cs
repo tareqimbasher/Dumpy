@@ -50,7 +50,7 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
             writer.WriteCloseTag("td");
 
             writer.WriteCloseTag("tr");
-            ++serializedItemCount;
+            serializedItemCount++;
         }
 
         var infoHeaderText =

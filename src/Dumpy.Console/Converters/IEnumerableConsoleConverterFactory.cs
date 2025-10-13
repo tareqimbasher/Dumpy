@@ -46,6 +46,8 @@ public class IEnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
             var table = new Table
             {
                 ShowHeaders = options.TableOptions.ShowHeaders,
+                ShowRowSeparators = options.TableOptions.ShowRowSeparators,
+                Expand = options.TableOptions.Expand,
             };
             table.AddColumn("");
 
@@ -125,12 +127,12 @@ public class IEnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
 
             var table = new Table
             {
-                ShowHeaders = options.TableOptions.ShowHeaders
+                ShowHeaders = options.TableOptions.ShowHeaders,
+                ShowRowSeparators = options.TableOptions.ShowRowSeparators,
+                Expand = options.TableOptions.Expand,
             };
-            // table.Expand = true;
             table.Border(TableBorder.Rounded);
             table.BorderStyle(new Style(Color.PaleTurquoise4));
-            table.ShowRowSeparators = true;
             table.Title = options.TableOptions.ShowTitles
                 ? new TableTitle(title, new Style(decoration: Decoration.Bold | Decoration.Dim))
                 : null;

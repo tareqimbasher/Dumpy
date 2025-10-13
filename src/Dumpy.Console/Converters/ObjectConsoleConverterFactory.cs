@@ -30,7 +30,9 @@ public class ObjectDefaultConsoleConverter<T> : ConsoleConverter<T>
 
         var table = new Table
         {
-            ShowHeaders = options.TableOptions.ShowHeaders
+            ShowHeaders = options.TableOptions.ShowHeaders,
+            ShowRowSeparators = options.TableOptions.ShowRowSeparators,
+            Expand = options.TableOptions.Expand,
         };
 
         var typeName = Markup.Escape(TypeUtil.GetName(targetType, true));
