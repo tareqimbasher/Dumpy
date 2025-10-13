@@ -34,28 +34,4 @@ public static class Exts
                           $"\n   size: {result.Length * sizeof(char):N0} bytes" +
                           $"\n");
     }
-
-    public static T? Dump<T>(this T? value, string? title = null, HtmlDumpOptions? options = null)
-    {
-        value.DumpConsole();
-        //SendToVsExt(value.DumpHtml(options));
-        return value;
-    }
-
-    // public static void UseRemoveViewer(this DumpyConfig config, string wsUri)
-    // {
-
-    // }
-
-    private static void SendToVsExt(string html)
-    {
-        html = JsonSerializer.Serialize(html); // to convert it to a JSON string
-        var json = $$"""
-                     {"type": "data", "data":{{html}}}
-                     """;
-
-        using ClientWebSocket ws = new();
-        ws.ConnectAsync(new Uri("ws://localhost:5689/"), CancellationToken.None).Wait();
-        ws.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(json)), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
-    }
 }
