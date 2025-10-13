@@ -38,10 +38,11 @@ public partial class HtmlDumpOptions
 
     private static Dictionary<Type, HtmlConverter> GetDefaultSimpleConverters()
     {
-        const int numberOfSimpleConverters = 6;
+        const int numberOfSimpleConverters = 7;
         var converters = new Dictionary<Type, HtmlConverter>(numberOfSimpleConverters);
 
         // When adding to this, update NumberOfSimpleConverters above.
+        Add(BuiltInConverters.DataTableNodeConverter);
         Add(BuiltInConverters.XmlNodeConverter);
         Add(BuiltInConverters.XNodeConverter);
 #if NETSTANDARD2_1 || NETCOREAPP3_0_OR_GREATER

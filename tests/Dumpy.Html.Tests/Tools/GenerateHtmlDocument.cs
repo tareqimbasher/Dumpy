@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Data;
+using System.Reflection;
 using Dumpy.Tests.Models;
 
 namespace Dumpy.Html.Tests.Tools;
@@ -13,7 +14,8 @@ public class GenerateHtmlDocument
         //FileSystemInfo();
         //Tuple();
         //TwoDimensionalArray();
-        Memory();
+        // Memory();
+        DataTable();
     }
 
     private void Person()
@@ -79,6 +81,24 @@ public class GenerateHtmlDocument
     {
         Memory<int> memory = new[] { 1, 4, 2 };
         Write(memory);
+    }
+
+    private void DataTable()
+    {
+        var table = new DataTable("Table name");
+        table.Columns.Add("Name");
+        table.Columns.Add("Date of Birth", typeof(DateTime));
+        table.Columns.Add("Salary", typeof(decimal));
+
+        var row1 = table.NewRow();
+        table.Rows.Add(row1);
+        row1.ItemArray = ["John Doe", DateTime.Parse("1980/1/1"), 1000];
+        
+        var row2 = table.NewRow();
+        table.Rows.Add(row2);
+        row2.ItemArray = ["Jane Doe", DateTime.Parse("1981/1/1"), 2000];
+
+        Write(table);
     }
 
     private static void Write<T>(T value)

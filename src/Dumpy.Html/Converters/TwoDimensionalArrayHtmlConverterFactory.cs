@@ -41,7 +41,7 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
 
         // Write info header
         writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
-        // columnCount + 1 because we will an extra empty cell in the table data header
+        // columnCount + 1 because we will have an extra empty cell in the table data header
         writer.WriteOpenTag("th", $"colspan=\"{columnCount + 1}\"");
         writer.Append($"{TypeUtil.GetName(targetType)} (Rows = {rowCount}, Columns = {columnCount}) ({collectionLength} items)");
         writer.WriteCloseTag("th");
