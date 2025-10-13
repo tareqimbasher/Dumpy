@@ -1,6 +1,6 @@
 using Dumpy.Html.Converters;
 
-namespace Dumpy.Html.Tests.Converters;
+namespace Dumpy.Html.Tests.Converters.ConverterSelection;
 
 public class CustomConverterSelectionTests
 {

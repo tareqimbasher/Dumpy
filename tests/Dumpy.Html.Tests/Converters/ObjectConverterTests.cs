@@ -3,10 +3,10 @@
 public class ObjectHtmlConverterTests
 {
     [Fact]
-    public void ShouldCorrectlySerializeObject()
+    public void ShouldSerializeObject()
     {
         var html = HtmlDumper.DumpHtml(Consts.Person);
 
-        Assert.Equal(Util.MinimizeHtml(Consts.PersonHtmlRepresentation), html);
+        Assert.Equal(Util.MinimizeHtml(Consts.PersonObjectHtmlRepresentation), html);
     }
 }

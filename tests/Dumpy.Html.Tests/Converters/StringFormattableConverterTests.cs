@@ -20,7 +20,7 @@ public class StringHtmlConverterTests
     [InlineData(false)]
     [InlineData(1.3f)]
     [InlineData(5L)]
-    public void ShouldCorrectlySerializePrimitiveValues<T>(T value)
+    public void ShouldSerializePrimitiveValues<T>(T value)
     {
         var html = HtmlDumper.DumpHtml(value);
 
@@ -32,7 +32,7 @@ public class StringHtmlConverterTests
     [InlineData(DateTimeKind.Utc)]
     [InlineData(BindingFlags.Instance)]
     [InlineData(BindingFlags.Instance | BindingFlags.Public)]
-    public void ShouldCorrectlySerializeEnumValues<T>(T value)
+    public void ShouldSerializeEnumValues<T>(T value)
     {
         var html = HtmlDumper.DumpHtml(value);
 
@@ -40,7 +40,7 @@ public class StringHtmlConverterTests
     }
 
     [Fact]
-    public void ShouldCorrectlySerializeDateTimeValues()
+    public void ShouldSerializeDateTimeValues()
     {
         var date = DateTime.Now;
 
@@ -50,7 +50,7 @@ public class StringHtmlConverterTests
     }
 
     [Fact]
-    public void ShouldCorrectlySerializeDateOnlyValues()
+    public void ShouldSerializeDateOnlyValues()
     {
         var date = DateOnly.Parse("2001-01-01");
 
@@ -60,7 +60,7 @@ public class StringHtmlConverterTests
     }
 
     [Fact]
-    public void ShouldCorrectlySerializeIFormattableValues()
+    public void ShouldSerializeIFormattableValues()
     {
         var val = new FormattableValue();
 
@@ -70,7 +70,7 @@ public class StringHtmlConverterTests
     }
 
     [Fact]
-    public void ShouldCorrectlySerializeNullableValues()
+    public void ShouldSerializeNullableValues()
     {
         var val = new int?(1);
 

@@ -85,7 +85,7 @@ public static class Consts
         ]
     };
 
-    public const string PersonHtmlRepresentation =
+    public const string PersonObjectHtmlRepresentation =
         """
         <table>
             <thead>
@@ -158,6 +158,110 @@ public static class Consts
                 </tr>
                 <tr>
                     <th>Children</th>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr class="dm-t-info">
+                                    <th colspan="5">Person[] (2 items)</th>
+                                </tr>
+                                <tr class="dm-t-data">
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>OtherNames</th>
+                                    <th>Spouse</th>
+                                    <th>Children</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Adam</td>
+                                    <td>16</td>
+                                    <td><span class="dm-null">null</span></td>
+                                    <td><span class="dm-null">null</span></td>
+                                    <td><span class="dm-null">null</span></td>
+                                </tr>
+                                <tr>
+                                    <td>June</td>
+                                    <td>13</td>
+                                    <td><span class="dm-null">null</span></td>
+                                    <td><span class="dm-null">null</span></td>
+                                    <td><span class="dm-null">null</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        """;
+
+    public const string PersonTableHtmlRepresentation =
+        """
+        <table>
+            <thead>
+                <tr class="dm-t-info">
+                    <th colspan="5">Person[] (1 items)</th>
+                </tr>
+                <tr class="dm-t-data">
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>OtherNames</th>
+                    <th>Spouse</th>
+                    <th>Children</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John Smith</td>
+                    <td>30</td>
+                    <td>
+                        <table>
+                            <thead class="dm-t-info">
+                                <tr>
+                                    <th>String[] (2 items)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Jack Smith</td>
+                                </tr>
+                                <tr>
+                                    <td>Jim</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr class="dm-t-info">
+                                    <th colspan="2">Person</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Name</th>
+                                    <td>Jane Rose</td>
+                                </tr>
+                                <tr>
+                                    <th>Age</th>
+                                    <td>25</td>
+                                </tr>
+                                <tr>
+                                    <th>OtherNames</th>
+                                    <td><span class="dm-null">null</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Spouse</th>
+                                    <td><span class="dm-null">null</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Children</th>
+                                    <td><span class="dm-null">null</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
                     <td>
                         <table>
                             <thead>
