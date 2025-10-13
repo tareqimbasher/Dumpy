@@ -22,7 +22,7 @@ public partial class ConsoleDumpOptions
             _defaultSimpleConverters = GetDefaultSimpleConverters();
             Volatile.Write(ref _defaultFactoryConverters, [
                 new FileSystemInfoConsoleConverterFactory(),
-                // new TwoDimensionalArrayConsoleConverterFactory(),
+                new TwoDimensionalArrayConsoleConverterFactory(),
                 new StringConsoleConverterFactory(),
                 // IEnumerable should always be second to last since it can convert any IEnumerable.
                 new IEnumerableConsoleConverterFactory(),

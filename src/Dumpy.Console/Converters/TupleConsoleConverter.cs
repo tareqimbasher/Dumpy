@@ -21,6 +21,8 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
             ShowHeaders = false, // Always false
             ShowRowSeparators = options.TableOptions.ShowRowSeparators,
             Expand = options.TableOptions.Expand,
+            Border = TableBorder.Rounded,
+            BorderStyle = new Style(Color.PaleTurquoise4)
         };
         table.AddColumn("");
         table.AddColumn("");

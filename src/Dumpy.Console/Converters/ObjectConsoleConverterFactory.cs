@@ -33,14 +33,14 @@ public class ObjectDefaultConsoleConverter<T> : ConsoleConverter<T>
             ShowHeaders = options.TableOptions.ShowHeaders,
             ShowRowSeparators = options.TableOptions.ShowRowSeparators,
             Expand = options.TableOptions.Expand,
+            Border = TableBorder.Rounded,
+            BorderStyle = new Style(Color.PaleTurquoise4)
         };
 
         var typeName = Markup.Escape(TypeUtil.GetName(targetType, true));
         table.Title = options.TableOptions.ShowTitles ? new TableTitle(typeName, new Style(decoration: Decoration.Bold)) : null;
         table.AddColumn(new TableColumn(new Markup("[bold][olive]Property[/][/]")));
         table.AddColumn(new TableColumn(new Markup("[bold][olive]Value[/][/]")));
-        table.Border(TableBorder.Rounded);
-        table.BorderStyle(new Style(Color.PaleTurquoise4));
 
         if (options.IncludeNonPublicMembers)
         {

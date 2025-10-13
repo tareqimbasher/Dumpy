@@ -48,6 +48,8 @@ public class IEnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                 ShowHeaders = options.TableOptions.ShowHeaders,
                 ShowRowSeparators = options.TableOptions.ShowRowSeparators,
                 Expand = options.TableOptions.Expand,
+                Border = TableBorder.Rounded,
+                BorderStyle = new Style(Color.PaleTurquoise4)
             };
             table.AddColumn("");
 
@@ -130,9 +132,9 @@ public class IEnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                 ShowHeaders = options.TableOptions.ShowHeaders,
                 ShowRowSeparators = options.TableOptions.ShowRowSeparators,
                 Expand = options.TableOptions.Expand,
+                Border = TableBorder.Rounded,
+                BorderStyle = new Style(Color.PaleTurquoise4)
             };
-            table.Border(TableBorder.Rounded);
-            table.BorderStyle(new Style(Color.PaleTurquoise4));
             table.Title = options.TableOptions.ShowTitles
                 ? new TableTitle(title, new Style(decoration: Decoration.Bold | Decoration.Dim))
                 : null;
