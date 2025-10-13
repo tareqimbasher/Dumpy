@@ -37,10 +37,11 @@ public partial class ConsoleDumpOptions
 
     private static Dictionary<Type, ConsoleConverter> GetDefaultSimpleConverters()
     {
-        const int numberOfSimpleConverters = 6;
+        const int numberOfSimpleConverters = 7;
         var converters = new Dictionary<Type, ConsoleConverter>(numberOfSimpleConverters);
 
         // When adding to this, update NumberOfSimpleConverters above.
+        Add(BuiltInConverters.DataTableNodeConverter);
         Add(BuiltInConverters.XmlNodeConverter);
         Add(BuiltInConverters.XNodeConverter);
 #if NETSTANDARD2_1 || NETCOREAPP3_0_OR_GREATER

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Data;
+using System.Text.Json;
 using System.Xml;
 using System.Xml.Linq;
 using Dumpy.Console;
@@ -41,6 +42,19 @@ XElement.Parse("<person><name>My Name</name></person>").Dump();
 
 PrintHeader("JSON");
 JsonDocument.Parse(JsonSerializer.Serialize(new Car())).Dump();
+
+PrintHeader("DataTable");
+var table = new DataTable("Table name");
+table.Columns.Add("Name");
+table.Columns.Add("Date of Birth", typeof(DateTime));
+table.Columns.Add("Salary", typeof(decimal));
+var row1 = table.NewRow();
+table.Rows.Add(row1);
+row1.ItemArray = ["John Doe", DateTime.Parse("1980/1/1"), 1000];
+var row2 = table.NewRow();
+table.Rows.Add(row2);
+row2.ItemArray = ["Jane Doe", DateTime.Parse("1981/1/1"), 2000];
+table.DumpConsole();
 
 return;
 
