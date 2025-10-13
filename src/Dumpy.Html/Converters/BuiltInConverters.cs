@@ -10,8 +10,10 @@ namespace Dumpy.Html.Converters;
 
 public static class BuiltInConverters
 {
+#if NETSTANDARD2_1 || NETCOREAPP3_0_OR_GREATER
     private static HtmlConverter<ITuple>? _tupleConverter;
     public static HtmlConverter<ITuple> TupleConverter => _tupleConverter ??= new TupleHtmlConverter();
+#endif
     
     private static HtmlConverter<XmlNode>? _xmlNodeConverter;
     public static HtmlConverter<XmlNode> XmlNodeConverter => _xmlNodeConverter ??= new XmlNodeHtmlConverter();

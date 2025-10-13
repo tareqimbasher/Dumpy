@@ -23,6 +23,9 @@ public partial class ConsoleDumpOptions
             Volatile.Write(ref _defaultFactoryConverters, [
                 new FileSystemInfoConsoleConverterFactory(),
                 new TwoDimensionalArrayConsoleConverterFactory(),
+#if NETSTANDARD2_1 || NETCOREAPP2_1_OR_GREATER
+                new MemoryConsoleConverterFactory(),
+#endif
                 new StringConsoleConverterFactory(),
                 // IEnumerable should always be second to last since it can convert any IEnumerable.
                 new IEnumerableConsoleConverterFactory(),
@@ -34,13 +37,15 @@ public partial class ConsoleDumpOptions
 
     private static Dictionary<Type, ConsoleConverter> GetDefaultSimpleConverters()
     {
-        const int numberOfSimpleConverters = 5;
+        const int numberOfSimpleConverters = 6;
         var converters = new Dictionary<Type, ConsoleConverter>(numberOfSimpleConverters);
 
         // When adding to this, update NumberOfSimpleConverters above.
-        Add(BuiltInConverters.TupleConverter);
         Add(BuiltInConverters.XmlNodeConverter);
         Add(BuiltInConverters.XNodeConverter);
+#if NETSTANDARD2_1 || NETCOREAPP3_0_OR_GREATER
+        Add(BuiltInConverters.TupleConverter);
+#endif
 #if NETCOREAPP3_0_OR_GREATER
         Add(BuiltInConverters.JsonDocumentConverter);
         Add(BuiltInConverters.JsonElementConverter);

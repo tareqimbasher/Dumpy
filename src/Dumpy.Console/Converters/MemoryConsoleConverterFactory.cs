@@ -1,39 +1,40 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Dumpy.Console.Widgets;
+using Spectre.Console.Rendering;
 
-namespace Dumpy.Html.Converters;
+namespace Dumpy.Console.Converters;
 
-public class MemoryHtmlConverterFactory : HtmlConverterFactory
+public class MemoryConsoleConverterFactory : ConsoleConverterFactory
 {
     private static readonly HashSet<Type> _canConvertTypes = new()
     {
         typeof(Memory<>),
         typeof(ReadOnlyMemory<>),
     };
-
+    
     public override bool CanConvert(Type typeToConvert)
     {
         return typeToConvert.IsGenericType && _canConvertTypes.Contains(typeToConvert.GetGenericTypeDefinition());
     }
-
-    public override HtmlConverter? CreateConverter(Type typeToConvert, HtmlDumpOptions options)
+    
+    public override ConsoleConverter? CreateConverter(Type typeToConvert, ConsoleDumpOptions options)
     {
-        var converterType = typeof(MemoryHtmlConverter<>).MakeGenericType(typeToConvert);
-        return Activator.CreateInstance(converterType) as HtmlConverter;
+        var converterType = typeof(MemoryConsoleConverter<>).MakeGenericType(typeToConvert);
+        return Activator.CreateInstance(converterType) as ConsoleConverter;
     }
 }
 
-public class MemoryHtmlConverter<T> : HtmlConverter<T>
+public class MemoryConsoleConverter<T> : ConsoleConverter<T>
 {
     private const string ToArrayMethodName = "ToArray";
-
-    public override void Convert(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
+    
+    public override IRenderable Convert(T? value, Type targetType, ConsoleDumpOptions options)
     {
         if (value is null)
         {
-            writer.WriteNullHtml(options);
-            return;
+            return NullWidget.Instance;
         }
         
         var method = targetType.GetMethod(ToArrayMethodName, BindingFlags.Public | BindingFlags.Instance);
@@ -46,6 +47,6 @@ public class MemoryHtmlConverter<T> : HtmlConverter<T>
 
         var array = (Array)method.Invoke(value, [])!;
 
-        HtmlDumper.DumpHtml(ref writer, array, array.GetType(), options);
+        return ConsoleDumper.DumpToRenderable(array, array.GetType(), options);
     }
 }

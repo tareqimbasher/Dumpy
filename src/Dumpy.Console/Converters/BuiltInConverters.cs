@@ -10,8 +10,10 @@ namespace Dumpy.Console.Converters;
 
 public static class BuiltInConverters
 {
+#if NETSTANDARD2_1 || NETCOREAPP3_0_OR_GREATER
     private static ConsoleConverter<ITuple>? _tupleConverter;
     public static ConsoleConverter<ITuple> TupleConverter => _tupleConverter ??= new TupleConsoleConverter();
+#endif
     
     private static ConsoleConverter<XmlNode>? _xmlNodeConverter;
     public static ConsoleConverter<XmlNode> XmlNodeConverter => _xmlNodeConverter ??= new XmlNodeConsoleConverter();

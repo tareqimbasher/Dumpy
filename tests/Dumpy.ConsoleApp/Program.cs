@@ -24,6 +24,10 @@ PrintHeader("2D Array");
 int[,] numbers = { { 1, 4, 2 }, { 3, 6, 8 } };
 numbers.DumpConsole();
 
+PrintHeader("Memory");
+Memory<int> memory = new[] { 1, 4, 2 };
+memory.DumpConsole();
+
 PrintHeader("FileSystemInfo");
 new FileInfo("/tmp/text.txt").DumpConsole();
 
