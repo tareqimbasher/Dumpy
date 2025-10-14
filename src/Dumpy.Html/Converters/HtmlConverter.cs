@@ -4,6 +4,9 @@ using Dumpy.Utils;
 
 namespace Dumpy.Html.Converters;
 
+/// <summary>
+/// Converts an object or value to HTML.
+/// </summary>
 public abstract class HtmlConverter
 {
     /// <summary>
@@ -21,6 +24,9 @@ public abstract class HtmlConverter
     public abstract void ConvertInner(ref ValueStringBuilder writer, object? value, Type targetType, HtmlDumpOptions options);
 }
 
+/// <summary>
+/// Converts an object or value to HTML.
+/// </summary>
 public abstract class HtmlConverter<T> : HtmlConverter
 {
     /// <summary>
@@ -45,6 +51,12 @@ public abstract class HtmlConverter<T> : HtmlConverter
     }
 }
 
+/// <summary>
+/// Supports converting several types by using a factory pattern.
+/// </summary>
+/// <remarks>
+/// This is useful for converters supporting generics, such as a converter for <see cref="System.Collections.Generic.List{T}"/>.
+/// </remarks>
 public abstract class HtmlConverterFactory : HtmlConverter
 {
     internal sealed override Type? TypeToConvert => null;

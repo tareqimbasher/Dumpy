@@ -15,7 +15,7 @@ public partial class HtmlDumpOptions
     private static HtmlConverter[]? _defaultFactoryConverters;
     private readonly ConcurrentDictionary<Type, HtmlConverter> _converters = new();
 
-    private void RootBuiltInConverters()
+    private static void InitBuiltInConverters()
     {
         if (Volatile.Read(ref _defaultFactoryConverters) is null)
         {
@@ -29,7 +29,7 @@ public partial class HtmlDumpOptions
 #endif
                 new StringHtmlConverterFactory(),
                 // IEnumerable should always be second to last since it can convert any IEnumerable.
-                new IEnumerableHtmlConverterFactory(),
+                new EnumerableHtmlConverterFactory(),
                 // Object should always be last since it converts any type.
                 new ObjectHtmlConverterFactory(),
             ]);
@@ -70,7 +70,7 @@ public partial class HtmlDumpOptions
             throw new ArgumentNullException(nameof(typeToConvert));
         }
 
-        RootBuiltInConverters();
+        InitBuiltInConverters();
         return GetConverterInternal(typeToConvert);
     }
 

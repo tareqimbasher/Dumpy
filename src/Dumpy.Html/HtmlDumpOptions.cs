@@ -11,7 +11,7 @@ public partial class HtmlDumpOptions : DumpOptions
     public List<HtmlConverter> Converters { get; set; } = new();
 
     /// <summary>
-    /// If true, adds title attributes containing additional metadata.
+    /// If true, adds title attributes containing additional metadata (ex. type name).
     /// </summary>
     public bool AddTitleAttributes { get; set; }
 

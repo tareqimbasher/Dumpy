@@ -8,8 +8,7 @@ using Dumpy.Utils;
 
 namespace Dumpy.Html.Converters;
 
-// ReSharper disable once InconsistentNaming
-public class IEnumerableHtmlConverterFactory : HtmlConverterFactory
+public class EnumerableHtmlConverterFactory : HtmlConverterFactory
 {
     public override bool CanConvert(Type typeToConvert)
     {
@@ -18,13 +17,12 @@ public class IEnumerableHtmlConverterFactory : HtmlConverterFactory
 
     public override HtmlConverter? CreateConverter(Type typeToConvert, HtmlDumpOptions options)
     {
-        var converterType = typeof(IEnumerableDefaultHtmlConverter<>).MakeGenericType(typeToConvert);
+        var converterType = typeof(EnumerableDefaultHtmlConverter<>).MakeGenericType(typeToConvert);
         return Activator.CreateInstance(converterType) as HtmlConverter;
     }
 }
 
-// ReSharper disable once InconsistentNaming
-public class IEnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
+public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 {
     public override void Convert(ref ValueStringBuilder writer, T? value, Type targetType, HtmlDumpOptions options)
     {
@@ -35,7 +33,8 @@ public class IEnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         }
 
         var collection = value as IEnumerable ??
-                         throw new SerializationException($"Value of type {targetType} is not an {nameof(IEnumerable)}.");
+                         throw new SerializationException(
+                             $"Value of type {targetType} is not an {nameof(IEnumerable)}.");
 
         var elementType = TypeUtil.GetCollectionElementType(targetType) ?? typeof(object);
 
@@ -46,7 +45,7 @@ public class IEnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         //
         // Everything else:
         //    Each row represents an item from the collection. Each table row has only one cell with the rendered item.
-        
+
         if (TypeUtil.IsObject(elementType))
         {
             ConvertObject(ref writer, collection, elementType, targetType, options);
@@ -115,7 +114,9 @@ public class IEnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
             foreach (var field in fields) // TODO check if needs to be included
             {
-                writer.WriteOpenTag("td");
+                writer.WriteOpenTag("td",
+                    options.AddTitleAttributes ? $"title=\"{TypeUtil.GetName(field.FieldType, true)}\"" : null);
+
                 var val = TypeUtil.GetFieldValue(field, element);
                 HtmlDumper.DumpHtml(ref writer, val, field.FieldType, options);
                 writer.WriteCloseTag("td");
@@ -123,7 +124,9 @@ public class IEnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
             foreach (var property in properties)
             {
-                writer.WriteOpenTag("td");
+                writer.WriteOpenTag("td",
+                    options.AddTitleAttributes ? $"title=\"{TypeUtil.GetName(property.PropertyType, true)}\"" : null);
+
                 var val = TypeUtil.GetPropertyValue(property, element);
                 HtmlDumper.DumpHtml(ref writer, val, property.PropertyType, options);
                 writer.WriteCloseTag("td");

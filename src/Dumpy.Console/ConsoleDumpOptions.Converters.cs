@@ -15,12 +15,13 @@ public partial class ConsoleDumpOptions
     private static ConsoleConverter[]? _defaultFactoryConverters;
     private readonly ConcurrentDictionary<Type, ConsoleConverter> _converters = new();
 
-    private void RootBuiltInConverters()
+    private static void InitBuiltInConverters()
     {
         if (Volatile.Read(ref _defaultFactoryConverters) is null)
         {
             _defaultSimpleConverters = GetDefaultSimpleConverters();
             Volatile.Write(ref _defaultFactoryConverters, [
+                // In decreasing specificity
                 new FileSystemInfoConsoleConverterFactory(),
                 new TwoDimensionalArrayConsoleConverterFactory(),
 #if NETSTANDARD2_1 || NETCOREAPP2_1_OR_GREATER
@@ -28,7 +29,7 @@ public partial class ConsoleDumpOptions
 #endif
                 new StringConsoleConverterFactory(),
                 // IEnumerable should always be second to last since it can convert any IEnumerable.
-                new IEnumerableConsoleConverterFactory(),
+                new EnumerableConsoleConverterFactory(),
                 // Object should always be last since it converts any type.
                 new ObjectConsoleConverterFactory(),
             ]);
@@ -69,7 +70,7 @@ public partial class ConsoleDumpOptions
             throw new ArgumentNullException(nameof(typeToConvert));
         }
 
-        RootBuiltInConverters();
+        InitBuiltInConverters();
         return GetConverterInternal(typeToConvert);
     }
 

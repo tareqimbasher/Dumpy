@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Dumpy.Html.Utils;
 
-public static class HtmlConsts
+public static class HtmlConstants
 {
     public const string HtmlAmpersand = "&amp;";
     public const string HtmlSpace = "&nbsp;";

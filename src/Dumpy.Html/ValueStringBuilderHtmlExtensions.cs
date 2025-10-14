@@ -9,7 +9,7 @@ public static class ValueStringBuilderHtmlExtensions
 
         foreach (var attribute in attributes)
         {
-            if (string.IsNullOrEmpty(attribute))
+            if (string.IsNullOrWhiteSpace(attribute))
             {
                 continue;
             }

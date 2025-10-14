@@ -17,7 +17,7 @@ public class BuiltinConverterSelectionTests
     [Theory]
     [MemberData(nameof(CollectionTypesData))]
     public void CollectionTypes(Type type)
-        => AssertOpenGenericConverter(type, typeof(IEnumerableDefaultHtmlConverter<>));
+        => AssertOpenGenericConverter(type, typeof(EnumerableDefaultHtmlConverter<>));
 
     [Theory]
     [MemberData(nameof(SpecialTypesData))]

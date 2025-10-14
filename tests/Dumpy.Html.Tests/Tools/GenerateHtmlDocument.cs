@@ -10,12 +10,13 @@ public class GenerateHtmlDocument
     public void GeneratePage()
     {
         //Person();
+        SimpleCollection();
         //PersonCollection();
         //FileSystemInfo();
         //Tuple();
         //TwoDimensionalArray();
         // Memory();
-        DataTable();
+        //DataTable();
     }
 
     private void Person()
@@ -50,6 +51,11 @@ public class GenerateHtmlDocument
                 }
             ]
         };
+    }
+
+    private void SimpleCollection()
+    {
+        Write(new[] { 1, 2, 3 });
     }
 
     private void PersonCollection()

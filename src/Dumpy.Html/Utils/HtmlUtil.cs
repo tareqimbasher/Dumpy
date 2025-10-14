@@ -16,14 +16,14 @@ internal static class HtmlUtil
         }
         
         text = text
-            .Replace("&", HtmlConsts.HtmlAmpersand)
+            .Replace("&", HtmlConstants.HtmlAmpersand)
             .Replace(" ", " ")
-            .Replace("<", HtmlConsts.HtmlLessThan)
-            .Replace(">", HtmlConsts.HtmlGreaterThan)
-            .Replace("\"", HtmlConsts.HtmlQuote)
-            .Replace("'", HtmlConsts.HtmlApostrophe)
-            .Replace("\n", HtmlConsts.HtmlNewLine);
+            .Replace("<", HtmlConstants.HtmlLessThan)
+            .Replace(">", HtmlConstants.HtmlGreaterThan)
+            .Replace("\"", HtmlConstants.HtmlQuote)
+            .Replace("'", HtmlConstants.HtmlApostrophe)
+            .Replace("\n", HtmlConstants.HtmlNewLine);
         
-        return _multipleSpacesRegex.Replace(text, HtmlConsts.HtmlSpace);
+        return _multipleSpacesRegex.Replace(text, HtmlConstants.HtmlSpace);
     }
 }

@@ -10,7 +10,7 @@ using Spectre.Console.Rendering;
 namespace Dumpy.Console.Converters;
 
 // ReSharper disable once InconsistentNaming
-public class IEnumerableConsoleConverterFactory : ConsoleConverterFactory
+public class EnumerableConsoleConverterFactory : ConsoleConverterFactory
 {
     public override bool CanConvert(Type typeToConvert)
     {
@@ -19,13 +19,13 @@ public class IEnumerableConsoleConverterFactory : ConsoleConverterFactory
 
     public override ConsoleConverter? CreateConverter(Type typeToConvert, ConsoleDumpOptions options)
     {
-        var converterType = typeof(IEnumerableDefaultConsoleConverter<>).MakeGenericType(typeToConvert);
+        var converterType = typeof(EnumerableDefaultConsoleConverter<>).MakeGenericType(typeToConvert);
         return Activator.CreateInstance(converterType) as ConsoleConverter;
     }
 }
 
 // ReSharper disable once InconsistentNaming
-public class IEnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
+public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
 {
     public override IRenderable Convert(T? value, Type targetType, ConsoleDumpOptions options)
     {

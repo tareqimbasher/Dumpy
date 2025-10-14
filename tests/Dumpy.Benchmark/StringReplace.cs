@@ -14,26 +14,26 @@ public class StringReplace
     public string Replace()
     {
         return Data
-            .Replace("&", HtmlConsts.HtmlAmpersand)
-            .Replace(" ", HtmlConsts.HtmlSpace)
-            .Replace("<", HtmlConsts.HtmlLessThan)
-            .Replace(">", HtmlConsts.HtmlGreaterThan)
-            .Replace("\"", HtmlConsts.HtmlQuote)
-            .Replace("'", HtmlConsts.HtmlApostrophe)
-            .Replace("\n", HtmlConsts.HtmlNewLine);
+            .Replace("&", HtmlConstants.HtmlAmpersand)
+            .Replace(" ", HtmlConstants.HtmlSpace)
+            .Replace("<", HtmlConstants.HtmlLessThan)
+            .Replace(">", HtmlConstants.HtmlGreaterThan)
+            .Replace("\"", HtmlConstants.HtmlQuote)
+            .Replace("'", HtmlConstants.HtmlApostrophe)
+            .Replace("\n", HtmlConstants.HtmlNewLine);
     }
     
     [Benchmark]
     public string StringBuilder()
     {
         return new StringBuilder(Data)
-            .Replace("&", HtmlConsts.HtmlAmpersand)
-            .Replace(" ", HtmlConsts.HtmlSpace)
-            .Replace("<", HtmlConsts.HtmlLessThan)
-            .Replace(">", HtmlConsts.HtmlGreaterThan)
-            .Replace("\"", HtmlConsts.HtmlQuote)
-            .Replace("'", HtmlConsts.HtmlApostrophe)
-            .Replace("\n", HtmlConsts.HtmlNewLine)
+            .Replace("&", HtmlConstants.HtmlAmpersand)
+            .Replace(" ", HtmlConstants.HtmlSpace)
+            .Replace("<", HtmlConstants.HtmlLessThan)
+            .Replace(">", HtmlConstants.HtmlGreaterThan)
+            .Replace("\"", HtmlConstants.HtmlQuote)
+            .Replace("'", HtmlConstants.HtmlApostrophe)
+            .Replace("\n", HtmlConstants.HtmlNewLine)
             .ToString();
     }
     
@@ -43,15 +43,15 @@ public class StringReplace
     public string Replace2()
     {
         var data = Data
-            .Replace("&", HtmlConsts.HtmlAmpersand)
-            .Replace("  ", HtmlConsts.HtmlSpace)
-            .Replace("<", HtmlConsts.HtmlLessThan)
-            .Replace(">", HtmlConsts.HtmlGreaterThan)
-            .Replace("\"", HtmlConsts.HtmlQuote)
-            .Replace("'", HtmlConsts.HtmlApostrophe)
-            .Replace("\n", HtmlConsts.HtmlNewLine);
+            .Replace("&", HtmlConstants.HtmlAmpersand)
+            .Replace("  ", HtmlConstants.HtmlSpace)
+            .Replace("<", HtmlConstants.HtmlLessThan)
+            .Replace(">", HtmlConstants.HtmlGreaterThan)
+            .Replace("\"", HtmlConstants.HtmlQuote)
+            .Replace("'", HtmlConstants.HtmlApostrophe)
+            .Replace("\n", HtmlConstants.HtmlNewLine);
 
-        return _multipleSpacesRegex.Replace(data, HtmlConsts.HtmlSpace);
+        return _multipleSpacesRegex.Replace(data, HtmlConstants.HtmlSpace);
     }
     
 }

@@ -5,6 +5,9 @@ using Spectre.Console.Rendering;
 
 namespace Dumpy.Console.Converters;
 
+/// <summary>
+/// Converts an object or value to formatted Console output.
+/// </summary>
 public abstract class ConsoleConverter
 {
     /// <summary>
@@ -22,6 +25,9 @@ public abstract class ConsoleConverter
     public abstract IRenderable ConvertInner(object? value, Type targetType, ConsoleDumpOptions options);
 }
 
+/// <summary>
+/// Converts an object or value to formatted Console output.
+/// </summary>
 public abstract class ConsoleConverter<T> : ConsoleConverter
 {
     /// <summary>
@@ -46,6 +52,12 @@ public abstract class ConsoleConverter<T> : ConsoleConverter
     }
 }
 
+/// <summary>
+/// Supports converting several types by using a factory pattern.
+/// </summary>
+/// <remarks>
+/// This is useful for converters supporting generics, such as a converter for <see cref="System.Collections.Generic.List{T}"/>.
+/// </remarks>
 public abstract class ConsoleConverterFactory : ConsoleConverter
 {
     internal sealed override Type? TypeToConvert => null;

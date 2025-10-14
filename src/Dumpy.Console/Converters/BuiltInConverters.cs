@@ -9,7 +9,7 @@ using System.Text.Json.Nodes;
 
 namespace Dumpy.Console.Converters;
 
-public static class BuiltInConverters
+internal static class BuiltInConverters
 {
 #if NETSTANDARD2_1 || NETCOREAPP3_0_OR_GREATER
     private static ConsoleConverter<ITuple>? _tupleConverter;
