@@ -5,6 +5,16 @@ namespace Dumpy.Html.Tests.Converters;
 
 public class XmlNodeConverterTests
 {
+    private static readonly HtmlDumpOptions _htmlDumpOptionsNoCss = new() { CssClasses = { Enabled = false } };
+
+    [Fact]
+    public void ConvertsNull()
+    {
+        var html = HtmlDumper.DumpHtml<XmlNode?>(null, _htmlDumpOptionsNoCss);
+
+        Assert.Equal("<span>null</span>", html);
+    }
+    
     [Fact]
     public void ConvertsCorrectly()
     {

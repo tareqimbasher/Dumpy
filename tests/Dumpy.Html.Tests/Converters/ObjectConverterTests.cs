@@ -2,6 +2,16 @@
 
 public class ObjectHtmlConverterTests
 {
+    private static readonly HtmlDumpOptions _htmlDumpOptionsNoCss = new() { CssClasses = { Enabled = false } };
+    
+    [Fact]
+    public void ConvertsNull()
+    {
+        var html = HtmlDumper.DumpHtml<object?>(null, _htmlDumpOptionsNoCss);
+
+        Assert.Equal("<span>null</span>", html);
+    }
+    
     [Fact]
     public void ShouldSerializeObject()
     {

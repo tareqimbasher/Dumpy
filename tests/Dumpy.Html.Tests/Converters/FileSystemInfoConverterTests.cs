@@ -2,6 +2,8 @@ namespace Dumpy.Html.Tests.Converters;
 
 public class FileSystemInfoConverterTests
 {
+    private static readonly HtmlDumpOptions _htmlDumpOptionsNoCss = new() { CssClasses = { Enabled = false } };
+
     private static readonly string _fileExpectedHtml = Util.MinimizeHtml(
         """
         <table>
@@ -198,6 +200,14 @@ public class FileSystemInfoConverterTests
         </table>
         """);
 
+    [Fact]
+    public void ConvertsNull()
+    {
+        var html = HtmlDumper.DumpHtml<FileInfo?>(null, _htmlDumpOptionsNoCss);
+
+        Assert.Equal("<span>null</span>", html);
+    }
+    
     [Fact]
     public void ConvertsFileInfo()
     {

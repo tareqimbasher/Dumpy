@@ -8,6 +8,16 @@ namespace Dumpy.Html.Tests.Converters;
 
 public class StringHtmlConverterTests
 {
+    private static readonly HtmlDumpOptions _htmlDumpOptionsNoCss = new() { CssClasses = { Enabled = false } };
+
+    [Fact]
+    public void ConvertsNull()
+    {
+        var html = HtmlDumper.DumpHtml<string?>(null, _htmlDumpOptionsNoCss);
+
+        Assert.Equal("<span>null</span>", html);
+    }
+    
     [Theory]
     [InlineData(1)]
     [InlineData(-1)]
