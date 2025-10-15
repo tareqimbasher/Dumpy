@@ -1,13 +1,14 @@
 using System;
 using System.Data;
-using Dumpy.Html.Utils;
-using Dumpy.Utils;
 
 namespace Dumpy.Html.Converters;
 
 public class DataTableHtmlConverter : HtmlConverter<DataTable>
 {
-    public override void Convert(ref ValueStringBuilder writer, DataTable? value, Type targetType,
+    public override void Convert(
+        ref ValueStringBuilder writer,
+        DataTable? value,
+        Type targetType,
         HtmlDumpOptions options)
     {
         if (value is null)
@@ -23,38 +24,65 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
         writer.WriteOpenTag("thead");
 
         // Write info header
-        var showing = options.MaxCollectionSerializeLength > rowCount
-            ? $" - Showing {options.MaxCollectionSerializeLength}"
-            : "";
-        var headerText = (!string.IsNullOrWhiteSpace(value.TableName) ? value.TableName : "DataTable")
-                         + $" (Rows = {rowCount}{showing}, Columns = {columnCount})";
+        writer.WriteOpenTagStart("tr");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        {
+            writer.WriteClass(options.CssClasses.TableInfoHeader);
+        }
+        writer.WriteOpenTagEnd();
 
-        writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
-        // columnCount + 1 because we will have an extra empty cell in the table data header
-        writer.WriteOpenTag("th", $"colspan=\"{columnCount + 1}\"");
-        writer.Append(headerText);
+        writer.WriteOpenTagStart("th");
+        // columnCount + 1 because we will have an extra empty cell at the beginning of the data header
+        writer.WriteIntAttr("colspan", columnCount + 1);
+        writer.WriteOpenTagEnd();
+
+
+        // Header text
+        writer.Append(!string.IsNullOrWhiteSpace(value.TableName) ? value.TableName : "DataTable");
+        writer.Append(" (Rows = ");
+        writer.AppendInt(rowCount);
+
+        if (options.MaxCollectionSerializeLength > rowCount)
+        {
+            writer.Append(" - Showing ");
+            writer.AppendInt(options.MaxCollectionSerializeLength.Value);
+        }
+
+        writer.Append(", Columns = ");
+        writer.AppendInt(columnCount);
+        writer.Append(')');
+
         writer.WriteCloseTag("th");
         writer.WriteCloseTag("tr");
 
+
         // Write data header
-        writer.WriteOpenTag("tr", options.CssClasses.TableDataHeaderFormatted);
+        writer.WriteOpenTagStart("tr");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableDataHeader))
+        {
+            writer.WriteClass(options.CssClasses.TableDataHeader);
+        }
+
+        writer.WriteOpenTagEnd();
 
         for (int i = 0; i < columnCount; i++)
         {
             writer.WriteOpenTag("th");
-            writer.Append(value.Columns[i].ColumnName);
+            writer.AppendEscapedText(value.Columns[i].ColumnName);
             writer.WriteCloseTag("th");
         }
 
         writer.WriteCloseTag("tr");
         writer.WriteCloseTag("thead");
 
+
+        // Table body
         writer.WriteOpenTag("tbody");
 
         var rowsToIterate = options.MaxCollectionSerializeLength > rowCount
             ? options.MaxCollectionSerializeLength
             : rowCount;
-        
+
         for (int iRow = 0; iRow < rowsToIterate; iRow++)
         {
             var row = value.Rows[iRow];

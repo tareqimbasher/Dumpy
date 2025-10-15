@@ -11,6 +11,7 @@ namespace Dumpy.Utils;
 
 public static class TypeUtil
 {
+    private static readonly ConcurrentDictionary<Type, string?[]> TypeNameCache = new();
     private static readonly ConcurrentDictionary<Type, PropertyInfo[]> TypePropertyInfoCache = new();
     private static readonly ConcurrentDictionary<Type, FieldInfo[]> TypeFieldInfoCache = new();
     private static readonly Type NullableType = typeof(Nullable<>);
@@ -59,10 +60,19 @@ public static class TypeUtil
 
     public static string GetName(Type type, bool fullyQualify = false)
     {
+        int nameIndex = fullyQualify ? 0 : 1;
+        
+        if (TypeNameCache.TryGetValue(type, out var cached) && cached[nameIndex] != null)
+        {
+            return cached[nameIndex]!;
+        }
+        
+        var cache = TypeNameCache.GetOrAdd(type, static _ => [null, null]);
         var name = fullyQualify ? type.FullName ?? type.Name : type.Name;
 
         if (!type.IsGenericType)
         {
+            cache[nameIndex] = name;
             return name;
         }
 
@@ -88,7 +98,9 @@ public static class TypeUtil
 
         sb.Append('>');
 
-        return sb.ToString();
+        var result = sb.ToString();
+        cache[nameIndex] = result;
+        return result;
     }
 
     public static PropertyInfo[] GetReadableProperties(Type type, bool includeNonPublic)

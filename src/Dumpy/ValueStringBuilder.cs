@@ -137,25 +137,16 @@ public ref partial struct ValueStringBuilder
             return false;
         }
     }
-
-    public void Insert(int index, char value, int count)
-    {
-        if (_pos > _chars.Length - count)
-        {
-            Grow(count);
-        }
-
-        int remaining = _pos - index;
-        _chars.Slice(index, remaining).CopyTo(_chars.Slice(index + count));
-        _chars.Slice(index, count).Fill(value);
-        _pos += count;
-    }
-
-    public void Insert(int index, string? s)
+    
+    /// <summary>
+    /// Inserts the string at the specified index.
+    /// </summary>
+    /// <returns>The length of the inserted string; 0 if the string is null.</returns>
+    public int Insert(int index, string? s)
     {
         if (s == null)
         {
-            return;
+            return 0;
         }
 
         int count = s.Length;
@@ -173,6 +164,57 @@ public ref partial struct ValueStringBuilder
 #endif
             .CopyTo(_chars.Slice(index));
         _pos += count;
+        return count;
+    }
+    
+    public int Insert(int index, char value) => Insert(index, value, 1);
+    
+    public int Insert(int index, char value, int count)
+    {
+        if (_pos > _chars.Length - count)
+        {
+            Grow(count);
+        }
+
+        int remaining = _pos - index;
+        _chars.Slice(index, remaining).CopyTo(_chars.Slice(index + count));
+        _chars.Slice(index, count).Fill(value);
+        _pos += count;
+        return count;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public int Insert(int index, int value)
+    {
+        Span<char> buf = stackalloc char[11]; // enough for int32 including the '-'
+        if (value.TryFormat(buf, out int written))
+            return Insert(index, buf.Slice(0, written));
+        else
+            return Insert(index, value.ToString()); // fallback
+    }
+    
+    /// <summary>
+    /// Inserts the span at the specified index.
+    /// </summary>
+    /// <returns>The length of the inserted span; 0 if empty.</returns>
+    public int Insert(int index, scoped ReadOnlySpan<char> s)
+    {
+        int count = s.Length;
+        if (count == 0)
+        {
+            return 0;
+        }
+
+        if (_pos > _chars.Length - count)
+        {
+            Grow(count);
+        }
+
+        int remaining = _pos - index;
+        _chars.Slice(index, remaining).CopyTo(_chars.Slice(index + count));
+        s.CopyTo(_chars.Slice(index));
+        _pos += count;
+        return count;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -209,6 +251,16 @@ public ref partial struct ValueStringBuilder
         {
             AppendSlow(s);
         }
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void AppendInt(int value)
+    {
+        Span<char> buf = stackalloc char[11]; // enough for int32 including the '-'
+        if (value.TryFormat(buf, out int written))
+            Append(buf.Slice(0, written));
+        else
+            Append(value.ToString()); // fallback
     }
 
     private void AppendSlow(string s)

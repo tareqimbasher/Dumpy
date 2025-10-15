@@ -15,12 +15,18 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
         }
 
         writer.WriteOpenTag("table");
-        writer.WriteOpenTag("thead", options.CssClasses.TableInfoHeaderFormatted);
+        writer.WriteOpenTagStart("thead");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        {
+            writer.WriteClass(options.CssClasses.TableInfoHeader);
+        }
 
         writer.WriteOpenTag("tr");
-        writer.WriteOpenTag("th", "colspan=\"2\"");
+        writer.WriteOpenTagStart("th");
+        writer.WriteAttr("colspan", "2");
+        writer.WriteOpenTagEnd();
 
-        int infoHeaderRowStartIndex = writer.Length;
+        int infoHeaderRowInsertIndex = writer.Length;
 
         writer.WriteCloseTag("th");
         writer.WriteCloseTag("tr");
@@ -42,7 +48,8 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
             writer.WriteOpenTag("tr");
 
             writer.WriteOpenTag("th");
-            writer.Append($"Item{iItem + 1}");
+            writer.Append("Item");
+            writer.AppendInt(iItem + 1);
             writer.WriteCloseTag("th");
 
             writer.WriteOpenTag("td");
@@ -53,9 +60,16 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
             serializedItemCount++;
         }
 
-        var infoHeaderText =
-            $"{TypeUtil.GetName(targetType)} ({(value.Length > options.MaxCollectionSerializeLength ? "First " : "")}{serializedItemCount} items)";
-        writer.Insert(infoHeaderRowStartIndex, infoHeaderText);
+        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, TypeUtil.GetName(targetType));
+        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, '(');
+        if (value.Length > options.MaxCollectionSerializeLength)
+        {
+            infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "First ");
+        }
+
+        // TODO add a InsertInt and make zero-alloc
+        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, serializedItemCount.ToString());
+        writer.Insert(infoHeaderRowInsertIndex, " items)");
 
         writer.WriteCloseTag("tbody");
         writer.WriteCloseTag("table");

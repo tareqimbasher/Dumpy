@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Dumpy.Html.Utils;
 using Dumpy.Utils;
 
 namespace Dumpy.Html.Converters;
@@ -29,14 +28,23 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
         writer.WriteOpenTag("table");
         writer.WriteOpenTag("thead"); // TODO set statically
 
-        writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
-        writer.WriteOpenTag(
-            "th",
-            "colspan=\"2\"",
-            options.AddTitleAttributes ? $"title=\"{TypeUtil.GetName(targetType, true)}\"" : null
-        );
+        writer.WriteOpenTagStart("tr");
+        if (options.CssClasses.TableInfoHeader != null)
+        {
+            writer.WriteClass(options.CssClasses.TableInfoHeader);
+        }
+        writer.WriteOpenTagEnd();
 
-        writer.Append(HtmlUtil.EscapeText(TypeUtil.GetName(targetType)));
+        writer.WriteOpenTagStart("th");
+        writer.WriteAttr("colspan", "2");
+        if (options.AddTitleAttributes)
+        {
+            writer.WriteAttr("title", TypeUtil.GetName(targetType, true));
+        }
+
+        writer.WriteOpenTagEnd();
+
+        writer.AppendEscapedText(TypeUtil.GetName(targetType));
 
         writer.WriteCloseTag("th");
         writer.WriteCloseTag("tr");
@@ -77,11 +85,14 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
     {
         writer.WriteOpenTag("tr");
 
-        writer.WriteOpenTag(
-            "th",
-            options.AddTitleAttributes
-                ? $"title=\"{TypeUtil.GetName(memberType, true)}\""
-                : null);
+        writer.WriteOpenTagStart("th");
+        if (options.AddTitleAttributes)
+        {
+            writer.WriteAttr("title", TypeUtil.GetName(memberType, true));
+        }
+
+        writer.WriteOpenTagEnd();
+
         writer.Append(memberName);
         writer.WriteCloseTag("th");
 
@@ -91,13 +102,14 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
 
         writer.WriteCloseTag("tr");
     }
-    
+
     protected virtual PropertyInfo[] GetReadableProperties(Type targetType, HtmlDumpOptions options)
     {
         return TypeUtil.GetReadableProperties(targetType, options.IncludeNonPublicMembers);
     }
 
-    protected virtual (object? propValue, Type propValueType) GetPropertyValue<TObject>(PropertyInfo property, TObject obj)
+    protected virtual (object? propValue, Type propValueType) GetPropertyValue<TObject>(PropertyInfo property,
+        TObject obj)
     {
         return (TypeUtil.GetPropertyValue(property, obj), property.PropertyType);
     }

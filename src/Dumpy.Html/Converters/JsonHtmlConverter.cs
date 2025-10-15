@@ -1,6 +1,5 @@
 #if NETCOREAPP3_0_OR_GREATER
 
-using Dumpy.Html.Utils;
 using System.Text.Json;
 using System;
 using System.Text.Json.Nodes;
@@ -76,8 +75,10 @@ internal static class JsonHtmlConverter
     private static void WriteJson(ref ValueStringBuilder writer, string json)
     {
         writer.WriteOpenTag("pre");
-        writer.WriteOpenTag("code", "language=\"json\"");
-        writer.Append(HtmlUtil.EscapeText(json));
+        writer.WriteOpenTagStart("code");
+        writer.WriteAttr("language", "json");
+        writer.WriteOpenTagEnd();
+        writer.Append(json);
         writer.WriteCloseTag("code");
         writer.WriteCloseTag("pre");
     }

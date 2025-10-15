@@ -1,5 +1,4 @@
 ﻿using System;
-using Dumpy.Html.Utils;
 using Dumpy.Utils;
 
 namespace Dumpy.Html.Converters;
@@ -28,6 +27,6 @@ public class StringDefaultHtmlConverter<T> : HtmlConverter<T>
             return;
         }
         
-        writer.Append(HtmlUtil.EscapeText(value.ToString()));
+        writer.AppendEscapedText(value.ToString());
     }
 }

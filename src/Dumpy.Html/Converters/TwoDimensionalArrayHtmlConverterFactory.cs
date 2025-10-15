@@ -39,24 +39,52 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
         writer.WriteOpenTag("table");
         writer.WriteOpenTag("thead");
 
+        
+        
+        
         // Write info header
-        writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
-        // columnCount + 1 because we will have an extra empty cell in the table data header
-        writer.WriteOpenTag("th", $"colspan=\"{columnCount + 1}\"");
-        writer.Append($"{TypeUtil.GetName(targetType)} (Rows = {rowCount}, Columns = {columnCount}) ({collectionLength} items)");
+        writer.WriteOpenTagStart("tr");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        {
+            writer.WriteClass(options.CssClasses.TableInfoHeader);
+        }
+        writer.WriteOpenTagEnd();
+        
+        writer.WriteOpenTagStart("th");
+        // columnCount + 1 because we will have an extra empty cell at the beginning of the data header
+        writer.WriteIntAttr("colspan", columnCount + 1);
+        writer.WriteOpenTagEnd();
+        
+        writer.AppendEscapedText(TypeUtil.GetName(targetType));
+        writer.Append("(Rows = ");
+        writer.AppendInt(rowCount);
+        writer.Append(", Columns = ");
+        writer.AppendInt(columnCount);
+        writer.Append(") (");
+        writer.AppendInt(collectionLength);
+        writer.Append(" items)");
+        
         writer.WriteCloseTag("th");
         writer.WriteCloseTag("tr");
-
+        
+        
+        
         // Write data header
-        writer.WriteOpenTag("tr", options.CssClasses.TableDataHeaderFormatted);
+        writer.WriteOpenTagStart("tr");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableDataHeader))
+        {
+            writer.WriteClass(options.CssClasses.TableDataHeader);
+        }
+        writer.WriteOpenTagEnd();
+        
         // First heading cell should be empty
         writer.WriteOpenTag("th");
         writer.WriteCloseTag("th");
-
+       
         for (int i = 0; i < columnCount; i++)
         {
             writer.WriteOpenTag("th");
-            writer.Append(i.ToString());
+            writer.AppendInt(i);
             writer.WriteCloseTag("th");
         }
 
@@ -70,7 +98,7 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
             writer.WriteOpenTag("tr");
 
             writer.WriteOpenTag("th");
-            writer.Append(iRow.ToString());
+            writer.AppendInt(iRow);
             writer.WriteCloseTag("th");
 
             for (int iColumn = 0; iColumn < columnCount; iColumn++)

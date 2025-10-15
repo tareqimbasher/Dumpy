@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Dumpy.Html.Utils;
+﻿namespace Dumpy.Html.Tests;
 
 public static class HtmlConstants
 {

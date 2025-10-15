@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using Dumpy.Html.Utils;
 using Dumpy.Utils;
 
 namespace Dumpy.Html.Converters;
@@ -74,20 +72,36 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         writer.WriteOpenTag("thead");
 
         // Info header
-        writer.WriteOpenTag("tr", options.CssClasses.TableInfoHeaderFormatted);
-        writer.WriteOpenTag("th", $"colspan=\"{fields.Length + properties.Length}\"");
+        writer.WriteOpenTagStart("tr");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        {
+            writer.WriteClass(options.CssClasses.TableInfoHeader);
+        }
 
-        int infoHeaderRowStartIndex = writer.Length;
+        writer.WriteOpenTagEnd();
+
+        writer.WriteOpenTagStart("th");
+        writer.WriteIntAttr("colspan", fields.Length + properties.Length);
+        writer.WriteOpenTagEnd();
+
+        int infoHeaderRowInsertIndex = writer.Length;
 
         writer.WriteCloseTag("th");
         writer.WriteCloseTag("tr");
 
         // Data header
-        writer.WriteOpenTag("tr", options.CssClasses.TableDataHeaderFormatted);
-        foreach (var name in fields.Select(x => x.Name).Union(properties.Select(x => x.Name)))
+        writer.WriteOpenTagStart("tr");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableDataHeader))
+        {
+            writer.WriteClass(options.CssClasses.TableDataHeader);
+        }
+
+        writer.WriteOpenTagEnd();
+
+        foreach (var name in fields.Select(x => x.Name).Concat(properties.Select(x => x.Name)))
         {
             writer.WriteOpenTag("th");
-            writer.Append(HtmlUtil.EscapeText(name));
+            writer.AppendEscapedText(name);
             writer.WriteCloseTag("th");
         }
 
@@ -114,8 +128,13 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
             foreach (var field in fields) // TODO check if needs to be included
             {
-                writer.WriteOpenTag("td",
-                    options.AddTitleAttributes ? $"title=\"{TypeUtil.GetName(field.FieldType, true)}\"" : null);
+                writer.WriteOpenTagStart("td");
+                if (options.AddTitleAttributes)
+                {
+                    writer.WriteAttr("title", TypeUtil.GetName(field.FieldType, true));
+                }
+
+                writer.WriteOpenTagEnd();
 
                 var val = TypeUtil.GetFieldValue(field, element);
                 HtmlDumper.DumpHtml(ref writer, val, field.FieldType, options);
@@ -124,8 +143,14 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
             foreach (var property in properties)
             {
-                writer.WriteOpenTag("td",
-                    options.AddTitleAttributes ? $"title=\"{TypeUtil.GetName(property.PropertyType, true)}\"" : null);
+                writer.WriteOpenTagStart("td");
+                if (options.AddTitleAttributes)
+                {
+                    writer.WriteAttr("title", TypeUtil.GetName(property.PropertyType, true));
+                }
+
+                writer.WriteOpenTagEnd();
+
 
                 var val = TypeUtil.GetPropertyValue(property, element);
                 HtmlDumper.DumpHtml(ref writer, val, property.PropertyType, options);
@@ -135,9 +160,13 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             writer.WriteCloseTag("tr");
         }
 
-        var infoHeaderText =
-            GetInfoHeaderText(collection, originalValueTargetType, count, elementsCountExceedMax);
-        writer.Insert(infoHeaderRowStartIndex, infoHeaderText);
+        InsertInfoHeaderText(
+            ref writer,
+            infoHeaderRowInsertIndex,
+            collection,
+            originalValueTargetType,
+            count,
+            elementsCountExceedMax);
 
         writer.WriteCloseTag("tbody");
         writer.WriteCloseTag("table");
@@ -152,12 +181,18 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
     )
     {
         writer.WriteOpenTag("table");
-        writer.WriteOpenTag("thead", options.CssClasses.TableInfoHeaderFormatted);
+        writer.WriteOpenTagStart("thead");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        {
+            writer.WriteClass(options.CssClasses.TableInfoHeader);
+        }
+
+        writer.WriteOpenTagEnd();
 
         writer.WriteOpenTag("tr");
         writer.WriteOpenTag("th");
 
-        int infoHeaderRowStartIndex = writer.Length;
+        int infoHeaderRowInsertIndex = writer.Length;
 
         writer.WriteCloseTag("th");
         writer.WriteCloseTag("tr");
@@ -180,7 +215,13 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             }
 
             writer.WriteOpenTag("tr");
-            writer.WriteOpenTag("td");
+            writer.WriteOpenTagStart("td");
+            if (options.AddTitleAttributes)
+            {
+                writer.WriteAttr("title", TypeUtil.GetName(elementType, true));
+            }
+
+            writer.WriteOpenTagEnd();
 
             HtmlDumper.DumpHtml(ref writer, element, elementType, options);
 
@@ -188,21 +229,27 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             writer.WriteCloseTag("tr");
         }
 
-        var infoHeaderText =
-            GetInfoHeaderText(collection, originalValueTargetType, count, elementsCountExceedMax);
-        writer.Insert(infoHeaderRowStartIndex, infoHeaderText);
+        InsertInfoHeaderText(
+            ref writer,
+            infoHeaderRowInsertIndex,
+            collection,
+            originalValueTargetType,
+            count,
+            elementsCountExceedMax);
 
         writer.WriteCloseTag("tbody");
         writer.WriteCloseTag("table");
     }
 
-    protected string GetInfoHeaderText(
+    protected void InsertInfoHeaderText(
+        ref ValueStringBuilder writer,
+        int infoHeaderRowInsertIndex,
         IEnumerable collection,
         Type collectionType,
         int serializedElementCount,
         bool collectionHasMoreElementsThanMax)
     {
-        var sb = new StringBuilder();
+        var startingIndex = infoHeaderRowInsertIndex;
         var collectionTypeName = TypeUtil.GetName(collectionType);
 
         if (collectionType.Namespace == "System.Linq" && collectionTypeName.StartsWith("IGrouping<"))
@@ -214,7 +261,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
                 if (key == null)
                 {
-                    sb.Append("Key = (null)");
+                    infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "Key = (null)");
                 }
                 else
                 {
@@ -222,17 +269,19 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
                     if (TypeUtil.IsStringFormattable(keyType))
                     {
-                        sb.Append($"Key = {key}");
+                        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "Key = ");
+                        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, key.ToString());
                     }
                     else if (TypeUtil.IsCollection(keyType))
                     {
-                        sb.Append($"Key = {TypeUtil.GetName(keyType)}");
+                        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "Key = ");
+                        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, TypeUtil.GetName(keyType));
                     }
                     else
                     {
                         var properties = TypeUtil.GetReadableProperties(keyType, false);
 
-                        sb.Append("Key = {");
+                        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "Key = {");
 
                         for (var iProp = 0; iProp < properties.Length; iProp++)
                         {
@@ -248,35 +297,42 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
                             propValueStr ??= "(null)";
 
-                            sb.Append($"{property.Name}: {propValueStr}");
+                            infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, property.Name);
+                            infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, ": ");
+                            infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, propValueStr);
 
-                            if (sb.Length > 50)
+                            if ((infoHeaderRowInsertIndex - startingIndex) > 50)
                             {
-                                sb.Append("...");
+                                infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "...");
                                 break;
                             }
 
                             if (iProp < properties.Length - 1)
                             {
-                                sb.Append(", ");
+                                infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, ", ");
                             }
                         }
 
-                        sb.Append('}');
+                        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, '}');
                     }
                 }
 
-                if (sb.Length > 0)
+                if (infoHeaderRowInsertIndex > startingIndex)
                 {
-                    sb.Append("    ");
+                    infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "    ");
                 }
             }
         }
 
-        sb.Append(
-            $"{HtmlUtil.EscapeText(collectionTypeName)} ({(collectionHasMoreElementsThanMax ? "First " : "")}{serializedElementCount} items)"
-        );
+        infoHeaderRowInsertIndex += writer.EscapeAndInsertText(infoHeaderRowInsertIndex, collectionTypeName);
 
-        return sb.ToString();
+        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, " (");
+        if (collectionHasMoreElementsThanMax)
+        {
+            infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "First ");
+        }
+
+        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, serializedElementCount);
+        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, " items)");
     }
 }

@@ -1,5 +1,3 @@
-using Dumpy.Html.Utils;
-
 namespace Dumpy.Html.Tests;
 
 public class HtmlDumpOptionTests

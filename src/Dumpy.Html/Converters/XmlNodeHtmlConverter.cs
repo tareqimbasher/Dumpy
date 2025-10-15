@@ -1,6 +1,5 @@
 using System;
 using System.Xml;
-using Dumpy.Html.Utils;
 
 namespace Dumpy.Html.Converters;
 
@@ -15,10 +14,10 @@ public class XmlNodeHtmlConverter : HtmlConverter<XmlNode>
         }
         
         writer.WriteOpenTag("pre");
-        writer.WriteOpenTag("code", "language=\"xml\"");
-        
-        writer.Append(HtmlUtil.EscapeText(value.OuterXml));
-        
+        writer.WriteOpenTagStart("code");
+        writer.WriteAttr("language", "xml");
+        writer.WriteOpenTagEnd();
+        writer.Append(value.OuterXml);
         writer.WriteCloseTag("code");
         writer.WriteCloseTag("pre");
     }

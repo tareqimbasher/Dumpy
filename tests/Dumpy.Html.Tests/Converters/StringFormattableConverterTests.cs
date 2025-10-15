@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Xml.Linq;
-using Dumpy.Html.Utils;
 
 // ReSharper disable InvokeAsExtensionMethod
 
@@ -56,7 +55,7 @@ public class StringHtmlConverterTests
 
         var html = HtmlDumper.DumpHtml(date);
 
-        Assert.Equal(HtmlUtil.EscapeText(date.ToString()), html);
+        Assert.Equal(Util.EscapeText(date.ToString()), html);
     }
 
     [Fact]
@@ -66,7 +65,7 @@ public class StringHtmlConverterTests
 
         var html = HtmlDumper.DumpHtml(date);
 
-        Assert.Equal(HtmlUtil.EscapeText(date.ToString()), html);
+        Assert.Equal(Util.EscapeText(date.ToString()), html);
     }
 
     [Fact]
