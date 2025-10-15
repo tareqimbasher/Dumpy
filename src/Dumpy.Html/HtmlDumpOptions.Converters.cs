@@ -9,7 +9,7 @@ using Dumpy.Utils;
 
 namespace Dumpy.Html;
 
-public partial class HtmlDumpOptions
+public sealed partial class HtmlDumpOptions
 {
     private static Dictionary<Type, HtmlConverter>? _defaultSimpleConverters;
     private static HtmlConverter[]? _defaultFactoryConverters;

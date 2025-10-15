@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "others", "others", "{607543
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
 		.gitignore = .gitignore
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dumpy.Html.Tests", "tests\Dumpy.Html.Tests\Dumpy.Html.Tests.csproj", "{3731BA26-529B-44F8-9661-4997D1C3C484}"

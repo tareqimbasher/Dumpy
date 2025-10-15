@@ -3,10 +3,13 @@ using Dumpy.Html.Converters;
 
 namespace Dumpy.Html;
 
-public partial class HtmlDumpOptions : DumpOptions
+/// <summary>
+/// Provides options to use with <see cref="HtmlDumper"/>.
+/// </summary>
+public sealed partial class HtmlDumpOptions : DumpOptions
 {
     /// <summary>
-    /// The list of custom HTML converters to use during serialization.
+    /// The list of user-defined converters that were registered.
     /// </summary>
     public List<HtmlConverter> Converters { get; set; } = new();
 
@@ -21,6 +24,9 @@ public partial class HtmlDumpOptions : DumpOptions
     public CssClassOptions CssClasses { get; set; } = new();
 }
 
+/// <summary>
+/// Provides options to specify the CSS class names used in the output.
+/// </summary>
 public class CssClassOptions
 {
     public const string DefaultNullCssClass = "dm-null";

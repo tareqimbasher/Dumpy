@@ -1,20 +1,39 @@
 ﻿using System;
-using Dumpy.Html;
 using Dumpy.Utils;
 
-// ReSharper disable once CheckNamespace
-namespace Dumpy;
+namespace Dumpy.Html;
 
+/// <summary>
+/// Provides extension methods for dumping objects to HTML strings using configured <see cref="HtmlDumpOptions"/>.
+/// </summary>
 public static class HtmlDumper
 {
+    /// <summary>
+    /// Default options used when no <see cref="HtmlDumpOptions"/> are provided.
+    /// </summary>
     private static readonly HtmlDumpOptions _defaultOptions = new();
 
+    /// <summary>
+    /// Dumps the specified value to an HTML string using the provided options.
+    /// </summary>
+    /// <typeparam name="T">The static type of the value.</typeparam>
+    /// <param name="value">The value to dump.</param>
+    /// <param name="options">Optional dump options. If null, default options are used.</param>
+    /// <returns>An HTML string representing the value.</returns>
     public static string DumpHtml<T>(this T? value, HtmlDumpOptions? options = null)
     {
         var valueType = value?.GetType() ?? typeof(T);
         return DumpHtml(value, valueType, options);
     }
 
+    /// <summary>
+    /// Dumps the specified value to an HTML string using the provided runtime type and options.
+    /// </summary>
+    /// <typeparam name="T">The static type of the value.</typeparam>
+    /// <param name="value">The value to dump.</param>
+    /// <param name="valueType">The runtime type to use for converter selection.</param>
+    /// <param name="options">Optional dump options. If null, default options are used.</param>
+    /// <returns>An HTML string representing the value.</returns>
     public static string DumpHtml<T>(this T? value, Type valueType, HtmlDumpOptions? options = null)
     {
         options ??= _defaultOptions;
@@ -34,6 +53,14 @@ public static class HtmlDumper
         return writer.ToString();
     }
 
+    /// <summary>
+    /// Writes the HTML representation of the specified value into the provided writer.
+    /// </summary>
+    /// <typeparam name="T">The static type of the value.</typeparam>
+    /// <param name="writer">The destination buffer to write HTML into.</param>
+    /// <param name="value">The value to dump.</param>
+    /// <param name="valueType">The runtime type to use for converter selection.</param>
+    /// <param name="options">Dump options to control formatting and behaviors such as max depth and reference handling.</param>
     public static void DumpHtml<T>(ref ValueStringBuilder writer, T? value, Type valueType, HtmlDumpOptions options)
     {
         bool isRoot = !DumpContext.IsActive;

@@ -9,7 +9,7 @@ using Dumpy.Utils;
 
 namespace Dumpy.Console;
 
-public partial class ConsoleDumpOptions
+public sealed partial class ConsoleDumpOptions
 {
     private static Dictionary<Type, ConsoleConverter>? _defaultSimpleConverters;
     private static ConsoleConverter[]? _defaultFactoryConverters;

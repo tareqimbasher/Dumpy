@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using BenchmarkDotNet.Attributes;
 using Dumpify;
+using Dumpy.Html;
 
 namespace Dumpy.Benchmark;
 
