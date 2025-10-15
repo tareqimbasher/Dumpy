@@ -11,7 +11,7 @@ namespace Dumpy;
 
 public static class HtmlDumper
 {
-    private static readonly Lazy<HtmlDumpOptions> _defaultOptions = new(() => new HtmlDumpOptions());
+    private static readonly HtmlDumpOptions _defaultOptions = new();
 
     public static string DumpHtml<T>(this T? value, HtmlDumpOptions? options = null)
     {
@@ -21,7 +21,7 @@ public static class HtmlDumper
 
     public static string DumpHtml<T>(this T? value, Type valueType, HtmlDumpOptions? options = null)
     {
-        options ??= _defaultOptions.Value;
+        options ??= _defaultOptions;
 
         var writer = new ValueStringBuilder(stackalloc char[512], 4096);
 

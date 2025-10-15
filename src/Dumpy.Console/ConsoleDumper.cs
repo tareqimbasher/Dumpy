@@ -7,12 +7,7 @@ namespace Dumpy.Console;
 
 public static class ConsoleDumper
 {
-    private static readonly Lazy<ConsoleDumpOptions> _defaultOptions = new(() =>
-    {
-        var defaultOptions = new ConsoleDumpOptions();
-        ConsoleDumpOptions.ConfigureDefaultOptions(defaultOptions);
-        return defaultOptions;
-    });
+    private static readonly ConsoleDumpOptions _defaultOptions = new();
 
     [return: NotNullIfNotNull("value")]
     public static T? DumpConsole<T>(this T? value, ConsoleDumpOptions? options = null)
@@ -39,7 +34,7 @@ public static class ConsoleDumper
 
     public static IRenderable DumpToRenderable<T>(this T? value, ConsoleDumpOptions? options = null)
     {
-        options ??= _defaultOptions.Value;
+        options ??= _defaultOptions;
 
         var valueType = value?.GetType() ?? typeof(T);
 
@@ -48,7 +43,7 @@ public static class ConsoleDumper
 
     public static IRenderable DumpToRenderable<T>(this T? value, Type valueType, ConsoleDumpOptions? options = null)
     {
-        options ??= _defaultOptions.Value;
+        options ??= _defaultOptions;
 
         var converter = options.GetConverter(valueType);
         return converter.ConvertInner(value, valueType, options);
