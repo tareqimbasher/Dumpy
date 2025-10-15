@@ -13,6 +13,25 @@ public class EnumerableHtmlConverterTests
     }
 
     [Fact]
+    public void ShouldSerializeEmptyCollection()
+    {
+        string[] array = [];
+        string expected = $"""
+                           <table class="dm-empty">
+                               <thead class="{CssClassOptions.DefaultTableInfoHeaderCssClass}">
+                                   <tr>
+                                       <th>String[] (0 items)</th>
+                                   </tr>
+                               </thead>
+                           </table>
+                           """;
+
+        var html = HtmlDumper.DumpHtml(array);
+
+        Assert.Equal(Util.MinimizeHtml(expected), html);
+    }
+
+    [Fact]
     public void ShouldSerializeSimpleCollection()
     {
         var collection = new[] { "one", "two", "three" };

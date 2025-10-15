@@ -26,7 +26,7 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
         }
 
         writer.WriteOpenTag("table");
-        writer.WriteOpenTag("thead"); // TODO set statically
+        writer.WriteOpenTag("thead");
 
         writer.WriteOpenTagStart("tr");
         if (options.CssClasses.TableInfoHeader != null)

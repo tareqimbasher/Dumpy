@@ -43,7 +43,6 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         //
         // Everything else:
         //    Each row represents an item from the collection. Each table row has only one cell with the rendered item.
-
         if (TypeUtil.IsObject(elementType))
         {
             ConvertObject(ref writer, collection, elementType, targetType, options);
@@ -69,6 +68,8 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         var properties = TypeUtil.GetReadableProperties(elementType, options.IncludeNonPublicMembers);
 
         writer.WriteOpenTag("table");
+        int tableClassInsertIndex = writer.Length - 1; // -1 to set position before closing angle bracket (>)
+
         writer.WriteOpenTag("thead");
 
         // Info header
@@ -108,7 +109,6 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         writer.WriteCloseTag("tr");
 
         writer.WriteCloseTag("thead");
-        writer.WriteOpenTag("tbody");
 
         int? maxCount = options.MaxCollectionSerializeLength;
         int count = 0;
@@ -117,6 +117,11 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         foreach (var element in collection)
         {
             count++;
+            
+            if (count == 1) // We only want to add tbody if there is at least 1 item in the collection
+            {
+                writer.WriteOpenTag("tbody");
+            }
 
             if (count > maxCount)
             {
@@ -160,6 +165,18 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             writer.WriteCloseTag("tr");
         }
 
+        if (count > 1) // A tbody is added only if there are items in the collection
+        {
+            writer.WriteCloseTag("tbody");
+        }
+        else if (count == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        {
+            tableClassInsertIndex += writer.Insert(tableClassInsertIndex, " class=\"");
+            tableClassInsertIndex += writer.Insert(tableClassInsertIndex, options.CssClasses.EmptyCollection);
+            tableClassInsertIndex += writer.Insert(tableClassInsertIndex, "\"");
+            infoHeaderRowInsertIndex += tableClassInsertIndex;
+        }
+
         InsertInfoHeaderText(
             ref writer,
             infoHeaderRowInsertIndex,
@@ -168,7 +185,6 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             count,
             elementsCountExceedMax);
 
-        writer.WriteCloseTag("tbody");
         writer.WriteCloseTag("table");
     }
 
@@ -181,6 +197,8 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
     )
     {
         writer.WriteOpenTag("table");
+        int tableClassInsertIndex = writer.Length - 1; // -1 to set position before closing angle bracket (>)
+
         writer.WriteOpenTagStart("thead");
         if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
         {
@@ -198,8 +216,6 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         writer.WriteCloseTag("tr");
         writer.WriteCloseTag("thead");
 
-        writer.WriteOpenTag("tbody");
-
         int? maxCount = options.MaxCollectionSerializeLength;
         int count = 0;
         bool elementsCountExceedMax = false;
@@ -207,6 +223,11 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         foreach (var element in collection)
         {
             count++;
+
+            if (count == 1) // We only want to add tbody if there is at least 1 item in the collection
+            {
+                writer.WriteOpenTag("tbody");
+            }
 
             if (count > maxCount)
             {
@@ -229,6 +250,27 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             writer.WriteCloseTag("tr");
         }
 
+        if (count > 1) // A tbody is added only if there are items in the collection
+        {
+            writer.WriteCloseTag("tbody");
+        }
+        else if (count == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        {
+            var add = 0;
+
+            add = writer.Insert(tableClassInsertIndex, " class=\"");
+            tableClassInsertIndex += add;
+            infoHeaderRowInsertIndex += add;
+
+            add = writer.Insert(tableClassInsertIndex, options.CssClasses.EmptyCollection);
+            tableClassInsertIndex += add;
+            infoHeaderRowInsertIndex += add;
+
+            add = writer.Insert(tableClassInsertIndex, "\"");
+            tableClassInsertIndex += add;
+            infoHeaderRowInsertIndex += add;
+        }
+
         InsertInfoHeaderText(
             ref writer,
             infoHeaderRowInsertIndex,
@@ -237,7 +279,6 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             count,
             elementsCountExceedMax);
 
-        writer.WriteCloseTag("tbody");
         writer.WriteCloseTag("table");
     }
 

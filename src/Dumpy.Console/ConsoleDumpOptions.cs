@@ -8,12 +8,12 @@ public partial class ConsoleDumpOptions : DumpOptions
 {
     public static Action<ConsoleDumpOptions> ConfigureDefaultOptions { get; set; } = _ => { };
 
-    public TableOptions TableOptions { get; } = new();
-    
     /// <summary>
-    /// The list of custom Console Converters to use during serialization.
+    /// The list of custom Console converters to use during serialization.
     /// </summary>
-    public List<ConsoleConverter> Converters { get; } = new();
+    public List<ConsoleConverter> Converters { get; set; } = new();
+    
+    public TableOptions TableOptions { get; set; } = new();
 }
 
 public class TableOptions

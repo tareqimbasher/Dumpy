@@ -20,7 +20,11 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
         int columnCount = value.Columns.Count;
         int rowCount = value.Rows.Count;
 
-        writer.WriteOpenTag("table");
+        writer.WriteOpenTagStart("table");
+        if (rowCount > 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+            writer.WriteClass(options.CssClasses.EmptyCollection);
+        writer.WriteOpenTagEnd();
+
         writer.WriteOpenTag("thead");
 
         // Write info header
@@ -29,6 +33,7 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
         {
             writer.WriteClass(options.CssClasses.TableInfoHeader);
         }
+
         writer.WriteOpenTagEnd();
 
         writer.WriteOpenTagStart("th");
@@ -75,33 +80,36 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
         writer.WriteCloseTag("tr");
         writer.WriteCloseTag("thead");
 
-
-        // Table body
-        writer.WriteOpenTag("tbody");
-
-        var rowsToIterate = options.MaxCollectionSerializeLength > rowCount
-            ? options.MaxCollectionSerializeLength
-            : rowCount;
-
-        for (int iRow = 0; iRow < rowsToIterate; iRow++)
+        if (rowCount > 0)
         {
-            var row = value.Rows[iRow];
-            writer.WriteOpenTag("tr");
+            // Table body
+            writer.WriteOpenTag("tbody");
 
-            for (int iCol = 0; iCol < columnCount; iCol++)
+            var rowsToIterate = options.MaxCollectionSerializeLength > rowCount
+                ? options.MaxCollectionSerializeLength
+                : rowCount;
+
+            for (int iRow = 0; iRow < rowsToIterate; iRow++)
             {
-                var item = row[iCol];
-                var itemType = item == null ? typeof(object) : item.GetType();
+                var row = value.Rows[iRow];
+                writer.WriteOpenTag("tr");
 
-                writer.WriteOpenTag("td");
-                HtmlDumper.DumpHtml(ref writer, item, itemType, options);
-                writer.WriteCloseTag("td");
+                for (int iCol = 0; iCol < columnCount; iCol++)
+                {
+                    var item = row[iCol];
+                    var itemType = item == null ? typeof(object) : item.GetType();
+
+                    writer.WriteOpenTag("td");
+                    HtmlDumper.DumpHtml(ref writer, item, itemType, options);
+                    writer.WriteCloseTag("td");
+                }
+
+                writer.WriteCloseTag("tr");
             }
 
-            writer.WriteCloseTag("tr");
+            writer.WriteCloseTag("tbody");
         }
 
-        writer.WriteCloseTag("tbody");
         writer.WriteCloseTag("table");
     }
 }

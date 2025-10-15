@@ -16,11 +16,6 @@ public class DumpOptions
     public ReferenceLoopHandling ReferenceLoopHandling { get; set; } = DefaultReferenceLoopHandling;
 
     /// <summary>
-    /// If true, empty collections will be serialized to an "empty" placeholder instead of a table.
-    /// </summary>
-    public bool SerializeEmptyCollectionPlaceholder { get; set; }
-
-    /// <summary>
     /// If true, will serialize fields.
     /// </summary>
     public bool IncludeFields { get; set; }

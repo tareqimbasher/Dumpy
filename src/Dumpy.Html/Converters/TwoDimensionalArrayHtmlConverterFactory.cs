@@ -36,12 +36,13 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
         int rowCount = array.GetLength(0);
         int columnCount = array.GetLength(1);
 
-        writer.WriteOpenTag("table");
+        writer.WriteOpenTagStart("table");
+        if (rowCount > 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+            writer.WriteClass(options.CssClasses.EmptyCollection);
+        writer.WriteOpenTagEnd();
+        
         writer.WriteOpenTag("thead");
 
-        
-        
-        
         // Write info header
         writer.WriteOpenTagStart("tr");
         if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
@@ -91,30 +92,34 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
         writer.WriteCloseTag("tr");
         writer.WriteCloseTag("thead");
 
-        writer.WriteOpenTag("tbody");
-
-        for (int iRow = 0; iRow < rowCount; iRow++)
+        if (rowCount > 0)
         {
-            writer.WriteOpenTag("tr");
+            writer.WriteOpenTag("tbody");
 
-            writer.WriteOpenTag("th");
-            writer.AppendInt(iRow);
-            writer.WriteCloseTag("th");
-
-            for (int iColumn = 0; iColumn < columnCount; iColumn++)
+            for (int iRow = 0; iRow < rowCount; iRow++)
             {
-                var item = array.GetValue(iRow, iColumn);
-                var itemType = item == null ? typeof(object) : item.GetType();
+                writer.WriteOpenTag("tr");
 
-                writer.WriteOpenTag("td");
-                HtmlDumper.DumpHtml(ref writer, item, itemType, options);
-                writer.WriteCloseTag("td");
+                writer.WriteOpenTag("th");
+                writer.AppendInt(iRow);
+                writer.WriteCloseTag("th");
+
+                for (int iColumn = 0; iColumn < columnCount; iColumn++)
+                {
+                    var item = array.GetValue(iRow, iColumn);
+                    var itemType = item == null ? typeof(object) : item.GetType();
+
+                    writer.WriteOpenTag("td");
+                    HtmlDumper.DumpHtml(ref writer, item, itemType, options);
+                    writer.WriteCloseTag("td");
+                }
+
+                writer.WriteCloseTag("tr");
             }
 
-            writer.WriteCloseTag("tr");
+            writer.WriteCloseTag("tbody");
         }
-
-        writer.WriteCloseTag("tbody");
+        
         writer.WriteCloseTag("table");
     }
 }

@@ -6,7 +6,7 @@ namespace Dumpy.Html;
 public partial class HtmlDumpOptions : DumpOptions
 {
     /// <summary>
-    /// The list of custom HTML Converters to use during serialization.
+    /// The list of custom HTML converters to use during serialization.
     /// </summary>
     public List<HtmlConverter> Converters { get; set; } = new();
 
@@ -18,7 +18,7 @@ public partial class HtmlDumpOptions : DumpOptions
     /// <summary>
     /// CSS classes added to serialized HTML nodes.
     /// </summary>
-    public CssClassOptions CssClasses { get; } = new();
+    public CssClassOptions CssClasses { get; set; } = new();
 }
 
 public class CssClassOptions
