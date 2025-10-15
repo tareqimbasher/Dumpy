@@ -30,7 +30,7 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
         int serializedItemCount = 0;
         for (int iItem = 0; iItem < value.Length; iItem++)
         {
-            if (iItem + 1 == options.MaxCollectionSerializeLength)
+            if (iItem + 1 == options.MaxCollectionItems)
             {
                 break;
             }
@@ -42,14 +42,12 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
             serializedItemCount++;
         }
 
-        
-        
         if (options.TableOptions.ShowTitles)
         {
-            var exceededMax = value.Length > options.MaxCollectionSerializeLength;
+            var exceededMax = value.Length > options.MaxCollectionItems;
             var items = $"{(exceededMax ? "First " : "")}{serializedItemCount} items";
             var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
-            table.Title = new TableTitle($"{items} | {typeName}", new Style(decoration: Decoration.Bold | Decoration.Dim));
+            table.Title = new TableTitle($"{typeName} | {items}", new Style(decoration: Decoration.Bold | Decoration.Dim));
         }
 
         return table;

@@ -53,7 +53,7 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
             };
             table.AddColumn("");
 
-            int? maxCount = options.MaxCollectionSerializeLength;
+            int maxCount = options.MaxCollectionItems;
             int rowCount = 0;
             bool elementsCountExceedMax = false;
 
@@ -87,7 +87,7 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
 
             var properties = TypeUtil.GetReadableProperties(elementType, options.IncludeNonPublicMembers);
 
-            int? maxCount = options.MaxCollectionSerializeLength;
+            int maxCount = options.MaxCollectionItems;
             int rowCount = 0;
             bool elementsCountExceedMax = false;
 

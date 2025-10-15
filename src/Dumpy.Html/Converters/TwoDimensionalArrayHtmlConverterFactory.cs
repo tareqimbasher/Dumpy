@@ -37,7 +37,7 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
         int columnCount = array.GetLength(1);
 
         writer.WriteOpenTagStart("table");
-        if (rowCount > 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        if (rowCount == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
             writer.WriteClass(options.CssClasses.EmptyCollection);
         writer.WriteOpenTagEnd();
         
@@ -59,6 +59,11 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
         writer.AppendEscapedText(TypeUtil.GetName(targetType));
         writer.Append("(Rows = ");
         writer.AppendInt(rowCount);
+        if (rowCount > options.MaxCollectionItems)
+        {
+            writer.Append(" - Showing  first ");
+            writer.AppendInt(options.MaxCollectionItems);
+        }
         writer.Append(", Columns = ");
         writer.AppendInt(columnCount);
         writer.Append(") (");
@@ -67,8 +72,6 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
         
         writer.WriteCloseTag("th");
         writer.WriteCloseTag("tr");
-        
-        
         
         // Write data header
         writer.WriteOpenTagStart("tr");
@@ -98,6 +101,11 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
 
             for (int iRow = 0; iRow < rowCount; iRow++)
             {
+                if (iRow + 1 == options.MaxCollectionItems)
+                {
+                    break;
+                }
+                
                 writer.WriteOpenTag("tr");
 
                 writer.WriteOpenTag("th");

@@ -110,7 +110,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
         writer.WriteCloseTag("thead");
 
-        int? maxCount = options.MaxCollectionSerializeLength;
+        int maxCount = options.MaxCollectionItems;
         int count = 0;
         bool elementsCountExceedMax = false;
 
@@ -216,7 +216,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         writer.WriteCloseTag("tr");
         writer.WriteCloseTag("thead");
 
-        int? maxCount = options.MaxCollectionSerializeLength;
+        int maxCount = options.MaxCollectionItems;
         int count = 0;
         bool elementsCountExceedMax = false;
 

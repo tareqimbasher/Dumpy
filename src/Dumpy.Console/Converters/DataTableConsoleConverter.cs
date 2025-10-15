@@ -28,8 +28,8 @@ public class DataTableConsoleConverter : ConsoleConverter<DataTable>
             BorderStyle = new Style(Color.PaleTurquoise4)
         };
         
-        var showing = options.MaxCollectionSerializeLength > rowCount
-            ? $" - Showing {options.MaxCollectionSerializeLength}"
+        var showing = options.MaxCollectionItems > rowCount
+            ? $" - Showing first {options.MaxCollectionItems}"
             : "";
         var headerText = (!string.IsNullOrWhiteSpace(value.TableName) ? value.TableName : "DataTable")
                          + $" (Rows = {rowCount}{showing}, Columns = {columnCount})";
@@ -41,8 +41,8 @@ public class DataTableConsoleConverter : ConsoleConverter<DataTable>
             table.AddColumn(value.Columns[i].ColumnName);
         }
         
-        var rowsToIterate = options.MaxCollectionSerializeLength > rowCount
-            ? options.MaxCollectionSerializeLength
+        var rowsToIterate = options.MaxCollectionItems > rowCount
+            ? options.MaxCollectionItems
             : rowCount;
 
         for (int iRow = 0; iRow < rowsToIterate; iRow++)

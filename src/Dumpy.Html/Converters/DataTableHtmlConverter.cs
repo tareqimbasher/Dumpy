@@ -21,7 +21,7 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
         int rowCount = value.Rows.Count;
 
         writer.WriteOpenTagStart("table");
-        if (rowCount > 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        if (rowCount == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
             writer.WriteClass(options.CssClasses.EmptyCollection);
         writer.WriteOpenTagEnd();
 
@@ -47,10 +47,10 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
         writer.Append(" (Rows = ");
         writer.AppendInt(rowCount);
 
-        if (options.MaxCollectionSerializeLength > rowCount)
+        if (options.MaxCollectionItems > rowCount)
         {
             writer.Append(" - Showing ");
-            writer.AppendInt(options.MaxCollectionSerializeLength.Value);
+            writer.AppendInt(options.MaxCollectionItems);
         }
 
         writer.Append(", Columns = ");
@@ -85,8 +85,8 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
             // Table body
             writer.WriteOpenTag("tbody");
 
-            var rowsToIterate = options.MaxCollectionSerializeLength > rowCount
-                ? options.MaxCollectionSerializeLength
+            var rowsToIterate = options.MaxCollectionItems > rowCount
+                ? options.MaxCollectionItems
                 : rowCount;
 
             for (int iRow = 0; iRow < rowsToIterate; iRow++)

@@ -29,11 +29,11 @@ public class DumpOptions
     /// A predicate to filter members that should be dumped.
     /// </summary>
     public Func<MemberInfo, bool>? MemberFilter { get; set; }
-    
+
     /// <summary>
-    /// If set, only this number of items will be serialized when serializing collections.
+    /// The max number of items to serialize from a collection. Default is int.MaxValue.
     /// </summary>
-    public int? MaxCollectionSerializeLength { get; set; }
+    public int MaxCollectionItems { get; set; } = int.MaxValue;
 
     /// <summary>
     /// The max serialization depth. (Default: 64)

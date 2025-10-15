@@ -15,7 +15,7 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
         }
 
         writer.WriteOpenTagStart("table");
-        if (value.Length > 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        if (value.Length == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
             writer.WriteClass(options.CssClasses.EmptyCollection);
         writer.WriteOpenTagEnd();
 
@@ -43,7 +43,7 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
 
             for (int iItem = 0; iItem < value.Length; iItem++)
             {
-                if (iItem + 1 == options.MaxCollectionSerializeLength)
+                if (iItem + 1 == options.MaxCollectionItems)
                 {
                     break;
                 }
@@ -68,7 +68,7 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
 
             infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, TypeUtil.GetName(targetType));
             infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, '(');
-            if (value.Length > options.MaxCollectionSerializeLength)
+            if (value.Length > options.MaxCollectionItems)
             {
                 infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "First ");
             }

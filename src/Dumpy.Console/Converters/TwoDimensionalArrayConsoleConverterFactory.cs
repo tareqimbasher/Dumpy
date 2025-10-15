@@ -44,6 +44,10 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
         {
             return EmptyCollectionWidget.New(typeName);
         }
+        
+        var rowsToIterate = options.MaxCollectionItems > rowCount
+            ? options.MaxCollectionItems
+            : rowCount;
 
         var table = new Table
         {
@@ -54,10 +58,12 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
             BorderStyle = new Style(Color.PaleTurquoise4),
         };
 
-        var title = $"{typeName} (Rows = {rowCount}, Columns = {columnCount}) ({collectionLength} items)";
-        table.Title = options.TableOptions.ShowTitles
-            ? new TableTitle(Markup.Escape(title), new Style(decoration: Decoration.Bold | Decoration.Dim))
-            : null;
+        if (options.TableOptions.ShowTitles)
+        {
+            var exceededMax = rowCount > options.MaxCollectionItems;
+            var items = $"{(exceededMax ? "First " : "")}{rowsToIterate} items";
+            table.Title = new TableTitle($"{typeName} | {items}", new Style(decoration: Decoration.Bold | Decoration.Dim));
+        }
 
         // Add an empty column at the start
         table.AddColumn("");
@@ -67,7 +73,7 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
             table.AddColumn(i.ToString());
         }
 
-        for (int iRow = 0; iRow < rowCount; iRow++)
+        for (int iRow = 0; iRow < rowsToIterate; iRow++)
         {
             var row = new List<IRenderable>();
             row.Add(new Markup(iRow.ToString()));
