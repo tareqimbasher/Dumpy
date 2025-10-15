@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
 using Dumpy.Html;
-using Dumpy.Html.Converters;
 using Dumpy.Utils;
 
 // ReSharper disable once CheckNamespace
@@ -40,7 +36,63 @@ public static class HtmlDumper
 
     public static void DumpHtml<T>(ref ValueStringBuilder writer, T? value, Type valueType, HtmlDumpOptions options)
     {
-        var converter = options.GetConverter(valueType);
-        converter.ConvertInner(ref writer, value, valueType, options);
+        bool isRoot = !DumpContext.IsActive;
+        if (isRoot)
+        {
+            DumpContext.Reset();
+        }
+
+        try
+        {
+            // Enforce max depth
+            if (DumpContext.Depth >= options.MaxDepth)
+            {
+                writer.WriteMaxDepthReachedHtml(options);
+                return;
+            }
+
+            // Reference loop handling (checked only for reference types)
+            if (value != null && !valueType.IsValueType && DumpContext.IsVisited(value))
+            {
+                switch (options.ReferenceLoopHandling)
+                {
+                    case ReferenceLoopHandling.Error:
+                        throw new SerializationException(
+                            $"Self referencing loop detected for type {TypeUtil.GetName(valueType, true)}");
+                    case ReferenceLoopHandling.Ignore:
+                        // Do not serialize anything
+                        return;
+                    case ReferenceLoopHandling.IgnoreAndSerializeCyclicReference:
+                        writer.WriteCyclicReferenceHtml(options);
+                        return;
+                    case ReferenceLoopHandling.Serialize:
+                        // proceed
+                        break;
+                }
+            }
+
+            bool didEnter = false;
+            try
+            {
+                DumpContext.Enter(value);
+                didEnter = true;
+                var converter = options.GetConverter(valueType);
+                converter.ConvertInner(ref writer, value, valueType, options);
+            }
+            finally
+            {
+                if (didEnter)
+                {
+                    DumpContext.Exit(value);
+                }
+            }
+        }
+        finally
+        {
+            if (isRoot)
+            {
+                DumpContext.Clear();
+            }
+        }
     }
 }

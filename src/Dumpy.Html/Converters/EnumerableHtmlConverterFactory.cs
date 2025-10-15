@@ -147,7 +147,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             writer.WriteCloseTag("tr");
         }
 
-        if (count > 1) // A tbody is added only if there are items in the collection
+        if (count > 0) // A tbody is added only if there are items in the collection
         {
             writer.WriteCloseTag("tbody");
         }
@@ -232,7 +232,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             writer.WriteCloseTag("tr");
         }
 
-        if (count > 1) // A tbody is added only if there are items in the collection
+        if (count > 0) // A tbody is added only if there are items in the collection
         {
             writer.WriteCloseTag("tbody");
         }

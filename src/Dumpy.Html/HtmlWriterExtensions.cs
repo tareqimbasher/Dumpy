@@ -165,7 +165,7 @@ public static class HtmlWriterExtensions
     }
 
     /// <summary>
-    /// Writes the HTML representation of a null value.
+    /// Writes a span indicating a null value.
     /// </summary>
     public static void WriteNullHtml(this ref ValueStringBuilder writer, HtmlDumpOptions options)
     {
@@ -177,6 +177,38 @@ public static class HtmlWriterExtensions
 
         writer.WriteOpenTagEnd();
         writer.Append("null");
+        writer.WriteCloseTag("span");
+    }
+
+    /// <summary>
+    /// Writes a span indicating a cyclic reference encounter.
+    /// </summary>
+    public static void WriteCyclicReferenceHtml(this ref ValueStringBuilder writer, HtmlDumpOptions options)
+    {
+        writer.WriteOpenTagStart("span");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.CyclicReference))
+        {
+            writer.WriteClass(options.CssClasses.CyclicReference);
+        }
+
+        writer.WriteOpenTagEnd();
+        writer.Append("Cyclic reference");
+        writer.WriteCloseTag("span");
+    }
+
+    /// <summary>
+    /// Writes a span indicating max depth was reached.
+    /// </summary>
+    public static void WriteMaxDepthReachedHtml(this ref ValueStringBuilder writer, HtmlDumpOptions options)
+    {
+        writer.WriteOpenTagStart("span");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.MaxDepthReached))
+        {
+            writer.WriteClass(options.CssClasses.MaxDepthReached);
+        }
+
+        writer.WriteOpenTagEnd();
+        writer.Append("Max depth reached");
         writer.WriteCloseTag("span");
     }
 

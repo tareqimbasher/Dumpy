@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Spectre.Console;
 using Spectre.Console.Rendering;
+using Dumpy.Utils;
 
 namespace Dumpy.Console;
 
@@ -45,7 +46,60 @@ public static class ConsoleDumper
     {
         options ??= _defaultOptions;
 
-        var converter = options.GetConverter(valueType);
-        return converter.ConvertInner(value, valueType, options);
+        bool isRoot = !DumpContext.IsActive;
+        if (isRoot)
+        {
+            DumpContext.Reset();
+        }
+
+        try
+        {
+            // Enforce max depth
+            if (DumpContext.Depth >= options.MaxDepth)
+            {
+                return new Markup("[dim](max depth)[/]");
+            }
+
+            // Reference loop handling (checked only for reference types)
+            if (value != null && !valueType.IsValueType && DumpContext.IsVisited(value))
+            {
+                switch (options.ReferenceLoopHandling)
+                {
+                    case ReferenceLoopHandling.Error:
+                        throw new SerializationException(
+                            $"Self referencing loop detected for type {TypeUtil.GetName(valueType, true)}");
+                    case ReferenceLoopHandling.Ignore:
+                        return new Text(string.Empty);
+                    case ReferenceLoopHandling.IgnoreAndSerializeCyclicReference:
+                        return new Markup("[dim](cyclic)[/]");
+                    case ReferenceLoopHandling.Serialize:
+                        // proceed
+                        break;
+                }
+            }
+
+            bool didEnter = false;
+            try
+            {
+                DumpContext.Enter(value);
+                didEnter = true;
+                var converter = options.GetConverter(valueType);
+                return converter.ConvertInner(value, valueType, options);
+            }
+            finally
+            {
+                if (didEnter)
+                {
+                    DumpContext.Exit(value);
+                }
+            }
+        }
+        finally
+        {
+            if (isRoot)
+            {
+                DumpContext.Clear();
+            }
+        }
     }
 }
