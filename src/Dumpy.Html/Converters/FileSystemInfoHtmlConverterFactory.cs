@@ -43,9 +43,9 @@ public class FileSystemInfoHtmlConverter : ObjectDefaultHtmlConverter<FileSystem
         nameof(FileInfo.Directory),
     };
     
-    protected override PropertyInfo[] GetReadableProperties(Type targetType, HtmlDumpOptions options)
+    protected override MemberInfo[] GetReadableMembers(Type targetType, HtmlDumpOptions options)
     {
-        return base.GetReadableProperties(targetType, options)
+        return base.GetReadableMembers(targetType, options)
             .Where(p => _serializableProperties.Contains(p.Name))
             .ToArray();
     }

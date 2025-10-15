@@ -81,11 +81,7 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
         }
         else
         {
-            var fields = options.IncludeFields
-                ? TypeUtil.GetFields(elementType, options.IncludeNonPublicMembers)
-                : Array.Empty<FieldInfo>();
-
-            var properties = TypeUtil.GetReadableProperties(elementType, options.IncludeNonPublicMembers);
+            var members = options.GetReadableMembers(elementType);
 
             int maxCount = options.MaxCollectionItems;
             int rowCount = 0;
@@ -106,16 +102,10 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                 var row = new List<IRenderable>();
                 rows.Add(row);
 
-                foreach (var field in fields) // TODO check if needs to be included
+                foreach (var member in members)
                 {
-                    var val = TypeUtil.GetFieldValue(field, element);
-                    row.Add(val.DumpToRenderable(field.FieldType, options));
-                }
-
-                foreach (var property in properties)
-                {
-                    var val = TypeUtil.GetPropertyValue(property, element);
-                    row.Add(val.DumpToRenderable(property.PropertyType, options));
+                    var (memberType, memberValue) = member.GetMemberTypeAndValue(element);
+                    row.Add(memberValue.DumpToRenderable(memberType, options));
                 }
             }
 
@@ -139,16 +129,11 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                 ? new TableTitle(title, new Style(decoration: Decoration.Bold | Decoration.Dim))
                 : null;
 
-            foreach (var field in fields)
+            foreach (var member in members)
             {
-                table.AddColumn(new TableColumn(new Markup($"[bold][olive]{field.Name}[/][/]")));
+                table.AddColumn(new TableColumn(new Markup($"[bold][olive]{member.Name}[/][/]")));
             }
-
-            foreach (var property in properties)
-            {
-                table.AddColumn(new TableColumn(new Markup($"[bold][olive]{property.Name}[/][/]")));
-            }
-
+            
             foreach (var row in rows)
             {
                 table.AddRow(row);

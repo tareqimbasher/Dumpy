@@ -44,10 +44,8 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
         {
             return EmptyCollectionWidget.New(typeName);
         }
-        
-        var rowsToIterate = options.MaxCollectionItems > rowCount
-            ? options.MaxCollectionItems
-            : rowCount;
+
+        var rowsToIterate = Math.Min(rowCount, options.MaxCollectionItems);
 
         var table = new Table
         {

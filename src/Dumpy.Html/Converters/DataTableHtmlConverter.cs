@@ -85,9 +85,7 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
             // Table body
             writer.WriteOpenTag("tbody");
 
-            var rowsToIterate = options.MaxCollectionItems > rowCount
-                ? options.MaxCollectionItems
-                : rowCount;
+            var rowsToIterate = Math.Min(rowCount, options.MaxCollectionItems);
 
             for (int iRow = 0; iRow < rowsToIterate; iRow++)
             {

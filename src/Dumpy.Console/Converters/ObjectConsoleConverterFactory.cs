@@ -38,51 +38,35 @@ public class ObjectDefaultConsoleConverter<T> : ConsoleConverter<T>
         };
 
         var typeName = Markup.Escape(TypeUtil.GetName(targetType, true));
-        table.Title = options.TableOptions.ShowTitles ? new TableTitle(typeName, new Style(decoration: Decoration.Bold)) : null;
+        table.Title = options.TableOptions.ShowTitles
+            ? new TableTitle(typeName, new Style(decoration: Decoration.Bold))
+            : null;
         table.AddColumn(new TableColumn(new Markup("[bold][olive]Property[/][/]")));
         table.AddColumn(new TableColumn(new Markup("[bold][olive]Value[/][/]")));
 
-        if (options.IncludeNonPublicMembers)
+        foreach (var member in GetReadableMembers(targetType, options))
         {
-            foreach (var field in GetReadableFields(targetType, options))
+            switch (member)
             {
-                var fieldValue = TypeUtil.GetFieldValue(field, value);
-                table.AddRow(new Markup($"[bold][olive]{field.Name}[/][/]"),
-                    fieldValue.DumpToRenderable(field.FieldType, options));
-            }
-        }
+                case PropertyInfo property:
+                    var propValue = TypeUtil.GetPropertyValue(property, value);
+                    table.AddRow(new Markup($"[bold][olive]{property.Name}[/][/]"),
+                        propValue.DumpToRenderable(property.PropertyType, options));
+                    break;
 
-        foreach (var prop in GetReadableProperties(targetType, options))
-        {
-            var propValue = TypeUtil.GetPropertyValue(prop, value);
-            table.AddRow(new Markup($"[bold][olive]{prop.Name}[/][/]"),
-                propValue.DumpToRenderable(prop.PropertyType, options));
+                case FieldInfo field:
+                    var fieldValue = TypeUtil.GetFieldValue(field, value);
+                    table.AddRow(new Markup($"[bold][olive]{field.Name}[/][/]"),
+                        fieldValue.DumpToRenderable(field.FieldType, options));
+                    break;
+            }
         }
 
         return table;
     }
-
-    private FieldInfo[] GetReadableFields(Type targetType, ConsoleDumpOptions options)
+    
+    protected virtual MemberInfo[] GetReadableMembers(Type targetType, ConsoleDumpOptions options)
     {
-        var fields = TypeUtil.GetFields(targetType, options.IncludeNonPublicMembers);
-
-        if (options.MemberFilter == null)
-        {
-            return fields;
-        }
-
-        return fields.Where(f => options.MemberFilter(f)).ToArray();
-    }
-
-    protected virtual PropertyInfo[] GetReadableProperties(Type targetType, ConsoleDumpOptions options)
-    {
-        var properties = TypeUtil.GetReadableProperties(targetType, options.IncludeNonPublicMembers);
-
-        if (options.MemberFilter == null)
-        {
-            return properties;
-        }
-
-        return properties.Where(p => options.MemberFilter(p)).ToArray();
+        return options.GetReadableMembers(targetType);
     }
 }

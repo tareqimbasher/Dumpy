@@ -59,18 +59,19 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
     {
         writer.WriteOpenTag("tbody");
 
-        if (options.IncludeFields)
+        foreach (var member in GetReadableMembers(targetType, options))
         {
-            foreach (var field in TypeUtil.GetFields(targetType, options.IncludeNonPublicMembers))
+            switch (member)
             {
-                WriteTRow(ref writer, field.Name, field.FieldType, TypeUtil.GetFieldValue(field, value), options);
-            }
-        }
+                case PropertyInfo property:
+                    var (propValue, propType) = GetPropertyValue(property, value);
+                    WriteTRow(ref writer, property.Name, propType, propValue, options);
+                    break;
 
-        foreach (var prop in GetReadableProperties(targetType, options))
-        {
-            var (propValue, propValueType) = GetPropertyValue(prop, value);
-            WriteTRow(ref writer, prop.Name, propValueType, propValue, options);
+                case FieldInfo field:
+                    WriteTRow(ref writer, field.Name, field.FieldType, TypeUtil.GetFieldValue(field, value), options);
+                    break;
+            }
         }
 
         writer.WriteCloseTag("tbody");
@@ -103,9 +104,9 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
         writer.WriteCloseTag("tr");
     }
 
-    protected virtual PropertyInfo[] GetReadableProperties(Type targetType, HtmlDumpOptions options)
+    protected virtual MemberInfo[] GetReadableMembers(Type targetType, HtmlDumpOptions options)
     {
-        return TypeUtil.GetReadableProperties(targetType, options.IncludeNonPublicMembers);
+        return options.GetReadableMembers(targetType);
     }
 
     protected virtual (object? propValue, Type propValueType) GetPropertyValue<TObject>(PropertyInfo property,

@@ -61,11 +61,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         HtmlDumpOptions options
     )
     {
-        var fields = options.IncludeFields
-            ? TypeUtil.GetFields(elementType, options.IncludeNonPublicMembers)
-            : [];
-
-        var properties = TypeUtil.GetReadableProperties(elementType, options.IncludeNonPublicMembers);
+        var members = options.GetReadableMembers(elementType);
 
         writer.WriteOpenTag("table");
         int tableClassInsertIndex = writer.Length - 1; // -1 to set position before closing angle bracket (>)
@@ -82,7 +78,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         writer.WriteOpenTagEnd();
 
         writer.WriteOpenTagStart("th");
-        writer.WriteIntAttr("colspan", fields.Length + properties.Length);
+        writer.WriteIntAttr("colspan", members.Length);
         writer.WriteOpenTagEnd();
 
         int infoHeaderRowInsertIndex = writer.Length;
@@ -99,10 +95,10 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
         writer.WriteOpenTagEnd();
 
-        foreach (var name in fields.Select(x => x.Name).Concat(properties.Select(x => x.Name)))
+        foreach (var member in members)
         {
             writer.WriteOpenTag("th");
-            writer.AppendEscapedText(name);
+            writer.AppendEscapedText(member.Name);
             writer.WriteCloseTag("th");
         }
 
@@ -117,7 +113,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         foreach (var element in collection)
         {
             count++;
-            
+
             if (count == 1) // We only want to add tbody if there is at least 1 item in the collection
             {
                 writer.WriteOpenTag("tbody");
@@ -131,34 +127,20 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
             writer.WriteOpenTag("tr");
 
-            foreach (var field in fields) // TODO check if needs to be included
+            foreach (var member in members)
             {
                 writer.WriteOpenTagStart("td");
+                
+                var (memberType, value) = member.GetMemberTypeAndValue(element);
+
                 if (options.AddTitleAttributes)
                 {
-                    writer.WriteAttr("title", TypeUtil.GetName(field.FieldType, true));
+                    writer.WriteAttr("title", TypeUtil.GetName(memberType, true));
                 }
 
                 writer.WriteOpenTagEnd();
+                HtmlDumper.DumpHtml(ref writer, value, memberType, options);
 
-                var val = TypeUtil.GetFieldValue(field, element);
-                HtmlDumper.DumpHtml(ref writer, val, field.FieldType, options);
-                writer.WriteCloseTag("td");
-            }
-
-            foreach (var property in properties)
-            {
-                writer.WriteOpenTagStart("td");
-                if (options.AddTitleAttributes)
-                {
-                    writer.WriteAttr("title", TypeUtil.GetName(property.PropertyType, true));
-                }
-
-                writer.WriteOpenTagEnd();
-
-
-                var val = TypeUtil.GetPropertyValue(property, element);
-                HtmlDumper.DumpHtml(ref writer, val, property.PropertyType, options);
                 writer.WriteCloseTag("td");
             }
 

@@ -147,6 +147,29 @@ public static class TypeUtil
         TypeFieldInfoCache.TryAdd(type, fields);
         return fields;
     }
+
+    public static (Type memberType, object? value) GetMemberTypeAndValue(this MemberInfo member, object? obj)
+    {
+        Type memberType;
+        object? value;
+
+        if (member is PropertyInfo property)
+        {
+            memberType = property.PropertyType;
+            value = GetPropertyValue(property, obj);
+        }
+        else if (member is FieldInfo field)
+        {
+            memberType = field.FieldType;
+            value = GetFieldValue(field, obj);
+        }
+        else
+        {
+            throw new InvalidOperationException($"Unexpected member type: {member.MemberType}");
+        }
+
+        return (memberType, value);
+    }
     
     public static object? GetFieldValue<T>(FieldInfo field, T obj)
     {

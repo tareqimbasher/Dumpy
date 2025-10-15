@@ -41,9 +41,7 @@ public class DataTableConsoleConverter : ConsoleConverter<DataTable>
             table.AddColumn(value.Columns[i].ColumnName);
         }
         
-        var rowsToIterate = options.MaxCollectionItems > rowCount
-            ? options.MaxCollectionItems
-            : rowCount;
+        var rowsToIterate = Math.Min(rowCount, options.MaxCollectionItems);
 
         for (int iRow = 0; iRow < rowsToIterate; iRow++)
         {
