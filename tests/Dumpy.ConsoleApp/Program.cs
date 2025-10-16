@@ -48,13 +48,26 @@ var table = new DataTable("Table name");
 table.Columns.Add("Name");
 table.Columns.Add("Date of Birth", typeof(DateTime));
 table.Columns.Add("Salary", typeof(decimal));
-var row1 = table.NewRow();
-table.Rows.Add(row1);
-row1.ItemArray = ["John Doe", DateTime.Parse("1980/1/1"), 1000];
-var row2 = table.NewRow();
-table.Rows.Add(row2);
-row2.ItemArray = ["Jane Doe", DateTime.Parse("1981/1/1"), 2000];
+table.Rows.Add("John Doe", DateTime.Parse("1980/1/1"), 1000);
+table.Rows.Add("Jane Doe", DateTime.Parse("1981/1/1"), 2000);
 table.DumpConsole();
+
+PrintHeader("DataSet");
+var table1 = new DataTable();
+table1.Columns.Add("Name");
+table1.Columns.Add("Age", typeof(int));
+table1.Rows.Add("John Doe", 25);
+
+var table2 = new DataTable();
+table2.Columns.Add("Item");
+table2.Columns.Add("Price", typeof(decimal));
+table2.Rows.Add("Coffee", 5);
+
+var dataSet = new DataSet();
+dataSet.Tables.Add(table1);
+dataSet.Tables.Add(table2);
+
+dataSet.DumpConsole();
 
 return;
 

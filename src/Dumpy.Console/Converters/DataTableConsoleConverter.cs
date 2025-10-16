@@ -28,7 +28,7 @@ public class DataTableConsoleConverter : ConsoleConverter<DataTable>
             BorderStyle = new Style(Color.PaleTurquoise4)
         };
         
-        var showing = options.MaxCollectionItems > rowCount
+        var showing = rowCount > options.MaxCollectionItems
             ? $" - Showing first {options.MaxCollectionItems}"
             : "";
         var headerText = (!string.IsNullOrWhiteSpace(value.TableName) ? value.TableName : "DataTable")

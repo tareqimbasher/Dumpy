@@ -79,7 +79,7 @@ public static class HtmlDumper
             }
 
             // Reference loop handling (checked only for reference types)
-            if (value != null && !valueType.IsValueType && DumpContext.IsVisited(value))
+            if (value != null && !valueType.IsValueType && DumpContext.IsVisited(value, valueType))
             {
                 switch (options.ReferenceLoopHandling)
                 {
@@ -101,7 +101,7 @@ public static class HtmlDumper
             bool didEnter = false;
             try
             {
-                DumpContext.Enter(value);
+                DumpContext.Enter(value, valueType);
                 didEnter = true;
                 var converter = options.GetConverter(valueType);
                 converter.ConvertInner(ref writer, value, valueType, options);
@@ -110,7 +110,7 @@ public static class HtmlDumper
             {
                 if (didEnter)
                 {
-                    DumpContext.Exit(value);
+                    DumpContext.Exit(value, valueType);
                 }
             }
         }

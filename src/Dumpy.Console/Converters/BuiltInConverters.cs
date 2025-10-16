@@ -20,6 +20,11 @@ internal static class BuiltInConverters
 
     public static ConsoleConverter<DataTable> DataTableNodeConverter =>
         _dataTableNodeConverter ??= new DataTableConsoleConverter();
+    
+    private static ConsoleConverter<DataSet>? _dataSetNodeConverter;
+
+    public static ConsoleConverter<DataSet> DataSetNodeConverter =>
+        _dataSetNodeConverter ??= new DataSetConsoleConverter();
 
     private static ConsoleConverter<XmlNode>? _xmlNodeConverter;
     public static ConsoleConverter<XmlNode> XmlNodeConverter => _xmlNodeConverter ??= new XmlNodeConsoleConverter();

@@ -38,10 +38,11 @@ public sealed partial class ConsoleDumpOptions
 
     private static Dictionary<Type, ConsoleConverter> GetDefaultSimpleConverters()
     {
-        const int numberOfSimpleConverters = 7;
+        const int numberOfSimpleConverters = 8;
         var converters = new Dictionary<Type, ConsoleConverter>(numberOfSimpleConverters);
 
         // When adding to this, update NumberOfSimpleConverters above.
+        Add(BuiltInConverters.DataSetNodeConverter);
         Add(BuiltInConverters.DataTableNodeConverter);
         Add(BuiltInConverters.XmlNodeConverter);
         Add(BuiltInConverters.XNodeConverter);

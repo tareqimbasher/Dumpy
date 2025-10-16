@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -34,31 +35,31 @@ public static class DumpContext
 
     public static bool IsActive => _state.Value != null;
 
-    public static void Enter(object? value)
+    public static void Enter(object? value, Type valueType)
     {
         var state = _state.Value ??= new State();
         state.Depth++;
-        if (value != null && !value.GetType().IsValueType)
+        if (value != null && !valueType.IsValueType)
         {
             state.Visited.Add(value);
         }
     }
 
-    public static void Exit(object? value)
+    public static void Exit(object? value, Type valueType)
     {
         var state = _state.Value;
         if (state == null) return;
         if (state.Depth > 0) state.Depth--;
-        if (value != null && !value.GetType().IsValueType)
+        if (value != null && !valueType.IsValueType)
         {
             state.Visited.Remove(value);
         }
     }
 
-    public static bool IsVisited(object? value)
+    public static bool IsVisited(object? value, Type valueType)
     {
         var state = _state.Value;
-        if (state == null || value == null || value.GetType().IsValueType) return false;
+        if (state == null || value == null || valueType.IsValueType) return false;
         return state.Visited.Contains(value);
     }
 }

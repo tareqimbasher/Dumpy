@@ -47,9 +47,9 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
         writer.Append(" (Rows = ");
         writer.AppendInt(rowCount);
 
-        if (options.MaxCollectionItems > rowCount)
+        if (rowCount > options.MaxCollectionItems)
         {
-            writer.Append(" - Showing ");
+            writer.Append(" - Showing first ");
             writer.AppendInt(options.MaxCollectionItems);
         }
 

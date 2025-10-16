@@ -20,6 +20,11 @@ internal static class BuiltInConverters
 
     public static HtmlConverter<DataTable> DataTableNodeConverter =>
         _dataTableNodeConverter ??= new DataTableHtmlConverter();
+    
+    private static HtmlConverter<DataSet>? _dataSetNodeConverter;
+
+    public static HtmlConverter<DataSet> DataSetNodeConverter =>
+        _dataSetNodeConverter ??= new DataSetHtmlConverter();
 
     private static HtmlConverter<XmlNode>? _xmlNodeConverter;
     public static HtmlConverter<XmlNode> XmlNodeConverter => _xmlNodeConverter ??= new XmlNodeHtmlConverter();

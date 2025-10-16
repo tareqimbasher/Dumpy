@@ -97,7 +97,7 @@ public static class ConsoleDumper
             }
 
             // Reference loop handling (checked only for reference types)
-            if (value != null && !valueType.IsValueType && DumpContext.IsVisited(value))
+            if (value != null && !valueType.IsValueType && DumpContext.IsVisited(value, valueType))
             {
                 switch (options.ReferenceLoopHandling)
                 {
@@ -117,7 +117,7 @@ public static class ConsoleDumper
             bool didEnter = false;
             try
             {
-                DumpContext.Enter(value);
+                DumpContext.Enter(value, valueType);
                 didEnter = true;
                 var converter = options.GetConverter(valueType);
                 return converter.ConvertInner(value, valueType, options);
@@ -126,7 +126,7 @@ public static class ConsoleDumper
             {
                 if (didEnter)
                 {
-                    DumpContext.Exit(value);
+                    DumpContext.Exit(value, valueType);
                 }
             }
         }
