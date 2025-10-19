@@ -6,23 +6,26 @@ namespace Dumpy.Html.Tests.Tools;
 
 public class GenerateHtmlDocument
 {
+    private readonly List<(string title, string html)> _htmlFragments = new();
+
     [Fact]
     public void GeneratePage()
     {
-        //Person();
-        //SimpleCollection();
-        //PersonCollection();
-        //FileSystemInfo();
-        //Tuple();
-        //TwoDimensionalArray();
-        // Memory();
-        //DataTable();
+        Object();
+        SimpleCollection();
+        PersonCollection();
+        Tuple();
+        TwoDimensionalArray();
+        Memory();
+        DataTable();
         DataSet();
+        FileSystemInfo();
+        Write();
     }
 
-    private void Person()
+    private void Object()
     {
-        Write(NewPerson());
+        Add(NewPerson(), "Object");
     }
 
     private Person NewPerson()
@@ -56,38 +59,31 @@ public class GenerateHtmlDocument
 
     private void SimpleCollection()
     {
-        Write(new[] { 1, 2, 3 });
+        Add(new[] { 1, 2, 3 }, "Collection of Primitives");
     }
 
     private void PersonCollection()
     {
         var collection = Enumerable.Range(0, 4).Select(x => NewPerson());
-        Write(collection);
-    }
-
-    private void FileSystemInfo()
-    {
-        var file = new FileInfo("/does/not/exist.txt");
-        var dir = new DirectoryInfo("/does/not/exist");
-        Write(dir);
+        Add(collection, "Collection of Objects");
     }
 
     private void Tuple()
     {
         (Person person, DateTime created) tuple = (NewPerson(), DateTime.Now);
-        Write(tuple);
+        Add(tuple, "Tuple");
     }
 
     private void TwoDimensionalArray()
     {
         int[,] numbers = { { 1, 4, 2 }, { 3, 6, 8 } };
-        Write(numbers);
+        Add(numbers, "2-D Array");
     }
 
     private void Memory()
     {
         Memory<int> memory = new[] { 1, 4, 2 };
-        Write(memory);
+        Add(memory, "Memory");
     }
 
     private void DataTable()
@@ -100,9 +96,9 @@ public class GenerateHtmlDocument
         table.Rows.Add("John Doe", DateTime.Parse("1980/1/1"), 1000);
         table.Rows.Add("Jane Doe", DateTime.Parse("1981/1/1"), 2000);
 
-        Write(table);
+        Add(table, "DataTable");
     }
-    
+
     private void DataSet()
     {
         var table1 = new DataTable("Table 1");
@@ -111,7 +107,7 @@ public class GenerateHtmlDocument
         table1.Columns.Add("Salary", typeof(decimal));
         table1.Rows.Add("John Doe", DateTime.Parse("1980/1/1"), 1000);
         table1.Rows.Add("Jane Doe", DateTime.Parse("1981/1/1"), 2000);
-        
+
         var table2 = new DataTable("Table 2");
         table2.Columns.Add("Item");
         table2.Columns.Add("Price", typeof(decimal));
@@ -121,18 +117,46 @@ public class GenerateHtmlDocument
         var dataSet = new DataSet();
         dataSet.Tables.Add(table1);
         dataSet.Tables.Add(table2);
-        
-        Write(dataSet);
+
+        Add(dataSet, "DataSet");
     }
 
-    private static void Write<T>(T value)
+    private void FileSystemInfo()
     {
-        var html = HtmlDumper.DumpHtml(value, new HtmlDumpOptions { AddTitleAttributes = true });
+        Add(new DirectoryInfo("/path/to/folder"), "DirectoryInfo");
+        Add(new FileInfo("/path/to/file.txt"), "FileInfo");
+    }
+
+    private void Add<T>(T value, string title)
+    {
+        var html = value.DumpHtml(new HtmlDumpOptions { AddTitleAttributes = true });
+        _htmlFragments.Add((title, html));
+    }
+
+    private void Write()
+    {
+        var html = string.Join("<br/><hr/><br/>",
+                _htmlFragments.Select(x =>
+                    $"""
+                    <h1>{x.title}</h1>
+                    <div>{x.html}</div>
+                    """
+            ));
 
         var doc = Consts.DocumentTemplate.Replace("HTML_REPLACE", html);
 
-        File.WriteAllText(
-            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "dumpy.html"),
-            doc);
+        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "dumpy.html");
+        File.WriteAllText(path, doc);
     }
+
+    // private static void Write2<T>(T value)
+    // {
+    //     var html = HtmlDumper.DumpHtml(value, new HtmlDumpOptions { AddTitleAttributes = true });
+    //
+    //     var doc = Consts.DocumentTemplate.Replace("HTML_REPLACE", html);
+    //
+    //     File.WriteAllText(
+    //         Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "dumpy.html"),
+    //         doc);
+    // }
 }

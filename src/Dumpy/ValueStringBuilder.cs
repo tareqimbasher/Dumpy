@@ -9,9 +9,12 @@ using System.Runtime.InteropServices;
 
 namespace Dumpy;
 
+/// <summary>
+/// Provides a high-performance, stack-friendly mutable string builder.
+/// </summary>
 public ref partial struct ValueStringBuilder
 {
-    private readonly int _growthSize = 4096;
+    private readonly int _growthSize = 1024;
     private char[]? _arrayToReturnToPool;
     private Span<char> _chars;
     private int _pos;
@@ -32,6 +35,13 @@ public ref partial struct ValueStringBuilder
         _pos = 0;
     }
 
+    /// <summary>
+    /// Gets or sets the number of characters that have been written to the current buffer.
+    /// </summary>
+    /// <remarks>
+    /// Setting this property truncates or extends the current contents. 
+    /// The value must not exceed the current <see cref="Capacity"/>.
+    /// </remarks>
     public int Length
     {
         get => _pos;
@@ -43,6 +53,13 @@ public ref partial struct ValueStringBuilder
         }
     }
 
+    
+    /// <summary>
+    /// Gets the total number of characters that can be stored in the current buffer before it needs to grow.
+    /// </summary>
+    /// <remarks>
+    /// If more capacity is required when appending or inserting, the internal buffer is automatically expanded.
+    /// </remarks>
     public int Capacity => _chars.Length;
 
     public void EnsureCapacity(int capacity)
@@ -167,6 +184,7 @@ public ref partial struct ValueStringBuilder
         return count;
     }
     
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Insert(int index, char value) => Insert(index, value, 1);
     
     public int Insert(int index, char value, int count)

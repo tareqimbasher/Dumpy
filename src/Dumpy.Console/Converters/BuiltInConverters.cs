@@ -16,22 +16,27 @@ internal static class BuiltInConverters
     public static ConsoleConverter<ITuple> TupleConverter => _tupleConverter ??= new TupleConsoleConverter();
 #endif
 
+    
     private static ConsoleConverter<DataTable>? _dataTableNodeConverter;
 
     public static ConsoleConverter<DataTable> DataTableNodeConverter =>
         _dataTableNodeConverter ??= new DataTableConsoleConverter();
+    
     
     private static ConsoleConverter<DataSet>? _dataSetNodeConverter;
 
     public static ConsoleConverter<DataSet> DataSetNodeConverter =>
         _dataSetNodeConverter ??= new DataSetConsoleConverter();
 
+    
     private static ConsoleConverter<XmlNode>? _xmlNodeConverter;
     public static ConsoleConverter<XmlNode> XmlNodeConverter => _xmlNodeConverter ??= new XmlNodeConsoleConverter();
 
+    
     private static ConsoleConverter<XNode>? _xNodeConverter;
     public static ConsoleConverter<XNode> XNodeConverter => _xNodeConverter ??= new XNodeConsoleConverter();
 
+    
 #if NETCOREAPP3_0_OR_GREATER
     private static ConsoleConverter<JsonDocument>? _jsonDocumentConverter;
 

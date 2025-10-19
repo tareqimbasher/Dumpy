@@ -15,6 +15,17 @@ public sealed partial class HtmlDumpOptions
     private static HtmlConverter[]? _defaultFactoryConverters;
     private readonly ConcurrentDictionary<Type, HtmlConverter> _converters = new();
 
+    public HtmlConverter GetConverter(Type typeToConvert)
+    {
+        if (typeToConvert == null)
+        {
+            throw new ArgumentNullException(nameof(typeToConvert));
+        }
+
+        InitBuiltInConverters();
+        return GetConverterInternal(typeToConvert);
+    }
+    
     private static void InitBuiltInConverters()
     {
         if (Volatile.Read(ref _defaultFactoryConverters) is null)
@@ -62,17 +73,6 @@ public sealed partial class HtmlDumpOptions
             Debug.Assert(converter != null);
             converters.Add(converter.TypeToConvert!, converter);
         }
-    }
-
-    public HtmlConverter GetConverter(Type typeToConvert)
-    {
-        if (typeToConvert == null)
-        {
-            throw new ArgumentNullException(nameof(typeToConvert));
-        }
-
-        InitBuiltInConverters();
-        return GetConverterInternal(typeToConvert);
     }
 
     internal HtmlConverter GetConverterInternal(Type typeToConvert)

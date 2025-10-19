@@ -15,6 +15,17 @@ public sealed partial class ConsoleDumpOptions
     private static ConsoleConverter[]? _defaultFactoryConverters;
     private readonly ConcurrentDictionary<Type, ConsoleConverter> _converters = new();
 
+    public ConsoleConverter GetConverter(Type typeToConvert)
+    {
+        if (typeToConvert == null)
+        {
+            throw new ArgumentNullException(nameof(typeToConvert));
+        }
+
+        InitBuiltInConverters();
+        return GetConverterInternal(typeToConvert);
+    }
+
     private static void InitBuiltInConverters()
     {
         if (Volatile.Read(ref _defaultFactoryConverters) is null)
@@ -62,17 +73,6 @@ public sealed partial class ConsoleDumpOptions
             Debug.Assert(converter != null);
             converters.Add(converter.TypeToConvert!, converter);
         }
-    }
-
-    public ConsoleConverter GetConverter(Type typeToConvert)
-    {
-        if (typeToConvert == null)
-        {
-            throw new ArgumentNullException(nameof(typeToConvert));
-        }
-
-        InitBuiltInConverters();
-        return GetConverterInternal(typeToConvert);
     }
 
     internal ConsoleConverter GetConverterInternal(Type typeToConvert)

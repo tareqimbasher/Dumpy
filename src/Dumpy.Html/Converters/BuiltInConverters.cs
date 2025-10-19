@@ -16,21 +16,26 @@ internal static class BuiltInConverters
     public static HtmlConverter<ITuple> TupleConverter => _tupleConverter ??= new TupleHtmlConverter();
 #endif
 
+
     private static HtmlConverter<DataTable>? _dataTableNodeConverter;
 
     public static HtmlConverter<DataTable> DataTableNodeConverter =>
         _dataTableNodeConverter ??= new DataTableHtmlConverter();
-    
+
+
     private static HtmlConverter<DataSet>? _dataSetNodeConverter;
 
     public static HtmlConverter<DataSet> DataSetNodeConverter =>
         _dataSetNodeConverter ??= new DataSetHtmlConverter();
 
+
     private static HtmlConverter<XmlNode>? _xmlNodeConverter;
     public static HtmlConverter<XmlNode> XmlNodeConverter => _xmlNodeConverter ??= new XmlNodeHtmlConverter();
 
+
     private static HtmlConverter<XNode>? _xNodeConverter;
     public static HtmlConverter<XNode> XNodeConverter => _xNodeConverter ??= new XNodeHtmlConverter();
+
 
 #if NETCOREAPP3_0_OR_GREATER
     private static HtmlConverter<JsonDocument>? _jsonDocumentConverter;

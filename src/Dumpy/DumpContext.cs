@@ -7,7 +7,6 @@ namespace Dumpy;
 
 /// <summary>
 /// Tracks traversal state for dumping: current depth and visited references for loop detection.
-/// Uses AsyncLocal to scope to the current logical call context.
 /// </summary>
 public static class DumpContext
 {
@@ -19,6 +18,8 @@ public static class DumpContext
     }
 
     private const int HashSetCapacity = 64;
+
+    // Use AsyncLocal to scope to the current logical call context.
     private static readonly AsyncLocal<State?> _state = new();
 
     public static void Reset()
@@ -35,7 +36,7 @@ public static class DumpContext
 
     public static bool IsActive => _state.Value != null;
 
-    public static void Enter(object? value, Type valueType)
+    public static void Enter<T>(T value, Type valueType)
     {
         var state = _state.Value ??= new State();
         state.Depth++;
@@ -45,7 +46,7 @@ public static class DumpContext
         }
     }
 
-    public static void Exit(object? value, Type valueType)
+    public static void Exit<T>(T value, Type valueType)
     {
         var state = _state.Value;
         if (state == null) return;
@@ -67,9 +68,13 @@ public static class DumpContext
 internal sealed class ReferenceEqualityComparer : IEqualityComparer<object?>
 {
     public static readonly ReferenceEqualityComparer Instance = new();
-    private ReferenceEqualityComparer() { }
+
+    private ReferenceEqualityComparer()
+    {
+    }
+
     public new bool Equals(object? x, object? y) => ReferenceEquals(x, y);
-    
+
     // Depending on target framework, RuntimeHelpers.GetHashCode might not be annotated
     // with the proper nullability attribute. We'll suppress any warning that might
     // result.
