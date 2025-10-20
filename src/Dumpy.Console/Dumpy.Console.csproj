@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Dumpy\Dumpy.csproj" Version="[1.0.0,2.0.0)"/>
+        <ProjectReference Include="..\Dumpy.Abstractions\Dumpy.Abstractions.csproj" Version="[1.0.0,2.0.0)" />
     </ItemGroup>
 
     <ItemGroup>

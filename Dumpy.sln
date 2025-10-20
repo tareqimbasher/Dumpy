@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dumpy", "src\Dumpy\Dumpy.csproj", "{0ABF13B2-5CB3-42FC-B35A-166B62905796}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dumpy.Abstractions", "src\Dumpy.Abstractions\Dumpy.Abstractions.csproj", "{0ABF13B2-5CB3-42FC-B35A-166B62905796}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4B6E624A-5221-401F-BC65-D594908C6980}"
 EndProject

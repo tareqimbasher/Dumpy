@@ -6,14 +6,15 @@
         <FileVersion>$(Version)</FileVersion>
         <InformationalVersion>$(Version)</InformationalVersion>
         
-        <Title>Dumpy</Title>
-        <Description>Small and fast object dumpers for .NET.</Description>
-        
+        <Title>Dumpy.Abstractions</Title>
+        <Description>Small and fast object dumpers for .NET. Shared infrastructure for Dumpy libraries. Not intended for direct use.</Description>
+
+        <RootNamespace>Dumpy</RootNamespace>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <DocumentationFile>bin\Release\Dumpy.xml</DocumentationFile>
+        <DocumentationFile>bin\Release\Dumpy.Abstractions.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
