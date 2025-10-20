@@ -6,16 +6,16 @@ using Dumpy.Console;
 using Dumpy.ConsoleApp;
 
 PrintHeader("Strings");
-"String".Dump();
-3.2.Dump();
-DateTime.Now.Dump();
+"String".DumpOwn();
+3.2.DumpOwn();
+DateTime.Now.DumpOwn();
 
 PrintHeader("Object");
-new Car().Dump();
+new Car().DumpOwn();
 
 PrintHeader("Collection");
-new[] { new Car(), new Car() }.Dump();
-new Dictionary<string, int>() { { "Student 1", 90 }, { "Student 2", 100 } }.Dump();
+new[] { new Car(), new Car() }.DumpOwn();
+new Dictionary<string, int>() { { "Student 1", 90 }, { "Student 2", 100 } }.DumpOwn();
 
 PrintHeader("Tuple");
 (Car car, DateTime created) tuple = (new Car(), DateTime.Now);
@@ -35,13 +35,13 @@ new FileInfo("/tmp/text.txt").DumpConsole();
 PrintHeader("XmlNode");
 var xmlDoc = new XmlDocument();
 xmlDoc.LoadXml("<person><name>My Name</name></person>");
-xmlDoc.Dump();
+xmlDoc.DumpOwn();
 
 PrintHeader("XNode");
-XElement.Parse("<person><name>My Name</name></person>").Dump();
+XElement.Parse("<person><name>My Name</name></person>").DumpOwn();
 
 PrintHeader("JSON");
-JsonDocument.Parse(JsonSerializer.Serialize(new Car())).Dump();
+JsonDocument.Parse(JsonSerializer.Serialize(new Car())).DumpOwn();
 
 PrintHeader("DataTable");
 var table = new DataTable("Table name");

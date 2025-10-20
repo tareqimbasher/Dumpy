@@ -16,7 +16,7 @@ public static class Setup
         });
     }
 
-    public static T? Dump<T>(this T? value, string? title = null, DumpOptions? options = null)
+    public static T? DumpOwn<T>(this T? value, string? title = null, DumpOptions? options = null)
     {
         value.DumpConsole(title);
         //value.DumpHtml();
@@ -36,9 +36,7 @@ public static class Setup
     private static void SendToHtmlViewer(string html)
     {
         html = JsonSerializer.Serialize(html); // to convert it to a JSON string
-        var json = $$"""
-                      {"type": "data", "data":{{html}}}
-                      """;
+        var json = $"{{\"type\": \"data\", \"data\":{html}}}";
 
         using ClientWebSocket ws = new();
         ws.ConnectAsync(new Uri("ws://localhost:5689/"), CancellationToken.None).Wait();

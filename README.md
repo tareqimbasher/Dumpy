@@ -25,8 +25,9 @@ Small, fast object dumpers for .NET. Inspect objects, collections, tuples, DataT
 
 ```csharp
 using Dumpy.Console;
+
 var person = new { Name = "Ada", Age = 37 };
-person.DumpConsole("Person");
+person.Dump("Person");
 ```
 
 #### HTML
@@ -35,7 +36,7 @@ person.DumpConsole("Person");
 using Dumpy.Html;
 
 var person = new { Name = "Ada", Age = 37 };
-string html = person.DumpHtml();
+string html = person.Dump();
 System.IO.File.WriteAllText("person.html", html);
 ```
 

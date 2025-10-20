@@ -32,7 +32,7 @@ reports. Produces readable tables and structures with optional CSS classes and m
 using Dumpy.Html;
 
 var person = new { Name = "Ada", Age = 37 };
-string html = person.DumpHtml();
+string html = person.Dump();
 // Save or embed the HTML
 System.IO.File.WriteAllText("person.html", html);
 ```
@@ -55,7 +55,7 @@ var options = new HtmlDumpOptions
     }
 };
 
-string html = person.DumpHtml(options);
+string html = person.Dump(options);
 ```
 
 # Options
@@ -122,7 +122,7 @@ void DumpHtml<T>(ref ValueStringBuilder writer, T? value, Type valueType, HtmlDu
 **Dump to an HTML string and save it:**
 
 ```csharp
-var html = person.DumpHtml();
+var html = person.Dump();
 System.IO.File.WriteAllText("person.html", html);
 ```
 
@@ -130,7 +130,7 @@ System.IO.File.WriteAllText("person.html", html);
 
 ```csharp
 Employee employee = person;
-var html = employee.DumpHtml(typeof(Person));
+var html = employee.Dump(typeof(Person));
 ```
 
 # Supported types

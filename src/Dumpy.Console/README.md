@@ -35,13 +35,13 @@ visuals.
 ```csharp
 using Dumpy.Console;
 var person = new { Name = "Ada", Age = 37 };
-person.DumpConsole();
+person.Dump();
 ```
 
 #### Add a title
 
 ```csharp
-person.DumpConsole("Person");
+person.Dump("Person");
 ```
 
 #### Customize rendering via options
@@ -57,7 +57,7 @@ var options = new ConsoleDumpOptions
         ShowTitles = false,
     }
 };
-person.DumpConsole("Person", options);
+person.Dump("Person", options);
 ```
 
 # Options
@@ -119,14 +119,14 @@ IRenderable DumpToRenderable(this T value, Type valueType, ConsoleDumpOptions? o
 **Dump to the console directly:**
 
 ```csharp
-person.DumpConsole();                   // <== using the extension method, or
-ConsoleDumper.DumpConsole(person);      // <== using the ConsoleDumper static class
+person.Dump();                   // <== using the extension method, or
+ConsoleDumper.Dump(person);      // <== using the ConsoleDumper static class
 ```
 
 **Annotate the output with a title:**
 
 ```csharp
-person.DumpConsole("John Doe");
+person.Dump("John Doe");
 ```
 
 **Dump to a `IRenderable` and then write it to the console yourself:**

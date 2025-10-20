@@ -23,6 +23,15 @@ public static class ConsoleDumper
     /// <param name="value">The value to dump.</param>
     /// <param name="options">Optional dump options. If null, default options are used.</param>
     /// <returns>The original <paramref name="value"/> for fluent usage.</returns>
+    public static T? Dump<T>(this T? value, ConsoleDumpOptions? options = null) => DumpConsole(value, options);
+    
+    /// <summary>
+    /// Writes a formatted representation of the specified value to the console.
+    /// </summary>
+    /// <typeparam name="T">The static type of the value.</typeparam>
+    /// <param name="value">The value to dump.</param>
+    /// <param name="options">Optional dump options. If null, default options are used.</param>
+    /// <returns>The original <paramref name="value"/> for fluent usage.</returns>
     [return: NotNullIfNotNull("value")]
     public static T? DumpConsole<T>(this T? value, ConsoleDumpOptions? options = null)
     {

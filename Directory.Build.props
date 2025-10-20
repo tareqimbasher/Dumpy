@@ -1,0 +1,18 @@
+<Project>
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.1;net6.0;net7.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <LangVersion>12</LangVersion>
+
+        <Authors>Tareq Imbasher</Authors>
+        <PackageTags>console;html;dump;object;netpad;linqpad</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://github.com/tareqimbasher/Dumpy</PackageProjectUrl>
+
+        <RepositoryUrl>https://github.com/tareqimbasher/Dumpy</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    </PropertyGroup>
+</Project>

@@ -50,21 +50,21 @@ public class Serialization
     // public string Dumpify100() => DumpExtensions.DumpText(_100);
 
 
-    [Benchmark(Description = "1000 items - STJ")]
-    public string Json1000() => JsonSerializer.Serialize(_1000);
+    //[Benchmark(Description = "1000 items - STJ")]
+    //public string Json1000() => JsonSerializer.Serialize(_1000);
 
-    [Benchmark(Description = "1000 items - Dumpy")]
-    public string Html1000() => HtmlDumper.DumpHtml(_1000, _htmlDumpOptions);
+    //[Benchmark(Description = "1000 items - Dumpy")]
+    //public string Html1000() => HtmlDumper.DumpHtml(_1000, _htmlDumpOptions);
 
     // [Benchmark(Description = "1000 items - Dumpify")]
     // public string Dumpify1000() => DumpExtensions.DumpText(_1000);
 
 
-    [Benchmark(Description = "10000 items - STJ")]
-    public string Json10000() => JsonSerializer.Serialize(_10000);
+    //[Benchmark(Description = "10000 items - STJ")]
+    //public string Json10000() => JsonSerializer.Serialize(_10000);
 
-    [Benchmark(Description = "10000 items - Dumpy")]
-    public string Html10000() => HtmlDumper.DumpHtml(_10000, _htmlDumpOptions);
+    //[Benchmark(Description = "10000 items - Dumpy")]
+    //public string Html10000() => HtmlDumper.DumpHtml(_10000, _htmlDumpOptions);
 
     // Takes too long
     // [Benchmark(Description = "10000 items - Dumpify")]

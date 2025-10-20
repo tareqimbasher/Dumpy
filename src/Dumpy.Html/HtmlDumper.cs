@@ -20,6 +20,15 @@ public static class HtmlDumper
     /// <param name="value">The value to dump.</param>
     /// <param name="options">Optional dump options. If null, default options are used.</param>
     /// <returns>An HTML string representing the value.</returns>
+    public static string Dump<T>(this T? value, HtmlDumpOptions? options = null) => DumpHtml(value, options);
+    
+    /// <summary>
+    /// Dumps the specified value to an HTML string using the provided options.
+    /// </summary>
+    /// <typeparam name="T">The static type of the value.</typeparam>
+    /// <param name="value">The value to dump.</param>
+    /// <param name="options">Optional dump options. If null, default options are used.</param>
+    /// <returns>An HTML string representing the value.</returns>
     public static string DumpHtml<T>(this T? value, HtmlDumpOptions? options = null)
     {
         var valueType = value?.GetType() ?? typeof(T);
