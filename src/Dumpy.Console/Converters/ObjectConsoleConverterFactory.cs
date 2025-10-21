@@ -50,13 +50,13 @@ public class ObjectDefaultConsoleConverter<T> : ConsoleConverter<T>
             {
                 case PropertyInfo property:
                     var propValue = TypeUtil.GetPropertyValue(property, value);
-                    table.AddRow(new Markup($"[bold][olive]{property.Name}[/][/]"),
+                    table.AddRow(Markup.FromInterpolated($"[bold][olive]{property.Name}[/][/]"),
                         propValue.DumpToRenderable(property.PropertyType, options));
                     break;
 
                 case FieldInfo field:
                     var fieldValue = TypeUtil.GetFieldValue(field, value);
-                    table.AddRow(new Markup($"[bold][olive]{field.Name}[/][/]"),
+                    table.AddRow(Markup.FromInterpolated($"[bold][olive]{field.Name}[/][/]"),
                         fieldValue.DumpToRenderable(field.FieldType, options));
                     break;
             }

@@ -31,12 +31,12 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
 
         if (targetType == typeof(string))
         {
-            return new Markup($"[lightsalmon1]\"{value}\"[/]");
+            return Markup.FromInterpolated($"[lightsalmon1]\"{value}\"[/]");
         }
 
         if (targetType == typeof(Guid))
         {
-            return new Markup($"[lightsalmon1]{value}[/]");
+            return Markup.FromInterpolated($"[lightsalmon1]{value}[/]");
         }
 
         if (targetType.IsEnum
@@ -47,12 +47,12 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
             || targetType == typeof(DateTimeOffset)
             || targetType == typeof(TimeSpan))
         {
-            return new Markup($"[yellow4_1]{value}[/]");
+            return Markup.FromInterpolated($"[yellow4_1]{value}[/]");
         }
 
         if (targetType == typeof(bool))
         {
-            return new Markup($"[mediumpurple1]{value}[/]");
+            return Markup.FromInterpolated($"[mediumpurple1]{value}[/]");
         }
 
         if (targetType == typeof(int)
@@ -67,12 +67,12 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
             || targetType == typeof(double)
             || targetType == typeof(decimal))
         {
-            return new Markup($"[skyblue2]{value}[/]");
+            return Markup.FromInterpolated($"[skyblue2]{value}[/]");
         }
 
         if (targetType == typeof(char))
         {
-            return new Markup($"[lightsalmon1]'{value}'[/]");
+            return Markup.FromInterpolated($"[lightsalmon1]'{value}'[/]");
         }
 
         return new Text(value.ToString()!);

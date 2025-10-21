@@ -131,7 +131,7 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
 
             foreach (var member in members)
             {
-                table.AddColumn(new TableColumn(new Markup($"[bold][olive]{member.Name}[/][/]")));
+                table.AddColumn(new TableColumn(Markup.FromInterpolated($"[bold][olive]{member.Name}[/][/]")));
             }
             
             foreach (var row in rows)

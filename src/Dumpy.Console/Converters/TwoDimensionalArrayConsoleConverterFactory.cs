@@ -60,7 +60,8 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
         {
             var exceededMax = rowCount > options.MaxCollectionItems;
             var items = $"{(exceededMax ? "First " : "")}{rowsToIterate} items";
-            table.Title = new TableTitle($"{typeName} | {items}", new Style(decoration: Decoration.Bold | Decoration.Dim));
+            table.Title = new TableTitle($"{typeName} | {items}",
+                new Style(decoration: Decoration.Bold | Decoration.Dim));
         }
 
         // Add an empty column at the start
@@ -73,8 +74,7 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
 
         for (int iRow = 0; iRow < rowsToIterate; iRow++)
         {
-            var row = new List<IRenderable>();
-            row.Add(new Markup(iRow.ToString()));
+            var row = new List<IRenderable> { new Markup(iRow.ToString()) };
 
             for (int iColumn = 0; iColumn < columnCount; iColumn++)
             {
@@ -82,7 +82,7 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
                 var itemType = item == null ? typeof(object) : item.GetType();
                 row.Add(ConsoleDumper.DumpToRenderable(item, itemType, options));
             }
-            
+
             table.AddRow(row);
         }
 

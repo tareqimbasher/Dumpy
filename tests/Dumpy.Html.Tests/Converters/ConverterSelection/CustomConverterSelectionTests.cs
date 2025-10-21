@@ -54,7 +54,7 @@ public class CustomConverterSelectionTests
 
     public class Car : Vehicle, ICar
     {
-        public string Make { get; set; }
+        public required string Make { get; set; }
     }
 
     public class FlyingCar : Car

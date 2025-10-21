@@ -36,7 +36,7 @@ public static class DumpContext
 
     public static bool IsActive => _state.Value != null;
 
-    public static void Enter<T>(T value, Type valueType)
+    public static void Enter<T>(T? value, Type valueType)
     {
         var state = _state.Value ??= new State();
         state.Depth++;
@@ -46,7 +46,7 @@ public static class DumpContext
         }
     }
 
-    public static void Exit<T>(T value, Type valueType)
+    public static void Exit<T>(T? value, Type valueType)
     {
         var state = _state.Value;
         if (state == null) return;

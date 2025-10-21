@@ -16,6 +16,6 @@
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <NoWarn>CS1591;</NoWarn>
+        <NoWarn>CS1591;NU1701;</NoWarn>
     </PropertyGroup>
 </Project>
