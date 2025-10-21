@@ -10,15 +10,18 @@ public static class Setup
 {
     static Setup()
     {
-        ConfigureDumpy.Update(options =>
-        {
-            options.UseRemoteViewer(new Uri("ws://localhost:5689"));
-        });
+        // ConfigureDumpy.Update(options =>
+        // {
+        //     options.UseRemoteViewer(new Uri("ws://localhost:5689"));
+        // });
     }
 
-    public static T? DumpOwn<T>(this T? value, string? title = null, DumpOptions? options = null)
+    public static T? DumpInternal<T>(this T? value, string? title = null, DumpOptions? options = null)
     {
-        value.DumpConsole(title);
+        value.DumpConsole(title, new ConsoleDumpOptions()
+        {
+            IncludeFields = true
+        });
         //value.DumpHtml();
         //value.DumpToHtmlViewer();
         return value;

@@ -8,7 +8,7 @@ public class GenerateHtmlDocument
 {
     private readonly List<(string title, string html)> _htmlFragments = new();
 
-    [Fact]
+    [Fact(Skip = "Adhoc")]
     public void GeneratePage()
     {
         Object();
@@ -20,6 +20,8 @@ public class GenerateHtmlDocument
         DataTable();
         DataSet();
         FileSystemInfo();
+        KitchenSink();
+        
         Write();
     }
 
@@ -125,6 +127,11 @@ public class GenerateHtmlDocument
     {
         Add(new DirectoryInfo("/path/to/folder"), "DirectoryInfo");
         Add(new FileInfo("/path/to/file.txt"), "FileInfo");
+    }
+    
+    private void KitchenSink()
+    {
+        Add(new KitchenSink(), "DirectoryInfo");
     }
 
     private void Add<T>(T value, string title)

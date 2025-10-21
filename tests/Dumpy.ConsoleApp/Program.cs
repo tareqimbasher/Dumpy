@@ -2,46 +2,53 @@
 using System.Text.Json;
 using System.Xml;
 using System.Xml.Linq;
-using Dumpy.Console;
-using Dumpy.ConsoleApp;
+using Dumpy.Tests;
+using Dumpy.Tests.Models;
+using Spectre.Console;
+using Rule = Spectre.Console.Rule;
 
 PrintHeader("Strings");
-"String".DumpOwn();
-3.2.DumpOwn();
-DateTime.Now.DumpOwn();
+"String".DumpInternal();
+3.2.DumpInternal();
+DateTime.Now.DumpInternal();
 
 PrintHeader("Object");
-new Car().DumpOwn();
+new {Name = "John Doe", Age = 30}.DumpInternal();
 
 PrintHeader("Collection");
-new[] { new Car(), new Car() }.DumpOwn();
-new Dictionary<string, int>() { { "Student 1", 90 }, { "Student 2", 100 } }.DumpOwn();
+Enumerable.Range(0, 5).Select(x => new
+{
+    Id = x + 1,
+    Hash = TestHelper.GenerateRandomString(10),
+    Message = TestHelper.GenerateRandomString(30),
+    Created = DateTime.Now
+}).DumpInternal();
 
 PrintHeader("Tuple");
-(Car car, DateTime created) tuple = (new Car(), DateTime.Now);
-tuple.DumpConsole();
+(KitchenSink car, DateTime created) tuple = (new KitchenSink(), DateTime.Now);
+tuple.DumpInternal();
 
 PrintHeader("2D Array");
 int[,] numbers = { { 1, 4, 2 }, { 3, 6, 8 } };
-numbers.DumpConsole();
+numbers.DumpInternal();
 
 PrintHeader("Memory");
 Memory<int> memory = new[] { 1, 4, 2 };
-memory.DumpConsole();
+memory.DumpInternal();
 
 PrintHeader("FileSystemInfo");
-new FileInfo("/tmp/text.txt").DumpConsole();
+new FileInfo("/tmp/text.txt").DumpInternal();
 
 PrintHeader("XmlNode");
 var xmlDoc = new XmlDocument();
 xmlDoc.LoadXml("<person><name>My Name</name></person>");
-xmlDoc.DumpOwn();
+xmlDoc.DumpInternal();
 
 PrintHeader("XNode");
-XElement.Parse("<person><name>My Name</name></person>").DumpOwn();
+XElement.Parse("<person><name>My Name</name></person>").DumpInternal();
 
 PrintHeader("JSON");
-JsonDocument.Parse(JsonSerializer.Serialize(new Car())).DumpOwn();
+JsonDocument.Parse(JsonSerializer.Serialize(new KitchenSink())).DumpInternal();
 
 PrintHeader("DataTable");
 var table = new DataTable("Table name");
@@ -50,7 +57,7 @@ table.Columns.Add("Date of Birth", typeof(DateTime));
 table.Columns.Add("Salary", typeof(decimal));
 table.Rows.Add("John Doe", DateTime.Parse("1980/1/1"), 1000);
 table.Rows.Add("Jane Doe", DateTime.Parse("1981/1/1"), 2000);
-table.DumpConsole();
+table.DumpInternal();
 
 PrintHeader("DataSet");
 var table1 = new DataTable();
@@ -66,12 +73,18 @@ table2.Rows.Add("Coffee", 5);
 var dataSet = new DataSet();
 dataSet.Tables.Add(table1);
 dataSet.Tables.Add(table2);
+dataSet.DumpInternal();
 
-dataSet.DumpConsole();
+PrintHeader("Kitchen Sink");
+new KitchenSink().DumpInternal();
 
 return;
 
 void PrintHeader(string text)
 {
-    Console.WriteLine($"\n{text}\n{new string('-', text.Length + 1)}");
+    Console.WriteLine();
+    var rule = new Rule($"[bold][deeppink1_1]{text}[/][/]");
+    rule.Justification = Justify.Left;
+    AnsiConsole.Write(rule);
+    Console.WriteLine();
 }
