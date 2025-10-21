@@ -34,25 +34,30 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
             return Markup.FromInterpolated($"[lightsalmon1]\"{value}\"[/]");
         }
 
+        if (targetType == typeof(bool))
+        {
+            return Markup.FromInterpolated($"[cyan]{value}[/]");
+        }
+        
+        if (targetType.IsEnum)
+        {
+            return Markup.FromInterpolated($"[yellow4_1]{value}[/]");
+        }
+        
         if (targetType == typeof(Guid))
         {
-            return Markup.FromInterpolated($"[lightsalmon1]{value}[/]");
+            return Markup.FromInterpolated($"[plum3]{value}[/]");
         }
 
-        if (targetType.IsEnum
-            || targetType == typeof(DateTime)
+        if (targetType == typeof(DateTime)
 #if NET6_0_OR_GREATER
             || targetType == typeof(DateOnly)
+            || targetType == typeof(TimeOnly)
 #endif
             || targetType == typeof(DateTimeOffset)
             || targetType == typeof(TimeSpan))
         {
-            return Markup.FromInterpolated($"[yellow4_1]{value}[/]");
-        }
-
-        if (targetType == typeof(bool))
-        {
-            return Markup.FromInterpolated($"[mediumpurple1]{value}[/]");
+            return Markup.FromInterpolated($"[gold3]{value}[/]");
         }
 
         if (targetType == typeof(int)

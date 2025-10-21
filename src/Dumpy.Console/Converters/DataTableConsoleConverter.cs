@@ -15,32 +15,28 @@ public class DataTableConsoleConverter : ConsoleConverter<DataTable>
         {
             return NullWidget.Instance;
         }
-        
+
         int columnCount = value.Columns.Count;
         int rowCount = value.Rows.Count;
-        
-        var table = new Table
-        {
-            ShowHeaders = options.TableOptions.ShowHeaders,
-            ShowRowSeparators = options.TableOptions.ShowRowSeparators,
-            Expand = options.TableOptions.Expand,
-            Border = TableBorder.Rounded,
-            BorderStyle = new Style(Color.PaleTurquoise4)
-        };
-        
+
+        var table = options.CreateTable();
+
         var showing = rowCount > options.MaxCollectionItems
             ? $" - Showing first {options.MaxCollectionItems}"
             : "";
         var headerText = (!string.IsNullOrWhiteSpace(value.TableName) ? value.TableName : "DataTable")
                          + $" (Rows = {rowCount}{showing}, Columns = {columnCount})";
-        
-        table.Title = options.TableOptions.ShowTitles ? new TableTitle(headerText, new Style(decoration: Decoration.Bold)) : null;
-        
+
+        table.Title = options.TableOptions.ShowTitles
+            ? new TableTitle(headerText, options.StyleOptions.TitleTextStyle)
+            : null;
+
         for (int i = 0; i < columnCount; i++)
         {
-            table.AddColumn(value.Columns[i].ColumnName);
+            table.AddColumn(
+                new TableColumn(new Text(value.Columns[i].ColumnName, options.StyleOptions.HeaderTextStyle)));
         }
-        
+
         var rowsToIterate = Math.Min(rowCount, options.MaxCollectionItems);
 
         for (int iRow = 0; iRow < rowsToIterate; iRow++)

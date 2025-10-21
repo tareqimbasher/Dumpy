@@ -43,14 +43,7 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
 
         if (!isElementObject)
         {
-            var table = new Table
-            {
-                ShowHeaders = options.TableOptions.ShowHeaders,
-                ShowRowSeparators = options.TableOptions.ShowRowSeparators,
-                Expand = options.TableOptions.Expand,
-                Border = TableBorder.Rounded,
-                BorderStyle = new Style(Color.PaleTurquoise4)
-            };
+            var table = options.CreateTable();
             table.AddColumn("");
 
             int maxCount = options.MaxCollectionItems;
@@ -73,7 +66,7 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
             // TODO only get type name if needed
             var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
             table.Title = options.TableOptions.ShowTitles
-                ? new TableTitle(typeName, new Style(decoration: Decoration.Bold | Decoration.Dim))
+                ? new TableTitle(typeName, options.StyleOptions.TitleTextStyle)
                 : null;
             table.Columns[0].Header($"{(elementsCountExceedMax ? "First " : "")}{rowCount} items");
 
@@ -117,21 +110,14 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                 return EmptyCollectionWidget.New(typeName);
             }
 
-            var table = new Table
-            {
-                ShowHeaders = options.TableOptions.ShowHeaders,
-                ShowRowSeparators = options.TableOptions.ShowRowSeparators,
-                Expand = options.TableOptions.Expand,
-                Border = TableBorder.Rounded,
-                BorderStyle = new Style(Color.PaleTurquoise4)
-            };
+            var table = options.CreateTable();
             table.Title = options.TableOptions.ShowTitles
-                ? new TableTitle(title, new Style(decoration: Decoration.Bold | Decoration.Dim))
+                ? new TableTitle(title, options.StyleOptions.TitleTextStyle)
                 : null;
 
             foreach (var member in members)
             {
-                table.AddColumn(new TableColumn(Markup.FromInterpolated($"[bold][olive]{member.Name}[/][/]")));
+                table.AddColumn(new TableColumn(new Text(member.Name, options.StyleOptions.HeaderTextStyle)));
             }
             
             foreach (var row in rows)

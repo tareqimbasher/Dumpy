@@ -28,21 +28,14 @@ public class ObjectDefaultConsoleConverter<T> : ConsoleConverter<T>
             return NullWidget.Instance;
         }
 
-        var table = new Table
-        {
-            ShowHeaders = options.TableOptions.ShowHeaders,
-            ShowRowSeparators = options.TableOptions.ShowRowSeparators,
-            Expand = options.TableOptions.Expand,
-            Border = TableBorder.Rounded,
-            BorderStyle = new Style(Color.PaleTurquoise4)
-        };
+        var table = options.CreateTable();
 
         var typeName = Markup.Escape(TypeUtil.GetName(targetType, true));
         table.Title = options.TableOptions.ShowTitles
-            ? new TableTitle(typeName, new Style(decoration: Decoration.Bold))
+            ? new TableTitle(typeName, options.StyleOptions.TitleTextStyle)
             : null;
-        table.AddColumn(new TableColumn(new Markup("[bold][olive]Property[/][/]")));
-        table.AddColumn(new TableColumn(new Markup("[bold][olive]Value[/][/]")));
+        table.AddColumn(new TableColumn(new Text("Property", options.StyleOptions.HeaderTextStyle)));
+        table.AddColumn(new TableColumn(new Text("Value", options.StyleOptions.HeaderTextStyle)));
 
         foreach (var member in GetReadableMembers(targetType, options))
         {
@@ -50,13 +43,13 @@ public class ObjectDefaultConsoleConverter<T> : ConsoleConverter<T>
             {
                 case PropertyInfo property:
                     var propValue = TypeUtil.GetPropertyValue(property, value);
-                    table.AddRow(Markup.FromInterpolated($"[bold][olive]{property.Name}[/][/]"),
+                    table.AddRow(new Text(property.Name, options.StyleOptions.HeaderTextStyle),
                         propValue.DumpToRenderable(property.PropertyType, options));
                     break;
 
                 case FieldInfo field:
                     var fieldValue = TypeUtil.GetFieldValue(field, value);
-                    table.AddRow(Markup.FromInterpolated($"[bold][olive]{field.Name}[/][/]"),
+                    table.AddRow(new Text(field.Name, options.StyleOptions.HeaderTextStyle),
                         fieldValue.DumpToRenderable(field.FieldType, options));
                     break;
             }

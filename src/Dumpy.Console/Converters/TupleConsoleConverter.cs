@@ -16,14 +16,8 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
             return NullWidget.Instance;
         }
 
-        var table = new Table
-        {
-            ShowHeaders = false, // Always false
-            ShowRowSeparators = options.TableOptions.ShowRowSeparators,
-            Expand = options.TableOptions.Expand,
-            Border = TableBorder.Rounded,
-            BorderStyle = new Style(Color.PaleTurquoise4)
-        };
+        var table = options.CreateTable();
+        table.ShowHeaders = false;
         table.AddColumn("");
         table.AddColumn("");
 
@@ -47,7 +41,7 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
             var exceededMax = value.Length > options.MaxCollectionItems;
             var items = $"{(exceededMax ? "First " : "")}{serializedItemCount} items";
             var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
-            table.Title = new TableTitle($"{typeName} | {items}", new Style(decoration: Decoration.Bold | Decoration.Dim));
+            table.Title = new TableTitle($"{typeName} | {items}", options.StyleOptions.TitleTextStyle);
         }
 
         return table;

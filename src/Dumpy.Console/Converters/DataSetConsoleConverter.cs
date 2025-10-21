@@ -18,14 +18,7 @@ public class DataSetConsoleConverter : ConsoleConverter<DataSet>
         
         int tableCount = value.Tables.Count;
         
-        var table = new Table
-        {
-            ShowHeaders = options.TableOptions.ShowHeaders,
-            ShowRowSeparators = options.TableOptions.ShowRowSeparators,
-            Expand = options.TableOptions.Expand,
-            Border = TableBorder.Rounded,
-            BorderStyle = new Style(Color.PaleTurquoise4)
-        };
+        var table = options.CreateTable();
         
         var showing = tableCount > options.MaxCollectionItems
             ? $" - Showing first {options.MaxCollectionItems}"
@@ -33,10 +26,10 @@ public class DataSetConsoleConverter : ConsoleConverter<DataSet>
         var headerText = (!string.IsNullOrWhiteSpace(value.DataSetName) ? value.DataSetName : "DataSet")
                          + $" (Tables = {tableCount}{showing})";
         
-        table.Title = options.TableOptions.ShowTitles ? new TableTitle(headerText, new Style(decoration: Decoration.Bold)) : null;
+        table.Title = options.TableOptions.ShowTitles ? new TableTitle(headerText, options.StyleOptions.TitleTextStyle) : null;
 
-        table.AddColumn("No.");
-        table.AddColumn("DataTable");
+        table.AddColumn(new TableColumn(new Text("No.", options.StyleOptions.HeaderTextStyle)));
+        table.AddColumn(new TableColumn(new Text("DataTable", options.StyleOptions.HeaderTextStyle)));
         
         var tablesToIterate = Math.Min(tableCount, options.MaxCollectionItems);
         for (int iTable = 0; iTable < tablesToIterate; iTable++)
