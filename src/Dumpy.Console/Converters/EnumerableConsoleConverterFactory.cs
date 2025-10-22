@@ -63,10 +63,8 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                 table.AddRow(element.DumpToRenderable(elementType, options));
             }
 
-            // TODO only get type name if needed
-            var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
             table.Title = options.TableOptions.ShowTitles
-                ? new TableTitle(typeName, options.StyleOptions.TitleTextStyle)
+                ? new TableTitle(Markup.Escape(TypeUtil.GetName(targetType)), options.StyleOptions.TitleTextStyle)
                 : null;
             table.Columns[0].Header($"{(elementsCountExceedMax ? "First " : "")}{rowCount} items");
 
@@ -119,7 +117,7 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
             {
                 table.AddColumn(new TableColumn(new Text(member.Name, options.StyleOptions.HeaderTextStyle)));
             }
-            
+
             foreach (var row in rows)
             {
                 table.AddRow(row);

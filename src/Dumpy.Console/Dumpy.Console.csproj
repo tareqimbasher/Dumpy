@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>1.0.1</Version>
+        <TargetFrameworks>netstandard2.1;net6.0;net7.0</TargetFrameworks>
+        <Version>1.0.0</Version>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>$(Version)</FileVersion>
         <InformationalVersion>$(Version)</InformationalVersion>
 
         <Title>Dumpy.Console</Title>
-        <Description>Small and fast object dumper for .NET that .NET objects and values to formatted console output.</Description>
+        <Description>Small and fast object dumper for .NET that dumps objects and values to formatted console output.</Description>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

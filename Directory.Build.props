@@ -1,6 +1,5 @@
 <Project>
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.1;net6.0;net7.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <LangVersion>12</LangVersion>
 
