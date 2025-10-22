@@ -26,10 +26,10 @@ public class DataSetConsoleConverter : ConsoleConverter<DataSet>
         var headerText = (!string.IsNullOrWhiteSpace(value.DataSetName) ? value.DataSetName : "DataSet")
                          + $" (Tables = {tableCount}{showing})";
         
-        table.Title = options.TableOptions.ShowTitles ? new TableTitle(headerText, options.StyleOptions.TitleTextStyle) : null;
+        table.Title = options.Tables.ShowTitles ? new TableTitle(headerText, options.Styles.TitleTextStyle) : null;
 
-        table.AddColumn(new TableColumn(new Text("No.", options.StyleOptions.HeaderTextStyle)));
-        table.AddColumn(new TableColumn(new Text("DataTable", options.StyleOptions.HeaderTextStyle)));
+        table.AddColumn(new TableColumn(new Text("No.", options.Styles.HeaderTextStyle)));
+        table.AddColumn(new TableColumn(new Text("DataTable", options.Styles.HeaderTextStyle)));
         
         var tablesToIterate = Math.Min(tableCount, options.MaxCollectionItems);
         for (int iTable = 0; iTable < tablesToIterate; iTable++)

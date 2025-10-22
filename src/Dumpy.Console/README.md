@@ -1,10 +1,10 @@
 # Dumpy.Console
 
-A tiny, fast object dumper that renders rich formatted output directly to your terminal. Ideal for
-data visualization, debugging and diagnostics: inspect objects, collections, tuples, DataTables, and more without
-writing custom pretty-printers.
+A fast object dumper that renders rich formatted output directly to your terminal. Ideal for data visualization,
+debugging and diagnostics: inspect objects, collections, tuples, DataTables, and more without writing custom
+pretty-printers.
 
-**Supports:** `netstandard2.1` and `net6.0+`
+**Supports:** `netstandard2.1`, `net6.0` and later
 
 # Installation
 
@@ -90,13 +90,22 @@ new ConsoleDumpOptions
     Converters = { new MyConsoleConverter() },
 
     // Control table visuals (titles, headers, row separators, expand behavior).
-    TableOptions = new TableOptions
+    Tables = new TableOptions
     {
         ShowTitles = true,              // Show table titles
         ShowHeaders = true,             // Show table headers
         ShowRowSeparators = true,       // Show table row line separators
         Expand = false,                 // Expand the table width to fill available space
     },
+    
+    // Customize output styling.
+    Styles = new StyleOptions
+    {
+        TitleTextStyle  = new Style(decoration: Decoration.Bold | Decoration.Dim),
+        HeaderTextStyle = new Style(decoration: Decoration.Bold),
+        TableBorder     = TableBorder.Rounded,
+        BorderStyle     = new Style(Color.PaleTurquoise4),
+    }
 }
 ```
 

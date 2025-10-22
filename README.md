@@ -1,27 +1,25 @@
 # Dumpy
 
-Small, fast object dumpers for .NET. Inspect objects, collections, tuples, DataTables, JSON, XML and more — in your terminal or as portable HTML.
+Small, fast object dumpers for .NET. Convert objects, collections, tuples, DataTables and more to rich formatted
+output in your terminal or as portable HTML.
 
-**Supports:** `netstandard2.1` and `net6.0+`
+**Supports:** `netstandard2.1`, `net6.0` and later
 
 # Packages
 
-- [Dumpy.Console](src/Dumpy.Console/README.md) — rich, formatted console output
-- [Dumpy.Html](src/Dumpy.Html/README.md) — compact, styled HTML dumps for docs and bug reports
-
-# Installation
-
-### Dumpy.Console
-
-    dotnet add package Dumpy.Console
-
-### Dumpy.Html
-
-    dotnet add package Dumpy.Html
+- [Dumpy.Console](src/Dumpy.Console/README.md) — Dump to rich, formatted console output.
+- [Dumpy.Html](src/Dumpy.Html/README.md) — Dump to compact, structured HTML and visualize data for user reports, logging
+  artifacts, or sharing in docs and bug reports.
 
 # Quick start
 
-#### Console
+## Dumpy.Console
+
+### Installation
+
+    dotnet add package Dumpy.Console
+
+### Usage
 
 ```csharp
 using Dumpy.Console;
@@ -30,7 +28,13 @@ var person = new { Name = "Ada", Age = 37 };
 person.Dump("Person");
 ```
 
-#### HTML
+## Dumpy.Html
+
+### Installation
+
+    dotnet add package Dumpy.Html
+
+### Usage
 
 ```csharp
 using Dumpy.Html;

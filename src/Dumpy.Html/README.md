@@ -1,9 +1,9 @@
 # Dumpy.Html
 
-Generate compact, styled HTML representations of objects for debugging, logging artifacts, or sharing in docs and bug
-reports. Produces readable tables and structures with optional CSS classes and metadata.
+Generate compact, structured HTML representations of objects for user reports, debugging, logging artifacts, or sharing
+in docs and bug reports.
 
-**Supports:** `netstandard2.1` and `net6.0+`
+**Supports:** `netstandard2.1`, `net6.0` and later
 
 # Installation
 

@@ -49,11 +49,11 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
 
         var table = options.CreateTable();
 
-        if (options.TableOptions.ShowTitles)
+        if (options.Tables.ShowTitles)
         {
             var exceededMax = rowCount > options.MaxCollectionItems;
             var items = $"{(exceededMax ? "First " : "")}{rowsToIterate} items";
-            table.Title = new TableTitle($"{typeName} | {items}", options.StyleOptions.TitleTextStyle);
+            table.Title = new TableTitle($"{typeName} | {items}", options.Styles.TitleTextStyle);
         }
 
         // Add an empty column at the start
@@ -61,7 +61,7 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
 
         for (int i = 0; i < columnCount; i++)
         {
-            table.AddColumn(new TableColumn(new Text(i.ToString(), options.StyleOptions.HeaderTextStyle)));
+            table.AddColumn(new TableColumn(new Text(i.ToString(), options.Styles.HeaderTextStyle)));
         }
 
         for (int iRow = 0; iRow < rowsToIterate; iRow++)

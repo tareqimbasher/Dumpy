@@ -27,14 +27,14 @@ public class DataTableConsoleConverter : ConsoleConverter<DataTable>
         var headerText = (!string.IsNullOrWhiteSpace(value.TableName) ? value.TableName : "DataTable")
                          + $" (Rows = {rowCount}{showing}, Columns = {columnCount})";
 
-        table.Title = options.TableOptions.ShowTitles
-            ? new TableTitle(headerText, options.StyleOptions.TitleTextStyle)
+        table.Title = options.Tables.ShowTitles
+            ? new TableTitle(headerText, options.Styles.TitleTextStyle)
             : null;
 
         for (int i = 0; i < columnCount; i++)
         {
             table.AddColumn(
-                new TableColumn(new Text(value.Columns[i].ColumnName, options.StyleOptions.HeaderTextStyle)));
+                new TableColumn(new Text(value.Columns[i].ColumnName, options.Styles.HeaderTextStyle)));
         }
 
         var rowsToIterate = Math.Min(rowCount, options.MaxCollectionItems);

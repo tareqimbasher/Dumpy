@@ -8,11 +8,11 @@ internal static class Helpers
     {
         return new Table
         {
-            ShowHeaders = options.TableOptions.ShowHeaders,
-            ShowRowSeparators = options.TableOptions.ShowRowSeparators,
-            Expand = options.TableOptions.Expand,
-            Border = options.StyleOptions.TableBorder,
-            BorderStyle = options.StyleOptions.BorderStyle
+            ShowHeaders = options.Tables.ShowHeaders,
+            ShowRowSeparators = options.Tables.ShowRowSeparators,
+            Expand = options.Tables.Expand,
+            Border = options.Styles.TableBorder,
+            BorderStyle = options.Styles.BorderStyle
         };
     }
 }

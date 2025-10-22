@@ -63,8 +63,8 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                 table.AddRow(element.DumpToRenderable(elementType, options));
             }
 
-            table.Title = options.TableOptions.ShowTitles
-                ? new TableTitle(Markup.Escape(TypeUtil.GetName(targetType)), options.StyleOptions.TitleTextStyle)
+            table.Title = options.Tables.ShowTitles
+                ? new TableTitle(Markup.Escape(TypeUtil.GetName(targetType)), options.Styles.TitleTextStyle)
                 : null;
             table.Columns[0].Header($"{(elementsCountExceedMax ? "First " : "")}{rowCount} items");
 
@@ -109,13 +109,13 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
             }
 
             var table = options.CreateTable();
-            table.Title = options.TableOptions.ShowTitles
-                ? new TableTitle(title, options.StyleOptions.TitleTextStyle)
+            table.Title = options.Tables.ShowTitles
+                ? new TableTitle(title, options.Styles.TitleTextStyle)
                 : null;
 
             foreach (var member in members)
             {
-                table.AddColumn(new TableColumn(new Text(member.Name, options.StyleOptions.HeaderTextStyle)));
+                table.AddColumn(new TableColumn(new Text(member.Name, options.Styles.HeaderTextStyle)));
             }
 
             foreach (var row in rows)

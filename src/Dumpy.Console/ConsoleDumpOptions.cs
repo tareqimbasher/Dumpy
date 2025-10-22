@@ -17,12 +17,12 @@ public sealed partial class ConsoleDumpOptions : DumpOptions
     /// <summary>
     /// Options related to how tables are rendered.
     /// </summary>
-    public TableOptions TableOptions { get; set; } = new();
+    public TableOptions Tables { get; set; } = new();
     
     /// <summary>
     /// Styling options.
     /// </summary>
-    public StyleOptions StyleOptions { get; set; } = new();
+    public StyleOptions Styles { get; set; } = new();
 }
 
 /// <summary>

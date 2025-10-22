@@ -36,12 +36,12 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
             serializedItemCount++;
         }
 
-        if (options.TableOptions.ShowTitles)
+        if (options.Tables.ShowTitles)
         {
             var exceededMax = value.Length > options.MaxCollectionItems;
             var items = $"{(exceededMax ? "First " : "")}{serializedItemCount} items";
             var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
-            table.Title = new TableTitle($"{typeName} | {items}", options.StyleOptions.TitleTextStyle);
+            table.Title = new TableTitle($"{typeName} | {items}", options.Styles.TitleTextStyle);
         }
 
         return table;
