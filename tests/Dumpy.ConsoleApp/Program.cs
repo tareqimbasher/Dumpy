@@ -13,7 +13,10 @@ PrintHeader("Strings");
 DateTime.Now.DumpInternal();
 
 PrintHeader("Object");
-new {Name = "John Doe", Age = 30}.DumpInternal();
+new { Name = "John Doe", Age = 30 }.DumpInternal();
+
+PrintHeader("Object with Title");
+new { Name = "John Doe", Age = 30 }.DumpInternal("My Title");
 
 PrintHeader("Collection");
 Enumerable.Range(0, 5).Select(x => new
