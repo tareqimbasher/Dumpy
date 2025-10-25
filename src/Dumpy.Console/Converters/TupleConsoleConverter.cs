@@ -13,7 +13,7 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
     {
         if (value == null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
 
         var table = options.CreateTable();
@@ -41,7 +41,7 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
             var exceededMax = value.Length > options.MaxCollectionItems;
             var items = $"{(exceededMax ? "First " : "")}{serializedItemCount} items";
             var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
-            table.Title = new TableTitle($"{typeName} | {items}", options.Styles.TitleTextStyle);
+            table.Title = new TableTitle($"{typeName} | {items}", options.Styles.TableTitleText);
         }
 
         return table;

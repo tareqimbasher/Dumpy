@@ -25,17 +25,19 @@ public class ObjectDefaultConsoleConverter<T> : ConsoleConverter<T>
     {
         if (value is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
 
         var table = options.CreateTable();
 
         var typeName = Markup.Escape(TypeUtil.GetName(targetType, true));
         table.Title = options.Tables.ShowTitles
-            ? new TableTitle(typeName, options.Styles.TitleTextStyle)
+            ? new TableTitle(typeName, options.Styles.TableTitleText)
             : null;
-        table.AddColumn(new TableColumn(new Text("Property", options.Styles.HeaderTextStyle)));
-        table.AddColumn(new TableColumn(new Text("Value", options.Styles.HeaderTextStyle)));
+        
+        table.ShowHeaders = false;
+        table.AddColumn("");
+        table.AddColumn("");
 
         foreach (var member in GetReadableMembers(targetType, options))
         {
@@ -43,13 +45,13 @@ public class ObjectDefaultConsoleConverter<T> : ConsoleConverter<T>
             {
                 case PropertyInfo property:
                     var propValue = TypeUtil.GetPropertyValue(property, value);
-                    table.AddRow(new Text(property.Name, options.Styles.HeaderTextStyle),
+                    table.AddRow(new Text(property.Name, options.Styles.TableHeaderText),
                         propValue.DumpToRenderable(property.PropertyType, options));
                     break;
 
                 case FieldInfo field:
                     var fieldValue = TypeUtil.GetFieldValue(field, value);
-                    table.AddRow(new Text(field.Name, options.Styles.HeaderTextStyle),
+                    table.AddRow(new Text(field.Name, options.Styles.TableHeaderText),
                         fieldValue.DumpToRenderable(field.FieldType, options));
                     break;
             }

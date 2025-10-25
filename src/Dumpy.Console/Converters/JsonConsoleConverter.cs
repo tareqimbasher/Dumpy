@@ -44,7 +44,7 @@ internal static class JsonConsoleConverter
     {
         if (doc is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
 
         return WriteFromJsonElement(doc.RootElement, options);
@@ -63,7 +63,7 @@ internal static class JsonConsoleConverter
     {
         if (node is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
 
         var json = node.ToJsonString(_serializerOptions);

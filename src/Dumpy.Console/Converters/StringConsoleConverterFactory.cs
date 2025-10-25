@@ -26,27 +26,27 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
     {
         if (value is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
 
         if (targetType == typeof(string))
         {
-            return Markup.FromInterpolated($"[lightsalmon1]\"{value}\"[/]");
+            return Markup.FromInterpolated($"\"{value}\"", options.Styles.String);
         }
 
         if (targetType == typeof(bool))
         {
-            return Markup.FromInterpolated($"[cyan]{value}[/]");
+            return Markup.FromInterpolated($"{value}", options.Styles.Boolean);
         }
         
         if (targetType.IsEnum)
         {
-            return Markup.FromInterpolated($"[yellow4_1]{value}[/]");
+            return new Markup($"{value}", options.Styles.Enum);
         }
         
         if (targetType == typeof(Guid))
         {
-            return Markup.FromInterpolated($"[plum3]{value}[/]");
+            return Markup.FromInterpolated($"{value}", options.Styles.Guid);
         }
 
         if (targetType == typeof(DateTime)
@@ -57,7 +57,7 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
             || targetType == typeof(DateTimeOffset)
             || targetType == typeof(TimeSpan))
         {
-            return Markup.FromInterpolated($"[gold3]{value}[/]");
+            return Markup.FromInterpolated($"{value}", options.Styles.DateAndTime);
         }
 
         if (targetType == typeof(int)
@@ -72,12 +72,12 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
             || targetType == typeof(double)
             || targetType == typeof(decimal))
         {
-            return Markup.FromInterpolated($"[skyblue2]{value}[/]");
+            return Markup.FromInterpolated($"{value}", options.Styles.Numeric);
         }
 
         if (targetType == typeof(char))
         {
-            return Markup.FromInterpolated($"[lightsalmon1]'{value}'[/]");
+            return Markup.FromInterpolated($"'{value}'", options.Styles.Char);
         }
 
         return new Text(value.ToString()!);

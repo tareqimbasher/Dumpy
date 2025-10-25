@@ -72,7 +72,7 @@ new ConsoleDumpOptions
     ReferenceLoopHandling = ReferenceLoopHandling.Error,
     
     // Limit traversal depth to avoid overly deep graphs.
-    MaxDepth = 64,
+    MaxDepth = 10,
     
     // Limit the number of items to dump from a collection. Set if you dump large lists, arrays...etc.
     MaxCollectionItems = int.MaxValue,
@@ -101,10 +101,22 @@ new ConsoleDumpOptions
     // Customize output styling.
     Styles = new StyleOptions
     {
-        TitleTextStyle  = new Style(decoration: Decoration.Bold | Decoration.Dim),
-        HeaderTextStyle = new Style(decoration: Decoration.Bold),
-        TableBorder     = TableBorder.Rounded,
-        BorderStyle     = new Style(Color.PaleTurquoise4),
+        Border           = new Style(Color.PaleTurquoise4),
+        TitleText        = new Style(decoration: Decoration.Bold | Decoration.Underline),
+        TableTitleText   = new Style(decoration: Decoration.Bold | Decoration.Dim),
+        TableHeaderText   = new Style(decoration: Decoration.Bold),
+        TableBorderType  = TableBorder.Rounded,
+        
+        String           = new Style(Color.LightSalmon1),
+        Char             = new Style(Color.LightSalmon1),
+        Boolean          = new Style(Color.Cyan1),
+        Enum             = new Style(Color.Yellow4_1),
+        Guid             = new Style(Color.Plum3),
+        DateAndTime      = new Style(Color.Gold3),
+        Numeric          = new Style(Color.SkyBlue2),
+        
+        Null             = new Style(decoration: Decoration.Dim),
+        EmptyCollection  = new Style(decoration: Decoration.Dim | Decoration.Bold),
     }
 }
 ```

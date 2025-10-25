@@ -31,7 +31,7 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
     {
         if (value is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
 
         var collection = value as IEnumerable ??
@@ -64,7 +64,7 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
             }
 
             table.Title = options.Tables.ShowTitles
-                ? new TableTitle(Markup.Escape(TypeUtil.GetName(targetType)), options.Styles.TitleTextStyle)
+                ? new TableTitle(Markup.Escape(TypeUtil.GetName(targetType)), options.Styles.TableTitleText)
                 : null;
             table.Columns[0].Header($"{(elementsCountExceedMax ? "First " : "")}{rowCount} items");
 
@@ -105,17 +105,17 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
 
             if (rowCount == 0)
             {
-                return EmptyCollectionWidget.New(typeName);
+                return EmptyCollectionWidget.New(typeName, options);
             }
 
             var table = options.CreateTable();
             table.Title = options.Tables.ShowTitles
-                ? new TableTitle(title, options.Styles.TitleTextStyle)
+                ? new TableTitle(title, options.Styles.TableTitleText)
                 : null;
 
             foreach (var member in members)
             {
-                table.AddColumn(new TableColumn(new Text(member.Name, options.Styles.HeaderTextStyle)));
+                table.AddColumn(new TableColumn(new Text(member.Name, options.Styles.TableHeaderText)));
             }
 
             foreach (var row in rows)

@@ -24,7 +24,7 @@ public static class ConsoleDumper
     /// <param name="options">Optional dump options. If null, default options are used.</param>
     /// <returns>The original <paramref name="value"/> for fluent usage.</returns>
     public static T? Dump<T>(this T? value, ConsoleDumpOptions? options = null) => DumpConsole(value, options);
-    
+
     /// <summary>
     /// Writes a formatted representation of the specified value to the console.
     /// </summary>
@@ -51,10 +51,7 @@ public static class ConsoleDumper
     {
         if (title != null)
         {
-            var rule = new Rule($"[bold][lightgoldenrod2_2]{title}[/][/]");
-            rule.LeftJustified();
-            rule.RuleStyle("darkorange");
-            AnsiConsole.Write(rule);
+            AnsiConsole.Write(Markup.FromInterpolated($"{title}\n", options?.Styles.TitleText));
         }
 
         var renderable = DumpToRenderable(value, options);

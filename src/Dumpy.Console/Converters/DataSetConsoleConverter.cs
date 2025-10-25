@@ -13,7 +13,7 @@ public class DataSetConsoleConverter : ConsoleConverter<DataSet>
     {
         if (value is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
         
         int tableCount = value.Tables.Count;
@@ -26,10 +26,10 @@ public class DataSetConsoleConverter : ConsoleConverter<DataSet>
         var headerText = (!string.IsNullOrWhiteSpace(value.DataSetName) ? value.DataSetName : "DataSet")
                          + $" (Tables = {tableCount}{showing})";
         
-        table.Title = options.Tables.ShowTitles ? new TableTitle(headerText, options.Styles.TitleTextStyle) : null;
+        table.Title = options.Tables.ShowTitles ? new TableTitle(headerText, options.Styles.TableTitleText) : null;
 
-        table.AddColumn(new TableColumn(new Text("No.", options.Styles.HeaderTextStyle)));
-        table.AddColumn(new TableColumn(new Text("DataTable", options.Styles.HeaderTextStyle)));
+        table.AddColumn(new TableColumn(new Text("No.", options.Styles.TableHeaderText)));
+        table.AddColumn(new TableColumn(new Text("DataTable", options.Styles.TableHeaderText)));
         
         var tablesToIterate = Math.Min(tableCount, options.MaxCollectionItems);
         for (int iTable = 0; iTable < tablesToIterate; iTable++)

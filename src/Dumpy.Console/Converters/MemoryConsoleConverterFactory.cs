@@ -34,7 +34,7 @@ public class MemoryConsoleConverter<T> : ConsoleConverter<T>
     {
         if (value is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
         
         var method = targetType.GetMethod(ToArrayMethodName, BindingFlags.Public | BindingFlags.Instance);

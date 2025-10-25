@@ -27,7 +27,7 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
     {
         if (value is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
 
         if (value is not Array { Rank: 2 } array)
@@ -42,7 +42,7 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
 
         if (rowCount == 0)
         {
-            return EmptyCollectionWidget.New(typeName);
+            return EmptyCollectionWidget.New(typeName, options);
         }
 
         var rowsToIterate = Math.Min(rowCount, options.MaxCollectionItems);
@@ -53,7 +53,7 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
         {
             var exceededMax = rowCount > options.MaxCollectionItems;
             var items = $"{(exceededMax ? "First " : "")}{rowsToIterate} items";
-            table.Title = new TableTitle($"{typeName} | {items}", options.Styles.TitleTextStyle);
+            table.Title = new TableTitle($"{typeName} | {items}", options.Styles.TableTitleText);
         }
 
         // Add an empty column at the start
@@ -61,7 +61,7 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
 
         for (int i = 0; i < columnCount; i++)
         {
-            table.AddColumn(new TableColumn(new Text(i.ToString(), options.Styles.HeaderTextStyle)));
+            table.AddColumn(new TableColumn(new Text(i.ToString(), options.Styles.TableHeaderText)));
         }
 
         for (int iRow = 0; iRow < rowsToIterate; iRow++)

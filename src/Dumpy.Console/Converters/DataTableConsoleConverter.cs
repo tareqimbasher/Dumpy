@@ -13,7 +13,7 @@ public class DataTableConsoleConverter : ConsoleConverter<DataTable>
     {
         if (value is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
 
         int columnCount = value.Columns.Count;
@@ -28,13 +28,13 @@ public class DataTableConsoleConverter : ConsoleConverter<DataTable>
                          + $" (Rows = {rowCount}{showing}, Columns = {columnCount})";
 
         table.Title = options.Tables.ShowTitles
-            ? new TableTitle(headerText, options.Styles.TitleTextStyle)
+            ? new TableTitle(headerText, options.Styles.TableTitleText)
             : null;
 
         for (int i = 0; i < columnCount; i++)
         {
             table.AddColumn(
-                new TableColumn(new Text(value.Columns[i].ColumnName, options.Styles.HeaderTextStyle)));
+                new TableColumn(new Text(value.Columns[i].ColumnName, options.Styles.TableHeaderText)));
         }
 
         var rowsToIterate = Math.Min(rowCount, options.MaxCollectionItems);

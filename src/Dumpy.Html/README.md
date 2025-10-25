@@ -70,7 +70,7 @@ new HtmlDumpOptions
     ReferenceLoopHandling = ReferenceLoopHandling.Error,
 
     // Limit traversal depth to avoid overly deep graphs.
-    MaxDepth = 64,
+    MaxDepth = 10,
 
     // Limit the number of items to dump from a collection. Set if you dump large lists, arrays...etc.
     MaxCollectionItems = int.MaxValue,

@@ -11,7 +11,7 @@ public class XNodeConsoleConverter : ConsoleConverter<XNode>
     {
         if (value is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
         
         return value.ToString().DumpToRenderable();

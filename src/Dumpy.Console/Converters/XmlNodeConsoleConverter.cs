@@ -11,7 +11,7 @@ public class XmlNodeConsoleConverter : ConsoleConverter<XmlNode>
     {
         if (value is null)
         {
-            return NullWidget.Instance;
+            return NullWidget.New(options);
         }
         
         return value.OuterXml.DumpToRenderable();

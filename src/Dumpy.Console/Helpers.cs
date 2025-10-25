@@ -11,8 +11,8 @@ internal static class Helpers
             ShowHeaders = options.Tables.ShowHeaders,
             ShowRowSeparators = options.Tables.ShowRowSeparators,
             Expand = options.Tables.Expand,
-            Border = options.Styles.TableBorder,
-            BorderStyle = options.Styles.BorderStyle
+            Border = options.Styles.TableBorderType,
+            BorderStyle = options.Styles.Border,
         };
     }
 }

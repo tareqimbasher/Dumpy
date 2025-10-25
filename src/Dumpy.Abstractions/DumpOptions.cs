@@ -11,7 +11,7 @@ namespace Dumpy;
 /// </summary>
 public class DumpOptions
 {
-    private int _maxDepth = 64;
+    private int _maxDepth = 10;
     private int _maxCollectionItems = int.MaxValue;
 
     /// <summary>
@@ -20,7 +20,7 @@ public class DumpOptions
     public ReferenceLoopHandling ReferenceLoopHandling { get; set; } = ReferenceLoopHandling.Error;
 
     /// <summary>
-    /// The max serialization depth. Defaults to 64.
+    /// The max serialization depth. Defaults to 10.
     /// </summary>
     public int MaxDepth
     {
