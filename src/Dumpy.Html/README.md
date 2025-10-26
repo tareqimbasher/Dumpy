@@ -87,10 +87,10 @@ new HtmlDumpOptions
     // Register custom HtmlConverter instances to control how specific types are rendered.
     Converters = { new MyHtmlConverter() },
 
-    // Add HTML title attributes (ex. type names) for tooltips.
+    // Add HTML title attributes containing additional metadata (ex. type name).
     AddTitleAttributes = false,
 
-    // Control CSS classes applied to special cases (nulls, empty collections, etc.).
+    // Control CSS classes applied to generated HTML.
     CssClasses = new CssClassOptions
     {
         Enabled = true,                         // Disable to stop emitting CSS classes

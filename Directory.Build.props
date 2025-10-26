@@ -6,7 +6,6 @@
         <Authors>Tareq Imbasher</Authors>
         <PackageTags>console;html;dump;object;netpad;linqpad</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageProjectUrl>https://github.com/tareqimbasher/Dumpy</PackageProjectUrl>
 
         <RepositoryUrl>https://github.com/tareqimbasher/Dumpy</RepositoryUrl>

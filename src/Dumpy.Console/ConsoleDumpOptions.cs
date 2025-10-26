@@ -9,11 +9,21 @@ namespace Dumpy.Console;
 /// </summary>
 public sealed partial class ConsoleDumpOptions : DumpOptions
 {
+    public ConsoleDumpOptions()
+    {
+        MaxDepth = 5;
+    }
+    
     /// <summary>
     /// The list of user-defined converters that were registered.
     /// </summary>
     public List<ConsoleConverter> Converters { get; set; } = new();
 
+    /// <summary>
+    /// If true, will wrap <see cref="string"/> values with double quotes (") and <see cref="char"/> values with single quotes (').
+    /// </summary>
+    public bool ShowTextQuotes { get; set; }
+    
     /// <summary>
     /// Options related to how tables are rendered.
     /// </summary>

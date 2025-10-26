@@ -4,7 +4,7 @@ using Dumpy.Utils;
 namespace Dumpy.Html;
 
 /// <summary>
-/// Provides extension methods for dumping objects to HTML strings using configured <see cref="HtmlDumpOptions"/>.
+/// Provides extension methods for dumping objects to HTML strings.
 /// </summary>
 public static class HtmlDumper
 {
@@ -16,6 +16,9 @@ public static class HtmlDumper
     /// <summary>
     /// Dumps the specified value to an HTML string using the provided options.
     /// </summary>
+    /// <remarks>
+    /// This method is an overload of DumpHtml().
+    /// </remarks>
     /// <typeparam name="T">The static type of the value.</typeparam>
     /// <param name="value">The value to dump.</param>
     /// <param name="options">Optional dump options. If null, default options are used.</param>

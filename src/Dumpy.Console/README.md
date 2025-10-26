@@ -72,7 +72,7 @@ new ConsoleDumpOptions
     ReferenceLoopHandling = ReferenceLoopHandling.Error,
     
     // Limit traversal depth to avoid overly deep graphs.
-    MaxDepth = 10,
+    MaxDepth = 5,
     
     // Limit the number of items to dump from a collection. Set if you dump large lists, arrays...etc.
     MaxCollectionItems = int.MaxValue,
@@ -89,6 +89,9 @@ new ConsoleDumpOptions
     // Register custom ConsoleConverter instances to control how specific types are rendered.
     Converters = { new MyConsoleConverter() },
 
+    // If true, will wrap string values with double quotes (") and char values with single quotes (').
+    ShowTextQuotes = false,
+    
     // Control table visuals (titles, headers, row separators, expand behavior).
     Tables = new TableOptions
     {

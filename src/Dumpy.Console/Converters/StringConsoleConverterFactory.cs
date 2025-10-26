@@ -31,19 +31,21 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
 
         if (targetType == typeof(string))
         {
-            return Markup.FromInterpolated($"\"{value}\"", options.Styles.String);
+            return Markup.FromInterpolated(
+                options.ShowTextQuotes ? (FormattableString)$"\"{value}\"" : (FormattableString)$"{value}",
+                options.Styles.String);
         }
 
         if (targetType == typeof(bool))
         {
             return Markup.FromInterpolated($"{value}", options.Styles.Boolean);
         }
-        
+
         if (targetType.IsEnum)
         {
             return new Markup($"{value}", options.Styles.Enum);
         }
-        
+
         if (targetType == typeof(Guid))
         {
             return Markup.FromInterpolated($"{value}", options.Styles.Guid);
@@ -77,7 +79,9 @@ public class StringDefaultConsoleConverter<T> : ConsoleConverter<T>
 
         if (targetType == typeof(char))
         {
-            return Markup.FromInterpolated($"'{value}'", options.Styles.Char);
+            return Markup.FromInterpolated(
+                options.ShowTextQuotes ? (FormattableString)$"'{value}'" : (FormattableString)$"{value}",
+                options.Styles.Char);
         }
 
         return new Text(value.ToString()!);

@@ -7,7 +7,7 @@ using Dumpy.Utils;
 namespace Dumpy.Console;
 
 /// <summary>
-/// Provides helpers for dumping objects to the console using Spectre.Console and configured <see cref="ConsoleDumpOptions"/>.
+/// Provides helpers for dumping objects to the console.
 /// </summary>
 public static class ConsoleDumper
 {
@@ -19,10 +19,13 @@ public static class ConsoleDumper
     /// <summary>
     /// Writes a formatted representation of the specified value to the console.
     /// </summary>
+    /// <remarks>
+    /// This method is an overload of DumpConsole().
+    /// </remarks>
     /// <typeparam name="T">The static type of the value.</typeparam>
     /// <param name="value">The value to dump.</param>
     /// <param name="options">Optional dump options. If null, default options are used.</param>
-    /// <returns>The original <paramref name="value"/> for fluent usage.</returns>
+    /// <returns>The original <paramref name="value"/>.</returns>
     public static T? Dump<T>(this T? value, ConsoleDumpOptions? options = null) => DumpConsole(value, options);
 
     /// <summary>
@@ -31,7 +34,7 @@ public static class ConsoleDumper
     /// <typeparam name="T">The static type of the value.</typeparam>
     /// <param name="value">The value to dump.</param>
     /// <param name="options">Optional dump options. If null, default options are used.</param>
-    /// <returns>The original <paramref name="value"/> for fluent usage.</returns>
+    /// <returns>The original <paramref name="value"/>.</returns>
     [return: NotNullIfNotNull("value")]
     public static T? DumpConsole<T>(this T? value, ConsoleDumpOptions? options = null)
     {
@@ -43,9 +46,9 @@ public static class ConsoleDumper
     /// </summary>
     /// <typeparam name="T">The static type of the value.</typeparam>
     /// <param name="value">The value to dump.</param>
-    /// <param name="title">An optional title rendered as a Spectre.Console rule above the dump.</param>
+    /// <param name="title">An optional title rendered rule above the dumped value.</param>
     /// <param name="options">Optional dump options. If null, default options are used.</param>
-    /// <returns>The original <paramref name="value"/> for fluent usage.</returns>
+    /// <returns>The original <paramref name="value"/>.</returns>
     [return: NotNullIfNotNull("value")]
     public static T? DumpConsole<T>(this T? value, string? title, ConsoleDumpOptions? options = null)
     {
