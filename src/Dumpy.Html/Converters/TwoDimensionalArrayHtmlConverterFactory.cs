@@ -101,11 +101,6 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
 
             for (int iRow = 0; iRow < rowCount; iRow++)
             {
-                if (iRow + 1 == options.MaxCollectionItems)
-                {
-                    break;
-                }
-                
                 writer.WriteOpenTag("tr");
 
                 writer.WriteOpenTag("th");
@@ -123,6 +118,11 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
                 }
 
                 writer.WriteCloseTag("tr");
+
+                if (iRow + 1 >= options.MaxCollectionItems)
+                {
+                    break;
+                }
             }
 
             writer.WriteCloseTag("tbody");

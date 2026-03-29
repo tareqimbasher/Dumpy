@@ -24,16 +24,16 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
         int serializedItemCount = 0;
         for (int iItem = 0; iItem < value.Length; iItem++)
         {
-            if (iItem + 1 == options.MaxCollectionItems)
-            {
-                break;
-            }
-
             var item = value[iItem];
             var itemType = item == null ? typeof(object) : item.GetType();
 
             table.AddRow(new Text($"Item{iItem + 1}"), item.DumpToRenderable(itemType, options));
             serializedItemCount++;
+
+            if (serializedItemCount >= options.MaxCollectionItems)
+            {
+                break;
+            }
         }
 
         if (options.Tables.ShowTitles)

@@ -78,7 +78,7 @@ internal static class JsonHtmlConverter
         writer.WriteOpenTagStart("code");
         writer.WriteAttr("language", "json");
         writer.WriteOpenTagEnd();
-        writer.Append(json);
+        writer.AppendEscapedText(json);
         writer.WriteCloseTag("code");
         writer.WriteCloseTag("pre");
     }

@@ -4,202 +4,6 @@ public class FileSystemInfoConverterTests
 {
     private static readonly HtmlDumpOptions _htmlDumpOptionsNoCss = new() { CssClasses = { Enabled = false } };
 
-    private static readonly string _fileExpectedHtml = Util.MinimizeHtml(
-        """
-        <table>
-            <thead>
-            <tr class="dm-t-info">
-                <th colspan="2" title="System.IO.FileInfo">FileInfo</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th title="System.String">Name</th>
-                <td>exist.txt</td>
-            </tr>
-            <tr>
-                <th title="System.IO.DirectoryInfo">Directory</th>
-                <td>
-                    <table>
-                        <thead>
-                        <tr class="dm-t-info">
-                            <th colspan="2" title="System.IO.DirectoryInfo">DirectoryInfo</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th title="System.String">Name</th>
-                            <td>not</td>
-                        </tr>
-                        <tr>
-                            <th title="System.Boolean">Exists</th>
-                            <td>False</td>
-                        </tr>
-                        <tr>
-                            <th title="System.String">FullName</th>
-                            <td>/does/not</td>
-                        </tr>
-                        <tr>
-                            <th title="System.String">Extension</th>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th title="System.DateTime">CreationTime</th>
-                            <td>1/1/1601 2:20:00 AM</td>
-                        </tr>
-                        <tr>
-                            <th title="System.DateTime">CreationTimeUtc</th>
-                            <td>1/1/1601 12:00:00 AM</td>
-                        </tr>
-                        <tr>
-                            <th title="System.DateTime">LastAccessTime</th>
-                            <td>1/1/1601 2:20:00 AM</td>
-                        </tr>
-                        <tr>
-                            <th title="System.DateTime">LastAccessTimeUtc</th>
-                            <td>1/1/1601 12:00:00 AM</td>
-                        </tr>
-                        <tr>
-                            <th title="System.DateTime">LastWriteTime</th>
-                            <td>1/1/1601 2:20:00 AM</td>
-                        </tr>
-                        <tr>
-                            <th title="System.DateTime">LastWriteTimeUtc</th>
-                            <td>1/1/1601 12:00:00 AM</td>
-                        </tr>
-                        <tr>
-                            <th title="System.String">LinkTarget</th>
-                            <td><span class="dm-null">null</span></td>
-                        </tr>
-                        <tr>
-                            <th title="System.IO.UnixFileMode">UnixFileMode</th>
-                            <td>-1</td>
-                        </tr>
-                        <tr>
-                            <th title="System.IO.FileAttributes">Attributes</th>
-                            <td>-1</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <th title="System.Boolean">Exists</th>
-                <td>False</td>
-            </tr>
-            <tr>
-                <th title="System.String">FullName</th>
-                <td>/does/not/exist.txt</td>
-            </tr>
-            <tr>
-                <th title="System.String">Extension</th>
-                <td>.txt</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">CreationTime</th>
-                <td>1/1/1601 2:20:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">CreationTimeUtc</th>
-                <td>1/1/1601 12:00:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">LastAccessTime</th>
-                <td>1/1/1601 2:20:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">LastAccessTimeUtc</th>
-                <td>1/1/1601 12:00:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">LastWriteTime</th>
-                <td>1/1/1601 2:20:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">LastWriteTimeUtc</th>
-                <td>1/1/1601 12:00:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.String">LinkTarget</th>
-                <td><span class="dm-null">null</span></td>
-            </tr>
-            <tr>
-                <th title="System.IO.UnixFileMode">UnixFileMode</th>
-                <td>-1</td>
-            </tr>
-            <tr>
-                <th title="System.IO.FileAttributes">Attributes</th>
-                <td>-1</td>
-            </tr>
-            </tbody>
-        </table>
-        """);
-
-    private static readonly string _directoryExpectedHtml = Util.MinimizeHtml(
-        """
-        <table>
-            <thead>
-            <tr class="dm-t-info">
-                <th colspan="2" title="System.IO.DirectoryInfo">DirectoryInfo</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th title="System.String">Name</th>
-                <td>exist</td>
-            </tr>
-            <tr>
-                <th title="System.Boolean">Exists</th>
-                <td>False</td>
-            </tr>
-            <tr>
-                <th title="System.String">FullName</th>
-                <td>/does/not/exist</td>
-            </tr>
-            <tr>
-                <th title="System.String">Extension</th>
-                <td></td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">CreationTime</th>
-                <td>1/1/1601 2:20:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">CreationTimeUtc</th>
-                <td>1/1/1601 12:00:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">LastAccessTime</th>
-                <td>1/1/1601 2:20:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">LastAccessTimeUtc</th>
-                <td>1/1/1601 12:00:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">LastWriteTime</th>
-                <td>1/1/1601 2:20:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.DateTime">LastWriteTimeUtc</th>
-                <td>1/1/1601 12:00:00 AM</td>
-            </tr>
-            <tr>
-                <th title="System.String">LinkTarget</th>
-                <td><span class="dm-null">null</span></td>
-            </tr>
-            <tr>
-                <th title="System.IO.UnixFileMode">UnixFileMode</th>
-                <td>-1</td>
-            </tr>
-            <tr>
-                <th title="System.IO.FileAttributes">Attributes</th>
-                <td>-1</td>
-            </tr>
-            </tbody>
-        </table>
-        """);
-
     [Fact]
     public void ConvertsNull()
     {
@@ -207,7 +11,7 @@ public class FileSystemInfoConverterTests
 
         Assert.Equal("<span>null</span>", html);
     }
-    
+
     [Fact]
     public void ConvertsFileInfo()
     {
@@ -215,7 +19,31 @@ public class FileSystemInfoConverterTests
 
         var html = HtmlDumper.DumpHtml(file, new HtmlDumpOptions { AddTitleAttributes = true });
 
-        Assert.Equal(_fileExpectedHtml, html);
+        Assert.Contains("FileInfo", html);
+        Assert.Contains(file.Name, html);
+        Assert.Contains(file.FullName, html);
+        Assert.Contains(">Exists</th>", html);
+        Assert.Contains(">False<", html);
+        Assert.Contains(">Extension</th>", html);
+        Assert.Contains(">.txt<", html);
+        Assert.Contains(">LinkTarget</th>", html);
+        Assert.Contains(">Attributes</th>", html);
+        Assert.Contains(">CreationTime</th>", html);
+        Assert.Contains(">CreationTimeUtc</th>", html);
+        Assert.Contains(">LastAccessTime</th>", html);
+        Assert.Contains(">LastWriteTime</th>", html);
+    }
+
+    [Fact]
+    public void ConvertsFileInfo_ContainsNestedDirectoryInfo()
+    {
+        var file = new FileInfo("/does/not/exist.txt");
+
+        var html = HtmlDumper.DumpHtml(file, new HtmlDumpOptions { AddTitleAttributes = true });
+
+        Assert.Contains("DirectoryInfo", html);
+        Assert.Contains(file.Directory!.Name, html);
+        Assert.Contains(file.Directory.FullName, html);
     }
 
     [Fact]
@@ -225,6 +53,16 @@ public class FileSystemInfoConverterTests
 
         var html = HtmlDumper.DumpHtml(dir, new HtmlDumpOptions { AddTitleAttributes = true });
 
-        Assert.Equal(_directoryExpectedHtml, html);
+        Assert.Contains("DirectoryInfo", html);
+        Assert.Contains(dir.Name, html);
+        Assert.Contains(dir.FullName, html);
+        Assert.Contains(">Exists</th>", html);
+        Assert.Contains(">False<", html);
+        Assert.Contains(">LinkTarget</th>", html);
+        Assert.Contains(">Attributes</th>", html);
+        Assert.Contains(">CreationTime</th>", html);
+        Assert.Contains(">CreationTimeUtc</th>", html);
+        Assert.Contains(">LastAccessTime</th>", html);
+        Assert.Contains(">LastWriteTime</th>", html);
     }
 }

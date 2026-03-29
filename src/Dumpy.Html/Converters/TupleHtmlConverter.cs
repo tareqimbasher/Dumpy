@@ -43,11 +43,6 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
 
             for (int iItem = 0; iItem < value.Length; iItem++)
             {
-                if (iItem + 1 == options.MaxCollectionItems)
-                {
-                    break;
-                }
-
                 var item = value[iItem];
                 var itemType = item == null ? typeof(object) : item.GetType();
 
@@ -64,6 +59,11 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
 
                 writer.WriteCloseTag("tr");
                 serializedItemCount++;
+
+                if (serializedItemCount >= options.MaxCollectionItems)
+                {
+                    break;
+                }
             }
 
             infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, TypeUtil.GetName(targetType));
