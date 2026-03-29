@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/others/">
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="nuget-pack.sh" />
+    <File Path="nuget-push.sh" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Dumpy.Abstractions/Dumpy.Abstractions.csproj" />
+    <Project Path="src/Dumpy.Console/Dumpy.Console.csproj" />
+    <Project Path="src/Dumpy.Html/Dumpy.Html.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Dumpy.Benchmark/Dumpy.Benchmark.csproj" />
+    <Project Path="tests/Dumpy.ConsoleApp/Dumpy.ConsoleApp.csproj" />
+    <Project Path="tests/Dumpy.Html.Tests/Dumpy.Html.Tests.csproj" />
+    <Project Path="tests/Dumpy.Tests/Dumpy.Tests.csproj" />
+  </Folder>
+</Solution>
