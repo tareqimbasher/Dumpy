@@ -11,6 +11,7 @@ namespace Dumpy.Console;
 
 public sealed partial class ConsoleDumpOptions
 {
+    private static readonly object _initLock = new();
     private static Dictionary<Type, ConsoleConverter>? _defaultSimpleConverters;
     private static ConsoleConverter[]? _defaultFactoryConverters;
     private readonly ConcurrentDictionary<Type, ConsoleConverter> _converters = new();
@@ -28,10 +29,14 @@ public sealed partial class ConsoleDumpOptions
 
     private static void InitBuiltInConverters()
     {
-        if (Volatile.Read(ref _defaultFactoryConverters) is null)
+        if (Volatile.Read(ref _defaultFactoryConverters) is not null) return;
+
+        lock (_initLock)
         {
+            if (_defaultFactoryConverters is not null) return;
+
             _defaultSimpleConverters = GetDefaultSimpleConverters();
-            Volatile.Write(ref _defaultFactoryConverters, [
+            _defaultFactoryConverters = [
                 // In decreasing specificity
                 new FileSystemInfoConsoleConverterFactory(),
                 new TwoDimensionalArrayConsoleConverterFactory(),
@@ -43,7 +48,7 @@ public sealed partial class ConsoleDumpOptions
                 new EnumerableConsoleConverterFactory(),
                 // Object should always be last since it converts any type.
                 new ObjectConsoleConverterFactory(),
-            ]);
+            ];
         }
     }
 

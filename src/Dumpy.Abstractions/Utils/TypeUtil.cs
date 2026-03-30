@@ -186,14 +186,8 @@ public static class TypeUtil
 
     public static object? GetPropertyValue<T>(PropertyInfo property, T obj)
     {
-        //return PropertyAccessor.GetPropertyValue(obj, property);
-
         try
         {
-            // See for alternatives:
-            // https://stackoverflow.com/questions/4939508/get-value-of-c-sharp-dynamic-property-via-string
-            // https://stackoverflow.com/questions/17660097/is-it-possible-to-speed-this-method-up/17669142#17669142
-            // https://stackoverflow.com/questions/23150027/how-would-i-get-all-public-properties-of-object-faster-than-with-propertyinfo-ge
             return property.GetValue(obj);
         }
         catch (Exception)

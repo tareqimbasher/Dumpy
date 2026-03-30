@@ -11,6 +11,7 @@ namespace Dumpy.Html;
 
 public sealed partial class HtmlDumpOptions
 {
+    private static readonly object _initLock = new();
     private static Dictionary<Type, HtmlConverter>? _defaultSimpleConverters;
     private static HtmlConverter[]? _defaultFactoryConverters;
     private readonly ConcurrentDictionary<Type, HtmlConverter> _converters = new();
@@ -25,13 +26,17 @@ public sealed partial class HtmlDumpOptions
         InitBuiltInConverters();
         return GetConverterInternal(typeToConvert);
     }
-    
+
     private static void InitBuiltInConverters()
     {
-        if (Volatile.Read(ref _defaultFactoryConverters) is null)
+        if (Volatile.Read(ref _defaultFactoryConverters) is not null) return;
+
+        lock (_initLock)
         {
+            if (_defaultFactoryConverters is not null) return;
+
             _defaultSimpleConverters = GetDefaultSimpleConverters();
-            Volatile.Write(ref _defaultFactoryConverters, [
+            _defaultFactoryConverters = [
                 // In decreasing specificity
                 new FileSystemInfoHtmlConverterFactory(),
                 new TwoDimensionalArrayHtmlConverterFactory(),
@@ -43,7 +48,7 @@ public sealed partial class HtmlDumpOptions
                 new EnumerableHtmlConverterFactory(),
                 // Object should always be last since it converts any type.
                 new ObjectHtmlConverterFactory(),
-            ]);
+            ];
         }
     }
 
