@@ -2,10 +2,8 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Dumpy.Utils;
 
@@ -79,29 +77,28 @@ public static class TypeUtil
             return name;
         }
 
-        var sb = new StringBuilder();
+        var vsb = new ValueStringBuilder(stackalloc char[128]);
 
         if (type.Namespace == null && name.Contains("AnonymousType"))
         {
-            sb.Append("AnonymousType");
+            vsb.Append("AnonymousType");
         }
         else
         {
-            sb.Append(name.AsSpan(0, name.IndexOf('`')));
+            vsb.Append(name.AsSpan(0, name.IndexOf('`')));
         }
 
-        sb.Append(type
-            .GetGenericArguments()
-            .Aggregate("<",
-                delegate(string aggregate, Type argType)
-                {
-                    return aggregate + (aggregate == "<" ? "" : ",") + GetName(argType, fullyQualify);
-                }
-            ));
+        vsb.Append('<');
+        var args = type.GetGenericArguments();
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (i > 0) vsb.Append(',');
+            vsb.Append(GetName(args[i], fullyQualify));
+        }
 
-        sb.Append('>');
+        vsb.Append('>');
 
-        var result = sb.ToString();
+        var result = vsb.ToString();
         cache[nameIndex] = result;
         return result;
     }
@@ -118,16 +115,27 @@ public static class TypeUtil
             ? BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
             : BindingFlags.Instance | BindingFlags.Public;
 
-        members.Properties = type
-            .GetProperties(bindingFlags)
+        var allProps = type.GetProperties(bindingFlags);
+        var seen = new Dictionary<string, PropertyInfo>(allProps.Length);
+        foreach (var p in allProps)
+        {
             // Only include readable properties, and exclude indexer properties
-            .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
-            // Exclude properties that exist in base types and are hidden by properties in derived types
-            .GroupBy(p => p.Name)
-            .Select(g => g.OrderBy(p => p.DeclaringType == type).First())
-            .ToArray();
+            if (!p.CanRead || p.GetIndexParameters().Length > 0)
+            {
+                continue;
+            }
 
-        return members.Properties;
+            // Prefer the derived type's property over inherited ones with the same name
+            if (!seen.ContainsKey(p.Name) || p.DeclaringType == type)
+            {
+                seen[p.Name] = p;
+            }
+        }
+
+        var result = new PropertyInfo[seen.Count];
+        seen.Values.CopyTo(result, 0);
+        members.Properties = result;
+        return result;
     }
 
     public static FieldInfo[] GetFields(Type type, bool includeNonPublic)
@@ -142,12 +150,21 @@ public static class TypeUtil
             ? BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
             : BindingFlags.Instance | BindingFlags.Public;
 
-        members.Fields = type.GetFields(bindingFlags)
-            .GroupBy(f => f.Name)
-            .Select(g => g.OrderBy(p => p.DeclaringType == type).First())
-            .ToArray();
+        var allFields = type.GetFields(bindingFlags);
+        var seen = new Dictionary<string, FieldInfo>(allFields.Length);
+        foreach (var f in allFields)
+        {
+            // Prefer the derived type's field over inherited ones with the same name
+            if (!seen.ContainsKey(f.Name) || f.DeclaringType == type)
+            {
+                seen[f.Name] = f;
+            }
+        }
 
-        return members.Fields;
+        var result = new FieldInfo[seen.Count];
+        seen.Values.CopyTo(result, 0);
+        members.Fields = result;
+        return result;
     }
 
     public static (Type memberType, object? value) GetMemberTypeAndValue(this MemberInfo member, object? obj)
@@ -212,10 +229,15 @@ public static class TypeUtil
         }
 
         // Collections that might have an indexer
-        var indexerItemType = collectionType.GetProperties()
-            .FirstOrDefault(p => p.GetIndexParameters().Length > 0 && p.PropertyType != typeof(object))?.PropertyType;
+        foreach (var p in collectionType.GetProperties())
+        {
+            if (p.GetIndexParameters().Length > 0 && p.PropertyType != typeof(object))
+            {
+                return p.PropertyType;
+            }
+        }
 
-        return indexerItemType ?? typeof(object);
+        return typeof(object);
     }
 
     private static Type? FindIEnumerable(Type collectionType)

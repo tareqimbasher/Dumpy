@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Dumpy.Utils;
 
@@ -13,6 +13,7 @@ public class DumpOptions
 {
     private int _maxDepth = 10;
     private int _maxCollectionItems = int.MaxValue;
+    private readonly ConcurrentDictionary<Type, MemberInfo[]> _readableMembersCache = new();
 
     /// <summary>
     /// How reference loops should be handled. (Default: Error)
@@ -35,7 +36,7 @@ public class DumpOptions
             _maxDepth = value;
         }
     }
-    
+
     /// <summary>
     /// The max number of items to include from a collection. Defaults to int.MaxValue.
     /// </summary>
@@ -52,7 +53,7 @@ public class DumpOptions
             _maxCollectionItems = value;
         }
     }
-    
+
     /// <summary>
     /// If true, will include public fields in the output. Defaults to false.
     /// </summary>
@@ -75,21 +76,55 @@ public class DumpOptions
     /// <param name="targetType">The type to inspect.</param>
     public MemberInfo[] GetReadableMembers(Type targetType)
     {
-        var members = new List<MemberInfo>();
-
-        // Properties first, then fields
-        members.AddRange(TypeUtil.GetReadableProperties(targetType, IncludeNonPublicMembers));
-
-        if (IncludeFields)
+        if (_readableMembersCache.TryGetValue(targetType, out var cached))
         {
-            members.AddRange(TypeUtil.GetFields(targetType, IncludeNonPublicMembers));
+            return cached;
         }
 
-        if (MemberFilter != null)
+        var result = BuildReadableMembers(targetType);
+        _readableMembersCache.TryAdd(targetType, result);
+        return result;
+    }
+
+    private MemberInfo[] BuildReadableMembers(Type targetType)
+    {
+        var properties = TypeUtil.GetReadableProperties(targetType, IncludeNonPublicMembers);
+        var fields = IncludeFields ? TypeUtil.GetFields(targetType, IncludeNonPublicMembers) : null;
+
+        if (MemberFilter == null)
         {
-            return members.Where(MemberFilter).ToArray();
+            if (fields == null || fields.Length == 0)
+            {
+                return properties;
+            }
+
+            var members = new MemberInfo[properties.Length + fields.Length];
+            properties.CopyTo(members, 0);
+            fields.CopyTo(members, properties.Length);
+            return members;
         }
 
-        return members.ToArray();
+        // With a filter we must evaluate each member
+        var filtered = new List<MemberInfo>(properties.Length + (fields?.Length ?? 0));
+        foreach (var prop in properties)
+        {
+            if (MemberFilter(prop))
+            {
+                filtered.Add(prop);
+            }
+        }
+
+        if (fields != null)
+        {
+            foreach (var field in fields)
+            {
+                if (MemberFilter(field))
+                {
+                    filtered.Add(field);
+                }
+            }
+        }
+
+        return filtered.ToArray();
     }
 }

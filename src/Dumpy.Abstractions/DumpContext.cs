@@ -24,7 +24,16 @@ public static class DumpContext
 
     public static void Reset()
     {
-        _state.Value = new State();
+        var state = _state.Value;
+        if (state != null)
+        {
+            state.Depth = 0;
+            state.Visited.Clear();
+        }
+        else
+        {
+            _state.Value = new State();
+        }
     }
 
     public static void Clear()
