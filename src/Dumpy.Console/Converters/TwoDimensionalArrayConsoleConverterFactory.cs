@@ -35,7 +35,6 @@ public class TwoDimensionalArrayConsoleConverter<T> : ConsoleConverter<T>
             throw new SerializationException($"Value of type {targetType} is not a 2D array");
         }
 
-        int collectionLength = array.Length;
         int rowCount = array.GetLength(0);
         int columnCount = array.GetLength(1);
         var typeName = Markup.Escape(TypeUtil.GetName(targetType));

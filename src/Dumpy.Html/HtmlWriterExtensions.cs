@@ -197,6 +197,22 @@ public static class HtmlWriterExtensions
     }
 
     /// <summary>
+    /// Writes a span indicating a value threw an exception when read.
+    /// </summary>
+    public static void WriteErrorHtml(this ref ValueStringBuilder writer, HtmlDumpOptions options)
+    {
+        writer.WriteOpenTagStart("span");
+        if (!string.IsNullOrWhiteSpace(options.CssClasses.Error))
+        {
+            writer.WriteClass(options.CssClasses.Error);
+        }
+
+        writer.WriteOpenTagEnd();
+        writer.Append("Exception thrown");
+        writer.WriteCloseTag("span");
+    }
+
+    /// <summary>
     /// Writes a span indicating max depth was reached.
     /// </summary>
     public static void WriteMaxDepthReachedHtml(this ref ValueStringBuilder writer, HtmlDumpOptions options)

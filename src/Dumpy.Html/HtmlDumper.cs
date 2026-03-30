@@ -83,6 +83,12 @@ public static class HtmlDumper
 
         try
         {
+            if (value is DumpError)
+            {
+                writer.WriteErrorHtml(options);
+                return;
+            }
+
             // Enforce max depth
             if (DumpContext.Depth >= options.MaxDepth)
             {

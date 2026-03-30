@@ -99,6 +99,11 @@ public static class ConsoleDumper
 
         try
         {
+            if (value is DumpError)
+            {
+                return new Markup("[red](error)[/]");
+            }
+
             // Enforce max depth
             if (DumpContext.Depth >= options.MaxDepth)
             {

@@ -178,9 +178,9 @@ public static class TypeUtil
         {
             return field.GetValue(obj);
         }
-        catch
+        catch (Exception)
         {
-            return string.Empty;
+            return DumpError.Instance;
         }
     }
 
@@ -196,9 +196,9 @@ public static class TypeUtil
             // https://stackoverflow.com/questions/23150027/how-would-i-get-all-public-properties-of-object-faster-than-with-propertyinfo-ge
             return property.GetValue(obj);
         }
-        catch
+        catch (Exception)
         {
-            return string.Empty;
+            return DumpError.Instance;
         }
     }
 

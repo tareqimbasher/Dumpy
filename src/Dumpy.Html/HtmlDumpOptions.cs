@@ -31,6 +31,7 @@ public class CssClassOptions
 {
     public const string DefaultNullCssClass = "dm-null";
     public const string DefaultEmptyCollectionCssClass = "dm-empty";
+    public const string DefaultErrorCssClass = "dm-error";
     public const string DefaultCyclicReferenceCssClass = "dm-cyclic";
     public const string DefaultMaxDepthReachedCssClass = "dm-depth-max";
     public const string DefaultTableInfoHeaderCssClass = "dm-t-info";
@@ -38,6 +39,7 @@ public class CssClassOptions
 
     private string? _null = DefaultNullCssClass;
     private string? _emptyCollection = DefaultEmptyCollectionCssClass;
+    private string? _error = DefaultErrorCssClass;
     private string? _cyclicReference = DefaultCyclicReferenceCssClass;
     private string? _maxDepthReached = DefaultMaxDepthReachedCssClass;
     private string? _tableInfoHeader = DefaultTableInfoHeaderCssClass;
@@ -64,6 +66,15 @@ public class CssClassOptions
     {
         get => !Enabled ? null : _emptyCollection;
         set => _emptyCollection = value;
+    }
+    
+    /// <summary>
+    /// The CSS class added to values that threw an exception when read. (Default: <see cref="DefaultErrorCssClass"/>)
+    /// </summary>
+    public string? Error
+    {
+        get => !Enabled ? null : _error;
+        set => _error = value;
     }
 
     /// <summary>
