@@ -66,19 +66,12 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
                 }
             }
 
-            infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, TypeUtil.GetName(targetType));
-            infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, '(');
-            if (value.Length > options.MaxCollectionItems)
-            {
-                infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "First ");
-            }
-
             writer.WriteCloseTag("tbody");
         }
 
-        // TODO add a InsertInt and make zero-alloc
-        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, serializedItemCount.ToString());
-        writer.Insert(infoHeaderRowInsertIndex, " items)");
+        // Single string allocation is cheaper than multiple Insert() calls shifting the buffer
+        var header = $"{TypeUtil.GetName(targetType)}({(value.Length > options.MaxCollectionItems ? "First " : "")}{serializedItemCount} items)";
+        writer.Insert(infoHeaderRowInsertIndex, header);
         
         writer.WriteCloseTag("table");
     }

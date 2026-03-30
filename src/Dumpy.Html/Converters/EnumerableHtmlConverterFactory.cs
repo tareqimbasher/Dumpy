@@ -349,13 +349,8 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
         infoHeaderRowInsertIndex += writer.EscapeAndInsertText(infoHeaderRowInsertIndex, collectionTypeName);
 
-        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, " (");
-        if (collectionHasMoreElementsThanMax)
-        {
-            infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "First ");
-        }
-
-        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, serializedElementCount);
-        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, " items)");
+        // Single string allocation is cheaper than multiple Insert() calls shifting the buffer
+        var suffix = $" ({(collectionHasMoreElementsThanMax ? "First " : "")}{serializedElementCount} items)";
+        writer.Insert(infoHeaderRowInsertIndex, suffix);
     }
 }
