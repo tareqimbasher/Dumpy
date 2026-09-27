@@ -112,17 +112,17 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
         foreach (var element in collection)
         {
-            count++;
-
-            if (count == 1) // We only want to add tbody if there is at least 1 item in the collection
-            {
-                writer.WriteOpenTag("tbody");
-            }
-
-            if (count > maxCount)
+            if (count >= maxCount)
             {
                 elementsCountExceedMax = true;
                 break;
+            }
+
+            count++;
+
+            if (count == 1) // We only want to add tbody if at least 1 item is rendered
+            {
+                writer.WriteOpenTag("tbody");
             }
 
             writer.WriteOpenTag("tr");
@@ -147,16 +147,13 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             writer.WriteCloseTag("tr");
         }
 
-        if (count > 0) // A tbody is added only if there are items in the collection
+        if (count > 0) // A tbody is added only if at least 1 item is rendered
         {
             writer.WriteCloseTag("tbody");
         }
-        else if (count == 0 && options.CssClasses.EmptyCollection != null)
+        else if (!elementsCountExceedMax && options.CssClasses.EmptyCollection != null)
         {
-            tableClassInsertIndex += writer.Insert(tableClassInsertIndex, " class=\"");
-            tableClassInsertIndex += writer.Insert(tableClassInsertIndex, options.CssClasses.EmptyCollection);
-            tableClassInsertIndex += writer.Insert(tableClassInsertIndex, "\"");
-            infoHeaderRowInsertIndex += tableClassInsertIndex;
+            infoHeaderRowInsertIndex += InsertEmptyCollectionClass(ref writer, tableClassInsertIndex, options.CssClasses.EmptyCollection);
         }
 
         InsertInfoHeaderText(
@@ -204,17 +201,17 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
         foreach (var element in collection)
         {
-            count++;
-
-            if (count == 1) // We only want to add tbody if there is at least 1 item in the collection
-            {
-                writer.WriteOpenTag("tbody");
-            }
-
-            if (count > maxCount)
+            if (count >= maxCount)
             {
                 elementsCountExceedMax = true;
                 break;
+            }
+
+            count++;
+
+            if (count == 1) // We only want to add tbody if at least 1 item is rendered
+            {
+                writer.WriteOpenTag("tbody");
             }
 
             writer.WriteOpenTag("tr");
@@ -232,25 +229,13 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             writer.WriteCloseTag("tr");
         }
 
-        if (count > 0) // A tbody is added only if there are items in the collection
+        if (count > 0) // A tbody is added only if at least 1 item is rendered
         {
             writer.WriteCloseTag("tbody");
         }
-        else if (count == 0 && options.CssClasses.EmptyCollection != null)
+        else if (!elementsCountExceedMax && options.CssClasses.EmptyCollection != null)
         {
-            var add = 0;
-
-            add = writer.Insert(tableClassInsertIndex, " class=\"");
-            tableClassInsertIndex += add;
-            infoHeaderRowInsertIndex += add;
-
-            add = writer.Insert(tableClassInsertIndex, options.CssClasses.EmptyCollection);
-            tableClassInsertIndex += add;
-            infoHeaderRowInsertIndex += add;
-
-            add = writer.Insert(tableClassInsertIndex, "\"");
-            tableClassInsertIndex += add;
-            infoHeaderRowInsertIndex += add;
+            infoHeaderRowInsertIndex += InsertEmptyCollectionClass(ref writer, tableClassInsertIndex, options.CssClasses.EmptyCollection);
         }
 
         InsertInfoHeaderText(
@@ -262,6 +247,15 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
             elementsCountExceedMax);
 
         writer.WriteCloseTag("table");
+    }
+
+    /// <returns>The number of characters inserted.</returns>
+    private static int InsertEmptyCollectionClass(ref ValueStringBuilder writer, int tableClassInsertIndex, string cssClass)
+    {
+        int inserted = writer.Insert(tableClassInsertIndex, " class=\"");
+        inserted += writer.Insert(tableClassInsertIndex + inserted, cssClass);
+        inserted += writer.Insert(tableClassInsertIndex + inserted, '"');
+        return inserted;
     }
 
     protected void InsertInfoHeaderText(

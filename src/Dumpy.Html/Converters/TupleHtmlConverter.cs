@@ -24,6 +24,7 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
         {
             writer.WriteClass(options.CssClasses.TableInfoHeader);
         }
+        writer.WriteOpenTagEnd();
 
         writer.WriteOpenTag("tr");
         writer.WriteOpenTagStart("th");
@@ -36,12 +37,13 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
         writer.WriteCloseTag("tr");
         writer.WriteCloseTag("thead");
 
-        int serializedItemCount = 0;
-        if (value.Length > 0)
+        var itemsToIterate = Math.Min(value.Length, options.MaxCollectionItems);
+
+        if (itemsToIterate > 0)
         {
             writer.WriteOpenTag("tbody");
 
-            for (int iItem = 0; iItem < value.Length; iItem++)
+            for (int iItem = 0; iItem < itemsToIterate; iItem++)
             {
                 var item = value[iItem];
                 var itemType = item == null ? typeof(object) : item.GetType();
@@ -58,19 +60,13 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
                 writer.WriteCloseTag("td");
 
                 writer.WriteCloseTag("tr");
-                serializedItemCount++;
-
-                if (serializedItemCount >= options.MaxCollectionItems)
-                {
-                    break;
-                }
             }
 
             writer.WriteCloseTag("tbody");
         }
 
         // Single string allocation is cheaper than multiple Insert() calls shifting the buffer
-        var header = $"{TypeUtil.GetName(targetType)}({(value.Length > options.MaxCollectionItems ? "First " : "")}{serializedItemCount} items)";
+        var header = $"{TypeUtil.GetName(targetType)}({(value.Length > options.MaxCollectionItems ? "First " : "")}{itemsToIterate} items)";
         writer.Insert(infoHeaderRowInsertIndex, header);
         
         writer.WriteCloseTag("table");

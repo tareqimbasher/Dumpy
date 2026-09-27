@@ -50,14 +50,13 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
 
             foreach (var element in collection)
             {
-                rowCount++;
-
-                if (rowCount > maxCount)
+                if (rowCount >= maxCount)
                 {
                     elementsCountExceedMax = true;
                     break;
                 }
 
+                rowCount++;
                 table.AddRow(element.DumpToRenderable(elementType, options));
             }
 
@@ -80,14 +79,6 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
 
             foreach (var element in collection)
             {
-                rowCount++;
-
-                if (rowCount > maxCount)
-                {
-                    elementsCountExceedMax = true;
-                    break;
-                }
-
                 if (table == null)
                 {
                     table = options.CreateTable();
@@ -96,6 +87,14 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                         table.AddColumn(new TableColumn(new Text(member.Name, options.Styles.TableHeaderText)));
                     }
                 }
+
+                if (rowCount >= maxCount)
+                {
+                    elementsCountExceedMax = true;
+                    break;
+                }
+
+                rowCount++;
 
                 var row = new IRenderable[members.Length];
                 for (int i = 0; i < members.Length; i++)

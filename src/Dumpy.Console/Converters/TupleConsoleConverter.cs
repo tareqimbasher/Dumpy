@@ -21,25 +21,20 @@ public class TupleConsoleConverter : ConsoleConverter<ITuple>
         table.AddColumn("");
         table.AddColumn("");
 
-        int serializedItemCount = 0;
-        for (int iItem = 0; iItem < value.Length; iItem++)
+        var itemsToIterate = Math.Min(value.Length, options.MaxCollectionItems);
+
+        for (int iItem = 0; iItem < itemsToIterate; iItem++)
         {
             var item = value[iItem];
             var itemType = item == null ? typeof(object) : item.GetType();
 
             table.AddRow(new Text($"Item{iItem + 1}"), item.DumpToRenderable(itemType, options));
-            serializedItemCount++;
-
-            if (serializedItemCount >= options.MaxCollectionItems)
-            {
-                break;
-            }
         }
 
         if (options.Tables.ShowTitles)
         {
             var exceededMax = value.Length > options.MaxCollectionItems;
-            var items = $"{(exceededMax ? "First " : "")}{serializedItemCount} items";
+            var items = $"{(exceededMax ? "First " : "")}{itemsToIterate} items";
             var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
             table.Title = new TableTitle($"{typeName} | {items}", options.Styles.TableTitleText);
         }

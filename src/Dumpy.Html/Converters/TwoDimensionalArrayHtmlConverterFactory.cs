@@ -61,7 +61,7 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
         writer.AppendInt(rowCount);
         if (rowCount > options.MaxCollectionItems)
         {
-            writer.Append(" - Showing  first ");
+            writer.Append(" - Showing first ");
             writer.AppendInt(options.MaxCollectionItems);
         }
         writer.Append(", Columns = ");
@@ -95,11 +95,13 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
         writer.WriteCloseTag("tr");
         writer.WriteCloseTag("thead");
 
-        if (rowCount > 0)
+        var rowsToIterate = Math.Min(rowCount, options.MaxCollectionItems);
+
+        if (rowsToIterate > 0)
         {
             writer.WriteOpenTag("tbody");
 
-            for (int iRow = 0; iRow < rowCount; iRow++)
+            for (int iRow = 0; iRow < rowsToIterate; iRow++)
             {
                 writer.WriteOpenTag("tr");
 
@@ -118,11 +120,6 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
                 }
 
                 writer.WriteCloseTag("tr");
-
-                if (iRow + 1 >= options.MaxCollectionItems)
-                {
-                    break;
-                }
             }
 
             writer.WriteCloseTag("tbody");
