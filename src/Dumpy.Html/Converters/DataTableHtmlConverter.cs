@@ -21,7 +21,7 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
         int rowCount = value.Rows.Count;
 
         writer.WriteOpenTagStart("table");
-        if (rowCount == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        if (rowCount == 0 && options.CssClasses.EmptyCollection != null)
             writer.WriteClass(options.CssClasses.EmptyCollection);
         writer.WriteOpenTagEnd();
 
@@ -29,7 +29,7 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
 
         // Write info header
         writer.WriteOpenTagStart("tr");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        if (options.CssClasses.TableInfoHeader != null)
         {
             writer.WriteClass(options.CssClasses.TableInfoHeader);
         }
@@ -63,7 +63,7 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
 
         // Write data header
         writer.WriteOpenTagStart("tr");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableDataHeader))
+        if (options.CssClasses.TableDataHeader != null)
         {
             writer.WriteClass(options.CssClasses.TableDataHeader);
         }

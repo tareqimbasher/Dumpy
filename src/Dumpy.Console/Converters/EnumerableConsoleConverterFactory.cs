@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using Dumpy.Console.Widgets;
 using Dumpy.Utils;
 using Spectre.Console;
@@ -73,12 +71,12 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
         else
         {
             var members = options.GetReadableMembers(elementType);
+            var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
 
             int maxCount = options.MaxCollectionItems;
             int rowCount = 0;
             bool elementsCountExceedMax = false;
-
-            var rows = new List<List<IRenderable>>();
+            Table? table = null;
 
             foreach (var element in collection)
             {
@@ -90,38 +88,34 @@ public class EnumerableDefaultConsoleConverter<T> : ConsoleConverter<T>
                     break;
                 }
 
-                var row = new List<IRenderable>();
-                rows.Add(row);
-
-                foreach (var member in members)
+                if (table == null)
                 {
-                    var (memberType, memberValue) = member.GetMemberTypeAndValue(element);
-                    row.Add(memberValue.DumpToRenderable(memberType, options));
+                    table = options.CreateTable();
+                    foreach (var member in members)
+                    {
+                        table.AddColumn(new TableColumn(new Text(member.Name, options.Styles.TableHeaderText)));
+                    }
                 }
+
+                var row = new IRenderable[members.Length];
+                for (int i = 0; i < members.Length; i++)
+                {
+                    var (memberType, memberValue) = members[i].GetMemberTypeAndValue(element);
+                    row[i] = memberValue.DumpToRenderable(memberType, options);
+                }
+
+                table.AddRow(row);
             }
 
-            var typeName = Markup.Escape(TypeUtil.GetName(targetType, false));
-            string title = $"{(elementsCountExceedMax ? "First " : "")}{rowCount} items | {typeName}";
-
-            if (rowCount == 0)
+            if (table == null)
             {
                 return EmptyCollectionWidget.New(typeName, options);
             }
 
-            var table = options.CreateTable();
+            string title = $"{(elementsCountExceedMax ? "First " : "")}{rowCount} items | {typeName}";
             table.Title = options.Tables.ShowTitles
                 ? new TableTitle(title, options.Styles.TableTitleText)
                 : null;
-
-            foreach (var member in members)
-            {
-                table.AddColumn(new TableColumn(new Text(member.Name, options.Styles.TableHeaderText)));
-            }
-
-            foreach (var row in rows)
-            {
-                table.AddRow(row);
-            }
 
             return table;
         }

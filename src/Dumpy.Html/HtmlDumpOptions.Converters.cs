@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using Dumpy.Html.Converters;
 using Dumpy.Utils;
@@ -118,15 +117,26 @@ public sealed partial class HtmlDumpOptions
             else
             {
                 // Attempt to find a simple converter that can convert
-                simpleConverter = _defaultSimpleConverters.Values.FirstOrDefault(x => x.CanConvert(typeToConvert));
-                if (simpleConverter != null)
+                foreach (var sc in _defaultSimpleConverters.Values)
                 {
-                    converter = simpleConverter;
+                    if (sc.CanConvert(typeToConvert))
+                    {
+                        converter = sc;
+                        break;
+                    }
                 }
-                else
+
+                if (converter == null)
                 {
                     // Find a suitable factory converter
-                    converter = _defaultFactoryConverters.FirstOrDefault(x => x.CanConvert(typeToConvert));
+                    foreach (var fc in _defaultFactoryConverters)
+                    {
+                        if (fc.CanConvert(typeToConvert))
+                        {
+                            converter = fc;
+                            break;
+                        }
+                    }
                 }
 
                 // Since the object and IEnumerable converters cover all types, we should have a converter.

@@ -56,7 +56,7 @@ public class CssClassOptions
     public string? Null
     {
         get => !Enabled ? null : _null;
-        set => _null = value;
+        set => _null = string.IsNullOrWhiteSpace(value) ? null : value;
     }
 
     /// <summary>
@@ -65,16 +65,16 @@ public class CssClassOptions
     public string? EmptyCollection
     {
         get => !Enabled ? null : _emptyCollection;
-        set => _emptyCollection = value;
+        set => _emptyCollection = string.IsNullOrWhiteSpace(value) ? null : value;
     }
-    
+
     /// <summary>
     /// The CSS class added to values that threw an exception when read. (Default: <see cref="DefaultErrorCssClass"/>)
     /// </summary>
     public string? Error
     {
         get => !Enabled ? null : _error;
-        set => _error = value;
+        set => _error = string.IsNullOrWhiteSpace(value) ? null : value;
     }
 
     /// <summary>
@@ -83,7 +83,7 @@ public class CssClassOptions
     public string? CyclicReference
     {
         get => !Enabled ? null : _cyclicReference;
-        set => _cyclicReference = value;
+        set => _cyclicReference = string.IsNullOrWhiteSpace(value) ? null : value;
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public class CssClassOptions
     public string? MaxDepthReached
     {
         get => !Enabled ? null : _maxDepthReached;
-        set => _maxDepthReached = value;
+        set => _maxDepthReached = string.IsNullOrWhiteSpace(value) ? null : value;
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class CssClassOptions
     public string? TableInfoHeader
     {
         get => !Enabled ? null : _tableInfoHeader;
-        set => _tableInfoHeader = value;
+        set => _tableInfoHeader = string.IsNullOrWhiteSpace(value) ? null : value;
     }
 
     /// <summary>
@@ -110,6 +110,6 @@ public class CssClassOptions
     public string? TableDataHeader
     {
         get => !Enabled ? null : _tableDataHeader;
-        set => _tableDataHeader = value;
+        set => _tableDataHeader = string.IsNullOrWhiteSpace(value) ? null : value;
     }
 }

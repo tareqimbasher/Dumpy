@@ -37,7 +37,7 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
         int columnCount = array.GetLength(1);
 
         writer.WriteOpenTagStart("table");
-        if (rowCount == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        if (rowCount == 0 && options.CssClasses.EmptyCollection != null)
             writer.WriteClass(options.CssClasses.EmptyCollection);
         writer.WriteOpenTagEnd();
         
@@ -45,7 +45,7 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
 
         // Write info header
         writer.WriteOpenTagStart("tr");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        if (options.CssClasses.TableInfoHeader != null)
         {
             writer.WriteClass(options.CssClasses.TableInfoHeader);
         }
@@ -75,7 +75,7 @@ public class TwoDimensionalArrayHtmlConverter<T> : HtmlConverter<T>
         
         // Write data header
         writer.WriteOpenTagStart("tr");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableDataHeader))
+        if (options.CssClasses.TableDataHeader != null)
         {
             writer.WriteClass(options.CssClasses.TableDataHeader);
         }

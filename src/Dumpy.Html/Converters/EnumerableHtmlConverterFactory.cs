@@ -70,7 +70,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
         // Info header
         writer.WriteOpenTagStart("tr");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        if (options.CssClasses.TableInfoHeader != null)
         {
             writer.WriteClass(options.CssClasses.TableInfoHeader);
         }
@@ -88,7 +88,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
         // Data header
         writer.WriteOpenTagStart("tr");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableDataHeader))
+        if (options.CssClasses.TableDataHeader != null)
         {
             writer.WriteClass(options.CssClasses.TableDataHeader);
         }
@@ -151,7 +151,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         {
             writer.WriteCloseTag("tbody");
         }
-        else if (count == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        else if (count == 0 && options.CssClasses.EmptyCollection != null)
         {
             tableClassInsertIndex += writer.Insert(tableClassInsertIndex, " class=\"");
             tableClassInsertIndex += writer.Insert(tableClassInsertIndex, options.CssClasses.EmptyCollection);
@@ -182,7 +182,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         int tableClassInsertIndex = writer.Length - 1; // -1 to set position before closing angle bracket (>)
 
         writer.WriteOpenTagStart("thead");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        if (options.CssClasses.TableInfoHeader != null)
         {
             writer.WriteClass(options.CssClasses.TableInfoHeader);
         }
@@ -236,7 +236,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
         {
             writer.WriteCloseTag("tbody");
         }
-        else if (count == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        else if (count == 0 && options.CssClasses.EmptyCollection != null)
         {
             var add = 0;
 

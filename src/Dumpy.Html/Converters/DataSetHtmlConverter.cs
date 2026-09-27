@@ -20,7 +20,7 @@ public class DataSetHtmlConverter : HtmlConverter<DataSet>
         int tableCount = value.Tables.Count;
 
         writer.WriteOpenTagStart("table");
-        if (tableCount == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        if (tableCount == 0 && options.CssClasses.EmptyCollection != null)
             writer.WriteClass(options.CssClasses.EmptyCollection);
         writer.WriteOpenTagEnd();
 
@@ -28,7 +28,7 @@ public class DataSetHtmlConverter : HtmlConverter<DataSet>
 
         // Write info header
         writer.WriteOpenTagStart("tr");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        if (options.CssClasses.TableInfoHeader != null)
         {
             writer.WriteClass(options.CssClasses.TableInfoHeader);
         }

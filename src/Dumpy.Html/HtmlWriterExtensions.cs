@@ -170,7 +170,7 @@ public static class HtmlWriterExtensions
     public static void WriteNullHtml(this ref ValueStringBuilder writer, HtmlDumpOptions options)
     {
         writer.WriteOpenTagStart("span");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.Null))
+        if (options.CssClasses.Null != null)
         {
             writer.WriteClass(options.CssClasses.Null);
         }
@@ -186,7 +186,7 @@ public static class HtmlWriterExtensions
     public static void WriteCyclicReferenceHtml(this ref ValueStringBuilder writer, HtmlDumpOptions options)
     {
         writer.WriteOpenTagStart("span");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.CyclicReference))
+        if (options.CssClasses.CyclicReference != null)
         {
             writer.WriteClass(options.CssClasses.CyclicReference);
         }
@@ -202,7 +202,7 @@ public static class HtmlWriterExtensions
     public static void WriteErrorHtml(this ref ValueStringBuilder writer, HtmlDumpOptions options)
     {
         writer.WriteOpenTagStart("span");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.Error))
+        if (options.CssClasses.Error != null)
         {
             writer.WriteClass(options.CssClasses.Error);
         }
@@ -218,7 +218,7 @@ public static class HtmlWriterExtensions
     public static void WriteMaxDepthReachedHtml(this ref ValueStringBuilder writer, HtmlDumpOptions options)
     {
         writer.WriteOpenTagStart("span");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.MaxDepthReached))
+        if (options.CssClasses.MaxDepthReached != null)
         {
             writer.WriteClass(options.CssClasses.MaxDepthReached);
         }

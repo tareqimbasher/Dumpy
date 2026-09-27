@@ -15,12 +15,12 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
         }
 
         writer.WriteOpenTagStart("table");
-        if (value.Length == 0 && !string.IsNullOrWhiteSpace(options.CssClasses.EmptyCollection))
+        if (value.Length == 0 && options.CssClasses.EmptyCollection != null)
             writer.WriteClass(options.CssClasses.EmptyCollection);
         writer.WriteOpenTagEnd();
 
         writer.WriteOpenTagStart("thead");
-        if (!string.IsNullOrWhiteSpace(options.CssClasses.TableInfoHeader))
+        if (options.CssClasses.TableInfoHeader != null)
         {
             writer.WriteClass(options.CssClasses.TableInfoHeader);
         }
