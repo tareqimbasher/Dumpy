@@ -17,12 +17,12 @@ public static class TypeUtil
     public static bool IsStringFormattable(Type type)
     {
         return type.IsPrimitive
-               || type == typeof(string)
-               || type.IsEnum
-               || type.IsNullableOfT()
-               || typeof(IFormattable).IsAssignableFrom(type)
-               || typeof(Exception).IsAssignableFrom(type)
-               || typeof(Type).IsAssignableFrom(type);
+            || type == typeof(string)
+            || type.IsEnum
+            || type.IsNullableOfT()
+            || typeof(IFormattable).IsAssignableFrom(type)
+            || typeof(Exception).IsAssignableFrom(type)
+            || typeof(Type).IsAssignableFrom(type);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -119,8 +119,8 @@ public static class TypeUtil
         var seen = new Dictionary<string, PropertyInfo>(allProps.Length);
         foreach (var p in allProps)
         {
-            // Only include readable properties, and exclude indexer properties
-            if (!p.CanRead || p.GetIndexParameters().Length > 0)
+            // Only include readable properties, and exclude indexer and compiler-generated properties
+            if (!p.CanRead || p.GetIndexParameters().Length > 0 || IsCompilerGenerated(p))
             {
                 continue;
             }
@@ -154,6 +154,11 @@ public static class TypeUtil
         var seen = new Dictionary<string, FieldInfo>(allFields.Length);
         foreach (var f in allFields)
         {
+            if (IsCompilerGenerated(f))
+            {
+                continue;
+            }
+
             // Prefer the derived type's field over inherited ones with the same name
             if (!seen.ContainsKey(f.Name) || f.DeclaringType == type)
             {
@@ -272,4 +277,8 @@ public static class TypeUtil
 
         return null;
     }
+
+    private static bool IsCompilerGenerated(MemberInfo member)
+        // Anonymous type fields name contain '<' which C# identifiers can't.
+        => member.Name.IndexOf('<') >= 0 || member.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false);
 }
