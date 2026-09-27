@@ -17,7 +17,7 @@ public class XNodeHtmlConverter : HtmlConverter<XNode>
         writer.WriteOpenTagStart("code");
         writer.WriteAttr("language", "xml");
         writer.WriteOpenTagEnd();
-        writer.Append(value.ToString(SaveOptions.DisableFormatting));
+        writer.AppendEscapedText(value.ToString(SaveOptions.DisableFormatting));
         writer.WriteCloseTag("code");
         writer.WriteCloseTag("pre");
     }

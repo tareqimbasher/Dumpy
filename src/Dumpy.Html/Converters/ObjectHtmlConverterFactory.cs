@@ -94,7 +94,7 @@ public class ObjectDefaultHtmlConverter<T> : HtmlConverter<T>
 
         writer.WriteOpenTagEnd();
 
-        writer.Append(memberName);
+        writer.AppendEscapedText(memberName);
         writer.WriteCloseTag("th");
 
         writer.WriteOpenTag("td");

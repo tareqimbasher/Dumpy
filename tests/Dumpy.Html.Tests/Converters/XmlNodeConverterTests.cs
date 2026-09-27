@@ -22,7 +22,7 @@ public class XmlNodeConverterTests
 
         var html = HtmlDumper.DumpHtml(doc, typeof(XmlNode));
 
-        var xml = "<root><child id=\"1\" />Value</root>";
+        var xml = "&lt;root&gt;&lt;child id=\"1\" /&gt;Value&lt;/root&gt;";
         var expected = $"<pre><code language=\"xml\">{xml}</code></pre>";
         Assert.Equal(expected, html);
     }

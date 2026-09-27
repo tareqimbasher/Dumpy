@@ -340,4 +340,46 @@ public static class HtmlWriterExtensions
             }
         }
     }
+
+    /// <summary>
+    /// HTML escapes the provided attribute value text and inserts it into the writer at the specified index.
+    /// </summary>
+    /// <returns>The length of text that was inserted.</returns>
+    public static int EscapeAndInsertAttributeText(this ref ValueStringBuilder writer, int index, ReadOnlySpan<char> text)
+    {
+        var startingIndex = index;
+        int i = 0;
+        for (; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (c is '&' or '<' or '>' or '"' or '\'' or '\u202F')
+                break;
+        }
+
+        if (i == text.Length)
+        {
+            return writer.Insert(index, text);
+        }
+
+        if (i > 0)
+        {
+            index += writer.Insert(index, text.Slice(0, i));
+        }
+
+        for (; i < text.Length; i++)
+        {
+            switch (text[i])
+            {
+                case '&': index += writer.Insert(index, "&amp;"); break;
+                case '<': index += writer.Insert(index, "&lt;"); break;
+                case '>': index += writer.Insert(index, "&gt;"); break;
+                case '"': index += writer.Insert(index, "&quot;"); break;
+                case '\'': index += writer.Insert(index, "&#39;"); break;
+                case '\u202F': index += writer.Insert(index, ' '); break;
+                default: index += writer.Insert(index, text[i]); break;
+            }
+        }
+
+        return index - startingIndex;
+    }
 }

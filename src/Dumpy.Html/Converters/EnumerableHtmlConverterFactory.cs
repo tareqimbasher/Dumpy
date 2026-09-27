@@ -253,7 +253,7 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
     private static int InsertEmptyCollectionClass(ref ValueStringBuilder writer, int tableClassInsertIndex, string cssClass)
     {
         int inserted = writer.Insert(tableClassInsertIndex, " class=\"");
-        inserted += writer.Insert(tableClassInsertIndex + inserted, cssClass);
+        inserted += writer.EscapeAndInsertAttributeText(tableClassInsertIndex + inserted, cssClass);
         inserted += writer.Insert(tableClassInsertIndex + inserted, '"');
         return inserted;
     }
@@ -287,12 +287,12 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
                     if (TypeUtil.IsStringFormattable(keyType))
                     {
                         infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "Key = ");
-                        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, key.ToString());
+                        infoHeaderRowInsertIndex += writer.EscapeAndInsertText(infoHeaderRowInsertIndex, key.ToString());
                     }
                     else if (TypeUtil.IsCollection(keyType))
                     {
                         infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, "Key = ");
-                        infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, TypeUtil.GetName(keyType));
+                        infoHeaderRowInsertIndex += writer.EscapeAndInsertText(infoHeaderRowInsertIndex, TypeUtil.GetName(keyType));
                     }
                     else
                     {
@@ -314,9 +314,9 @@ public class EnumerableDefaultHtmlConverter<T> : HtmlConverter<T>
 
                             propValueStr ??= "(null)";
 
-                            infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, property.Name);
+                            infoHeaderRowInsertIndex += writer.EscapeAndInsertText(infoHeaderRowInsertIndex, property.Name);
                             infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, ": ");
-                            infoHeaderRowInsertIndex += writer.Insert(infoHeaderRowInsertIndex, propValueStr);
+                            infoHeaderRowInsertIndex += writer.EscapeAndInsertText(infoHeaderRowInsertIndex, propValueStr);
 
                             if ((infoHeaderRowInsertIndex - startingIndex) > 50)
                             {

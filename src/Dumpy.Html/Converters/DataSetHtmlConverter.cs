@@ -40,7 +40,7 @@ public class DataSetHtmlConverter : HtmlConverter<DataSet>
         writer.WriteOpenTagEnd();
 
         // Header text
-        writer.Append(!string.IsNullOrWhiteSpace(value.DataSetName) ? value.DataSetName : "DataSet");
+        writer.AppendEscapedText(!string.IsNullOrWhiteSpace(value.DataSetName) ? value.DataSetName : "DataSet");
         writer.Append(" (Tables = ");
         writer.AppendInt(tableCount);
 

@@ -43,7 +43,7 @@ public class DataTableHtmlConverter : HtmlConverter<DataTable>
 
 
         // Header text
-        writer.Append(!string.IsNullOrWhiteSpace(value.TableName) ? value.TableName : "DataTable");
+        writer.AppendEscapedText(!string.IsNullOrWhiteSpace(value.TableName) ? value.TableName : "DataTable");
         writer.Append(" (Rows = ");
         writer.AppendInt(rowCount);
 

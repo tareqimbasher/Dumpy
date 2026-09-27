@@ -31,13 +31,16 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
         writer.WriteAttr("colspan", "2");
         writer.WriteOpenTagEnd();
 
-        int infoHeaderRowInsertIndex = writer.Length;
+        var itemsToIterate = Math.Min(value.Length, options.MaxCollectionItems);
+
+        writer.AppendEscapedText(TypeUtil.GetName(targetType));
+        writer.Append(value.Length > options.MaxCollectionItems ? "(First " : "(");
+        writer.AppendInt(itemsToIterate);
+        writer.Append(" items)");
 
         writer.WriteCloseTag("th");
         writer.WriteCloseTag("tr");
         writer.WriteCloseTag("thead");
-
-        var itemsToIterate = Math.Min(value.Length, options.MaxCollectionItems);
 
         if (itemsToIterate > 0)
         {
@@ -65,10 +68,6 @@ public class TupleHtmlConverter : HtmlConverter<ITuple>
             writer.WriteCloseTag("tbody");
         }
 
-        // Single string allocation is cheaper than multiple Insert() calls shifting the buffer
-        var header = $"{TypeUtil.GetName(targetType)}({(value.Length > options.MaxCollectionItems ? "First " : "")}{itemsToIterate} items)";
-        writer.Insert(infoHeaderRowInsertIndex, header);
-        
         writer.WriteCloseTag("table");
     }
 }
